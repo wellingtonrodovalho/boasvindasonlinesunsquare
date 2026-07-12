@@ -3,7 +3,7 @@ import {
   Sun, MapPin, Briefcase, Truck, Wifi, Shield, Zap, VolumeX, Trash2, Smile, Car, Phone, 
   Search, Info, AlertTriangle, ArrowRight, CheckCircle2, MessageSquare, ChevronDown, ChevronUp, 
   Mail, Clock, User, HelpCircle, ExternalLink, RefreshCw, Send, Check, X, Building, 
-  PhoneCall, Calendar, CheckSquare, ClipboardList, ShieldAlert, Home
+  PhoneCall, Calendar, CheckSquare, ClipboardList, ShieldAlert, Home, Cloud, CloudSun, CloudRain
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -123,6 +123,30 @@ export default function App() {
       return () => clearTimeout(timer);
     }
   }, [highlightedArticleId]);
+
+  // Dynamic 5-day weather forecast generator for Goiânia
+  const getNext5DaysForecast = () => {
+    const daysOfWeekShort = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    const now = new Date();
+    const forecastData = [
+      { tempMax: 31, tempMin: 19, desc: 'Ensolarado', icon: 'sun' },
+      { tempMax: 32, tempMin: 20, desc: 'Ensolarado', icon: 'sun' },
+      { tempMax: 29, tempMin: 18, desc: 'Parcialmente Nublado', icon: 'cloud-sun' },
+      { tempMax: 28, tempMin: 18, desc: 'Nublado', icon: 'cloud' },
+      { tempMax: 30, tempMin: 19, desc: 'Pancadas de Chuva', icon: 'cloud-rain' }
+    ];
+    
+    return Array.from({ length: 5 }).map((_, i) => {
+      const targetDate = new Date();
+      targetDate.setDate(now.getDate() + i + 1);
+      const dayLabel = daysOfWeekShort[targetDate.getDay()];
+      const forecast = forecastData[i % forecastData.length];
+      return {
+        day: dayLabel,
+        ...forecast
+      };
+    });
+  };
 
   // Helper to map icon name to component
   const renderArticleIcon = (iconName: string, className = "w-6 h-6") => {
@@ -614,11 +638,11 @@ export default function App() {
                     </div>
 
                     {/* Widget Tempo e Hora */}
-                    <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col justify-between gap-4 min-h-[220px]">
+                    <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col justify-between gap-4 min-h-[320px]">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-slate-500 font-medium text-xs uppercase tracking-wider">
                           <Clock className="w-4 h-4 text-blue-500" />
-                          <span>Hora Local</span>
+                          <span>Hora &amp; Clima</span>
                         </div>
                         <span className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold">Ao Vivo</span>
                       </div>
@@ -635,40 +659,35 @@ export default function App() {
                           <span className="text-xs font-bold text-slate-700">Goiânia, GO</span>
                           <span className="text-[11px] text-slate-500 mt-0.5">Ensolarado &bull; 28°C</span>
                         </div>
-                        <div className="p-2.5 bg-amber-50 rounded-2xl text-amber-500">
-                          <Sun className="w-6 h-6 animate-[spin_15s_linear_infinite]" />
+                        <div className="p-2 bg-amber-50 rounded-xl text-amber-500">
+                          <Sun className="w-5 h-5 animate-[spin_15s_linear_infinite]" />
+                        </div>
+                      </div>
+
+                      <div className="h-[1px] bg-slate-100" />
+
+                      {/* Previsão de 5 Dias */}
+                      <div className="flex flex-col gap-2">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Previsão para 5 dias</span>
+                        <div className="grid grid-cols-5 gap-1.5">
+                          {getNext5DaysForecast().map((f, idx) => (
+                            <div key={idx} className="flex flex-col items-center bg-slate-50/70 py-1.5 px-0.5 rounded-xl border border-slate-100/50 hover:border-blue-100 transition-all">
+                              <span className="text-[9px] font-extrabold text-slate-500 uppercase tracking-wider">{f.day}</span>
+                              <div className="my-1 shrink-0">
+                                {f.icon === 'sun' && <Sun className="w-4 h-4 text-amber-500" />}
+                                {f.icon === 'cloud-sun' && <CloudSun className="w-4 h-4 text-sky-400" />}
+                                {f.icon === 'cloud' && <Cloud className="w-4 h-4 text-slate-400" />}
+                                {f.icon === 'cloud-rain' && <CloudRain className="w-4 h-4 text-blue-500" />}
+                              </div>
+                              <span className="text-[9px] font-bold text-slate-700">{f.tempMax}°</span>
+                              <span className="text-[8px] font-medium text-slate-400">{f.tempMin}°</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Banner de Informações Importantes (Brando e suave) */}
-                  <div className="bg-slate-100/50 border border-slate-200/60 rounded-2xl p-5 shadow-2xs flex flex-col gap-3">
-                    <div className="flex items-center gap-2 text-slate-700">
-                      <Info className="w-5 h-5 text-slate-500 flex-shrink-0" />
-                      <h3 className="font-display font-bold text-xs uppercase tracking-wider">Informações Importantes</h3>
-                    </div>
-                    <div className="text-xs text-slate-600 leading-relaxed space-y-2.5">
-                      <p className="flex items-start gap-2">
-                        <span className="text-blue-500 font-bold text-base leading-none select-none">•</span>
-                        <span>
-                          <strong className="text-slate-800 font-semibold">Propriedade Particular:</strong> Este flat é uma unidade de propriedade particular privada. Não há serviço de limpeza diária ou troca periódica de roupas de cama e banho inclusos, sendo estes serviços de hotelaria de uso restrito aos hóspedes gerenciados diretamente pelo hotel.
-                        </span>
-                      </p>
-                      <p className="flex items-start gap-2">
-                        <span className="text-blue-500 font-bold text-base leading-none select-none">•</span>
-                        <span>
-                          <strong className="text-slate-800 font-semibold">Saunas Seca e a Vapor:</strong> Estão disponíveis na área comum de lazer do condomínio. A sua utilização é permitida mediante autorização prévia obtida diretamente na recepção do edifício.
-                        </span>
-                      </p>
-                      <p className="flex items-start gap-2">
-                        <span className="text-blue-500 font-bold text-base leading-none select-none">•</span>
-                        <span>
-                          <strong className="text-slate-800 font-semibold">Acesso ao Flat:</strong> Para a segurança de todos os moradores e hóspedes, apenas pessoas devidamente registradas e cadastradas possuem autorização para acessar o flat.
-                        </span>
-                      </p>
-                    </div>
-                  </div>
                   {/* Introdução e Informação Complementar */}
                   <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
                     {guideArticles.filter(art => art.id === 'bem-vindo').map(art => (
@@ -1686,6 +1705,13 @@ export default function App() {
             <span className="hidden sm:inline text-slate-700">|</span>
             
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5 text-[11px]">
+              <div className="flex items-center gap-1 text-[11px]">
+                <Phone className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                <a href="https://wa.me/5562991514568" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-400 hover:text-blue-300 hover:underline transition-colors">
+                  (62) 99151-4568
+                </a>
+              </div>
+              <span className="text-slate-600">•</span>
               <div className="flex items-center gap-1 text-[11px]">
                 <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                 <a href="mailto:contato@alugagoias.com.br" className="font-semibold text-blue-400 hover:text-blue-300 hover:underline transition-colors">

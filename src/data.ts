@@ -40,9 +40,9 @@ export const guideArticles: GuideArticle[] = [
     category: 'Boas-Vindas',
     title: 'Bem-vindo ao Sun Square!',
     excerpt: 'Dicas iniciais para uma chegada tranquila e confortável.',
-    content: 'É um prazer receber você no nosso flat! Preparamos este espaço com muito carinho para que você tenha uma estadia excelente e produtiva em Goiânia.\n\n• PROPRIEDADE PARTICULAR: Este flat é uma propriedade particular. Sendo assim, não há serviço de limpeza diária ou troca de roupas de cama e banho inclusos. Estes serviços são restritos aos hóspedes gerenciados diretamente pelo hotel.\n• CONTROLE DE ACESSO: Somente pessoas devidamente registradas e identificadas possuem acesso autorizado ao flat.\n• CHECKLIST: Para começar bem, siga nosso Checklist de Boas-Vindas e consulte este guia rápido sempre que precisar de informações sobre o flat, regras do condomínio ou recomendações locais.',
+    content: 'É um prazer receber você no nosso flat! Preparamos este espaço com muito carinho para que você tenha uma estadia excelente e produtiva em Goiânia.\n\n• PROPRIEDADE PARTICULAR: Este flat é uma unidade de propriedade particular privada. Não há serviço de limpeza diária ou troca periódica de roupas de cama e banho inclusos, sendo estes de uso restrito aos hóspedes geridos pelo hotel.\n• CONTROLE DE ACESSO: Para a segurança de todos, apenas pessoas devidamente registradas e cadastradas possuem autorização para acessar o flat.\n• SAUNAS SECA E A VAPOR: Estão disponíveis no condomínio mediante autorização prévia obtida diretamente na recepção.\n• MANUAL DIGITAL: Consulte este guia rápido sempre que precisar de informações sobre o flat, regras do condomínio ou recomendações locais.',
     icon: 'Sun',
-    tags: ['bem-vindo', 'boas-vindas', 'inicio', 'propriedade particular', 'limpeza', 'acesso', 'registrado']
+    tags: ['bem-vindo', 'boas-vindas', 'inicio', 'propriedade particular', 'limpeza', 'acesso', 'registrado', 'sauna']
   },
   {
     id: 'wi-fi-flat',
