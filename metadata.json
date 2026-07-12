@@ -1,0 +1,6 @@
+{
+  "name": "Guia Sun Square",
+  "description": "Guia de Boas-Vindas interativo para o Sun Square com busca integrada, regras e suporte.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
