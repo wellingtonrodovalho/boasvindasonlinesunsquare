@@ -9,8 +9,77 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   guideArticles, faqItems, contactList, GuideArticle, FAQItem, ContactInfo, localGuideItems, LocalGuideItem 
 } from './data';
+import {
+  translationStrings,
+  translatedArticles,
+  translatedFaqs,
+  translatedLocalGuideItems,
+  translatedContacts
+} from './translations';
 
 export default function App() {
+  // Language State ('pt' | 'en' | 'es')
+  const [lang, setLang] = useState<'pt' | 'en' | 'es'>('pt');
+
+  // Active Data lists based on language
+  const activeArticles = lang === 'pt' ? guideArticles : (translatedArticles[lang] || guideArticles);
+  const activeFaqs = lang === 'pt' ? faqItems : (translatedFaqs[lang] || faqItems);
+  const activeLocalGuideItems = lang === 'pt' ? localGuideItems : (translatedLocalGuideItems[lang] || localGuideItems);
+  const activeContacts = lang === 'pt' ? contactList : (translatedContacts[lang] || contactList);
+  
+  // Active Translation Strings
+  const t = translationStrings[lang] || translationStrings.pt;
+
+  // Category normalization matchers for Local Guide and Rules
+  const isCategoryMatched = (artCategory: string, filter: string) => {
+    if (filter === 'Todos' || filter === 'All') return true;
+    const ptToOther: { [key: string]: string[] } = {
+      'Gastronomia': ['Gastronomia', 'Gastronomy', 'Gastronomy', 'Gastronomía'],
+      'Serviços': ['Serviços', 'Services', 'Servicios'],
+      'Saúde e Estética': ['Saúde e Estética', 'Estética & Veículos', 'Health & Beauty', 'Salud y Belleza', 'Aesthetics', 'Vehicles, Charging & Aesthetics', 'Vehículos, Recarga y Estética'],
+      'Lazer e Cultura': ['Lazer e Cultura', 'Lazer & Cultura', 'Leisure & Culture', 'Ocio y Cultura']
+    };
+    const list = ptToOther[filter];
+    if (!list) return artCategory.toLowerCase() === filter.toLowerCase();
+    return list.some(item => item.toLowerCase() === artCategory.toLowerCase());
+  };
+
+  const getRulesCategoryLabel = (cat: string) => {
+    if (lang === 'pt') return cat;
+    if (lang === 'en') {
+      switch (cat) {
+        case 'Todas': return 'All';
+        case 'Normas': return 'Rules';
+        case 'Convivência': return 'Coexistence';
+        case 'Animais': return 'Animals';
+        case 'Zelo': return 'Care';
+        default: return cat;
+      }
+    } else {
+      switch (cat) {
+        case 'Todas': return 'Todas';
+        case 'Normas': return 'Normas';
+        case 'Convivência': return 'Convivencia';
+        case 'Animais': return 'Mascotas';
+        case 'Zelo': return 'Cuidado';
+        default: return cat;
+      }
+    }
+  };
+
+  const isRulesCategoryMatched = (artCategory: string, filter: string) => {
+    if (filter === 'Todas' || filter === 'All') return true;
+    const ptToOther: { [key: string]: string[] } = {
+      'Normas': ['Normas', 'Rules'],
+      'Convivência': ['Convivência', 'Coexistence', 'Convivencia'],
+      'Animais': ['Animais', 'Animals', 'Mascotas'],
+      'Zelo': ['Zelo', 'Care', 'Cuidado']
+    };
+    const list = ptToOther[filter];
+    if (!list) return artCategory.toLowerCase() === filter.toLowerCase();
+    return list.some(item => item.toLowerCase() === artCategory.toLowerCase());
+  };
+
   // Navigation & Tabs State
   const [activeTab, setActiveTab] = useState<'inicio' | 'nosso-flat' | 'condominio' | 'guia-local' | 'regras' | 'suporte'>('inicio');
   
@@ -73,36 +142,54 @@ export default function App() {
   const [logoError, setLogoError] = useState(false);
 
   // Greetings based on local hour
-  const [greeting, setGreeting] = useState('Olá');
   const [currentTime, setCurrentTime] = useState('');
   const [currentDateStr, setCurrentDateStr] = useState('');
 
-  useEffect(() => {
+  const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 12) {
-      setGreeting('Bom dia');
+      return t.greetingMorning;
     } else if (hour >= 12 && hour < 18) {
-      setGreeting('Boa tarde');
+      return t.greetingAfternoon;
     } else {
-      setGreeting('Boa noite');
+      return t.greetingNight;
     }
+  };
 
+  useEffect(() => {
     const updateDateTime = () => {
       const now = new Date();
       setCurrentTime(now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }));
       
       const day = now.getDate();
-      const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-      const month = monthNames[now.getMonth()];
-      const dayOfWeekNames = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-      const dayOfWeek = dayOfWeekNames[now.getDay()];
+      const monthNames: { [key: string]: string[] } = {
+        pt: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        es: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+      };
       
-      setCurrentDateStr(`${dayOfWeek}, ${day} de ${month}`);
+      const dayOfWeekNames: { [key: string]: string[] } = {
+        pt: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+        en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        es: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+      };
+      
+      const activeMonths = monthNames[lang] || monthNames.pt;
+      const activeDays = dayOfWeekNames[lang] || dayOfWeekNames.pt;
+      
+      const month = activeMonths[now.getMonth()];
+      const dayOfWeek = activeDays[now.getDay()];
+      
+      if (lang === 'en') {
+        setCurrentDateStr(`${dayOfWeek}, ${month} ${day}`);
+      } else {
+        setCurrentDateStr(`${dayOfWeek}, ${day} de ${month}`);
+      }
     };
     updateDateTime();
     const interval = setInterval(updateDateTime, 15000);
     return () => clearInterval(interval);
-  }, []);
+  }, [lang]);
 
   // Save checklist progress to localStorage
   useEffect(() => {
@@ -208,24 +295,24 @@ export default function App() {
     if (!searchQuery.trim()) return { articles: [], faqs: [], contacts: [] };
     const query = searchQuery.toLowerCase().trim();
 
-    const filteredArticles = guideArticles.filter(art => 
+    const filteredArticles = activeArticles.filter(art => 
       art.title.toLowerCase().includes(query) ||
       art.excerpt.toLowerCase().includes(query) ||
       art.content.toLowerCase().includes(query) ||
       art.category.toLowerCase().includes(query) ||
-      art.tags.some(t => t.toLowerCase().includes(query))
+      (art.tags && art.tags.some((tag: string) => tag.toLowerCase().includes(query)))
     );
 
-    const filteredFaqs = faqItems.filter(faq => 
+    const filteredFaqs = activeFaqs.filter(faq => 
       faq.question.toLowerCase().includes(query) ||
       faq.answer.toLowerCase().includes(query) ||
       faq.category.toLowerCase().includes(query)
     );
 
-    const filteredContacts = contactList.filter(c => 
+    const filteredContacts = activeContacts.filter(c => 
       c.name.toLowerCase().includes(query) ||
       c.role.toLowerCase().includes(query) ||
-      c.email.toLowerCase().includes(query) ||
+      (c.email && c.email.toLowerCase().includes(query)) ||
       c.phone.includes(query)
     );
 
@@ -246,7 +333,7 @@ export default function App() {
     setSearchQuery('');
     setHighlightedArticleId(articleId);
     if (tab === 'guia-local') {
-      const art = guideArticles.find(a => a.id === articleId);
+      const art = activeArticles.find(a => a.id === articleId);
       if (art) {
         setGuideFilter(art.category);
       } else {
@@ -268,7 +355,7 @@ export default function App() {
     setActiveTab(tab);
     setHighlightedArticleId(articleId);
     if (tab === 'guia-local') {
-      const art = guideArticles.find(a => a.id === articleId);
+      const art = activeArticles.find(a => a.id === articleId);
       if (art) {
         setGuideFilter(art.category);
       } else {
@@ -318,21 +405,57 @@ export default function App() {
               )}
               <div>
                 <h1 className="text-lg md:text-xl font-display font-bold tracking-tight text-slate-800 flex items-center gap-1.5">
-                  Sun Square
+                  {t.headerTitle}
                 </h1>
-                <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Guia de Boas Vindas</p>
+                <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">{t.headerSubtitle}</p>
               </div>
             </div>
             
-            {/* Action Badges */}
+            {/* Language Switcher and Action Badges */}
             <div className="flex items-center gap-1.5 md:gap-2">
+              <div className="flex items-center bg-slate-100 p-0.5 rounded-full border border-slate-200">
+                <button
+                  onClick={() => setLang('pt')}
+                  className={`px-1.5 py-1 md:px-2 rounded-full text-[10px] font-extrabold transition-all cursor-pointer select-none ${
+                    lang === 'pt'
+                      ? 'bg-white text-blue-600 shadow-xs'
+                      : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                  title="Português"
+                >
+                  🇧🇷 PT
+                </button>
+                <button
+                  onClick={() => setLang('en')}
+                  className={`px-1.5 py-1 md:px-2 rounded-full text-[10px] font-extrabold transition-all cursor-pointer select-none ${
+                    lang === 'en'
+                      ? 'bg-white text-blue-600 shadow-xs'
+                      : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                  title="English"
+                >
+                  🇺🇸 EN
+                </button>
+                <button
+                  onClick={() => setLang('es')}
+                  className={`px-1.5 py-1 md:px-2 rounded-full text-[10px] font-extrabold transition-all cursor-pointer select-none ${
+                    lang === 'es'
+                      ? 'bg-white text-blue-600 shadow-xs'
+                      : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                  title="Español"
+                >
+                  🇪🇸 ES
+                </button>
+              </div>
+
               <button
                 onClick={() => triggerQuickAction('suporte', 'contatos-uteis')}
                 className="animate-police-strobe flex items-center gap-1 px-2.5 py-1.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[10px] md:text-xs rounded-full shadow-lg active:scale-95 hover:scale-102 cursor-pointer transition-all duration-150 uppercase tracking-wider"
-                title="Canais de Emergência"
+                title={t.emergencyTitle}
               >
                 <ShieldAlert className="w-3.5 h-3.5 text-white animate-pulse shrink-0" />
-                <span>Emergência</span>
+                <span>{t.emergencyBtn}</span>
               </button>
             </div>
           </div>
@@ -346,7 +469,7 @@ export default function App() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Buscar regras, wi-fi, contatos, churrasqueira..."
+              placeholder={t.searchPlaceholder}
               className="w-full pl-10 pr-10 py-2.5 bg-slate-100/80 hover:bg-slate-100 focus:bg-white text-sm text-slate-800 placeholder-slate-400 rounded-full border-none focus:ring-2 focus:ring-blue-500 outline-none transition-all duration-200 shadow-inner"
               id="global-search-bar"
             />
@@ -364,12 +487,12 @@ export default function App() {
           {/* Abas de Navegação Fixas e Visíveis */}
           <nav className="flex border-b border-slate-100 justify-between sm:justify-start sm:gap-4 overflow-x-auto scrollbar-none" id="tabs-navigation">
             {[
-              { id: 'inicio', label: 'Início', icon: Sun },
-              { id: 'nosso-flat', label: 'Nosso Flat', icon: Home },
-              { id: 'condominio', label: 'O Condomínio', icon: Building },
-              { id: 'guia-local', label: 'Guia Local', icon: MapPin },
-              { id: 'regras', label: 'Regras', icon: ClipboardList },
-              { id: 'suporte', label: 'Suporte', icon: Phone }
+              { id: 'inicio', label: lang === 'pt' ? 'Início' : lang === 'en' ? 'Home' : 'Inicio', icon: Sun },
+              { id: 'nosso-flat', label: lang === 'pt' ? 'Nosso Flat' : lang === 'en' ? 'Our Flat' : 'Nuestro Flat', icon: Home },
+              { id: 'condominio', label: lang === 'pt' ? 'O Condomínio' : lang === 'en' ? 'The Condominium' : 'El Condominio', icon: Building },
+              { id: 'guia-local', label: lang === 'pt' ? 'Guia Local' : lang === 'en' ? 'Local Guide' : 'Guía Local', icon: MapPin },
+              { id: 'regras', label: lang === 'pt' ? 'Regras' : lang === 'en' ? 'Rules' : 'Reglas', icon: ClipboardList },
+              { id: 'suporte', label: lang === 'pt' ? 'Suporte' : lang === 'en' ? 'Support' : 'Soporte', icon: Phone }
             ].map((tab) => {
               const IconComponent = tab.icon;
               const isActive = activeTab === tab.id && !hasSearchResults;
@@ -615,11 +738,11 @@ export default function App() {
                       
                       <div className="relative z-10 flex flex-col gap-3">
                         <h2 className="text-2xl md:text-3xl font-display font-bold leading-tight">
-                          {greeting}! Seja bem-vindo(a)
+                          {getGreeting()}! {t.welcomeCardTitle}
                         </h2>
                         
-                        <p className="text-sm text-white/90 max-w-xl leading-relaxed">
-                          Seja muito bem-vindo(a) à Unidade 1208A! Queremos que sua estadia seja extremamente agradável. Tratamos nosso flat com muito carinho e pedimos que cuide do espaço como se fosse seu.
+                        <p className="text-sm text-white/90 max-w-xl leading-relaxed font-normal">
+                          {t.welcomeCardDesc}
                         </p>
                       </div>
 
@@ -627,11 +750,11 @@ export default function App() {
                         <div className="h-[1px] bg-white/20 my-3" />
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-white/80">
                           <span className="flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5" /> Setor Oeste, Goiânia - GO (Frente à Praça do Sol)
+                            <MapPin className="w-3.5 h-3.5" /> {t.welcomeCardLocation}
                           </span>
                           <span className="hidden sm:inline">&bull;</span>
                           <span className="flex items-center gap-1">
-                            <Building className="w-3.5 h-3.5" /> Unidade 1208A
+                            <Building className="w-3.5 h-3.5" /> {t.welcomeCardUnit}
                           </span>
                         </div>
                       </div>
@@ -642,22 +765,22 @@ export default function App() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-slate-500 font-medium text-xs uppercase tracking-wider">
                           <Clock className="w-4 h-4 text-blue-500" />
-                          <span>Hora &amp; Clima</span>
+                          <span>{lang === 'pt' ? 'Hora & Clima' : lang === 'en' ? 'Time & Weather' : 'Hora y Clima'}</span>
                         </div>
-                        <span className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold">Ao Vivo</span>
+                        <span className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold">{t.liveBadge}</span>
                       </div>
                       
                       <div className="flex flex-col">
                         <span className="text-3xl font-mono font-bold text-slate-800 tracking-tight leading-none">{currentTime || '--:--'}</span>
-                        <span className="text-xs text-slate-400 font-medium mt-1.5 capitalize">{currentDateStr || 'Carregando...'}</span>
+                        <span className="text-xs text-slate-400 font-medium mt-1.5 capitalize">{currentDateStr || (lang === 'pt' ? 'Carregando...' : lang === 'en' ? 'Loading...' : 'Cargando...')}</span>
                       </div>
 
                       <div className="h-[1px] bg-slate-100" />
 
                       <div className="flex items-center justify-between">
                         <div className="flex flex-col">
-                          <span className="text-xs font-bold text-slate-700">Goiânia, GO</span>
-                          <span className="text-[11px] text-slate-500 mt-0.5">Ensolarado &bull; 28°C</span>
+                          <span className="text-xs font-bold text-slate-700">{t.locationLabel}</span>
+                          <span className="text-[11px] text-slate-500 mt-0.5">{t.weatherDetails}</span>
                         </div>
                         <div className="p-2 bg-amber-50 rounded-xl text-amber-500">
                           <Sun className="w-5 h-5 animate-[spin_15s_linear_infinite]" />
@@ -668,7 +791,7 @@ export default function App() {
 
                       {/* Previsão de 5 Dias */}
                       <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Previsão para 5 dias</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t.forecastTitle}</span>
                         <div className="grid grid-cols-5 gap-1.5">
                           {getNext5DaysForecast().map((f, idx) => (
                             <div key={idx} className="flex flex-col items-center bg-slate-50/70 py-1.5 px-0.5 rounded-xl border border-slate-100/50 hover:border-blue-100 transition-all">
@@ -690,7 +813,7 @@ export default function App() {
 
                   {/* Introdução e Informação Complementar */}
                   <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
-                    {guideArticles.filter(art => art.id === 'bem-vindo').map(art => (
+                    {activeArticles.filter(art => art.id === 'bem-vindo').map(art => (
                       <div key={art.id} id={art.id} className="scroll-mt-28">
                         <div className="flex items-center gap-2.5 mb-2">
                           <span className="p-2 bg-blue-50 text-blue-600 rounded-xl">
@@ -716,9 +839,9 @@ export default function App() {
                   <div className="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 shadow-sm">
                     <div className="mb-5">
                       <h3 className="font-display font-bold text-slate-800 text-sm md:text-base flex items-center gap-2">
-                        <Info className="w-4 h-4 text-blue-600" /> Instruções de Boas-Vindas
+                        <Info className="w-4 h-4 text-blue-600" /> {lang === 'pt' ? 'Instruções de Boas-Vindas' : lang === 'en' ? 'Welcome Instructions' : 'Instrucciones de Bienvenida'}
                       </h3>
-                      <p className="text-xs text-slate-400 mt-0.5">Pontos importantes para garantir uma estadia agradável e sem imprevistos.</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{lang === 'pt' ? 'Pontos importantes para garantir uma estadia agradável e sem imprevistos.' : lang === 'en' ? 'Important details to ensure a pleasant stay without any unexpected issues.' : 'Detalles importantes para garantizar una estancia agradable y sin imprevistos.'}</p>
                     </div>
 
                     {/* Informational Cards Grid */}
@@ -726,8 +849,8 @@ export default function App() {
                       {[
                         { 
                           key: 'checkin', 
-                          title: 'Horário de Check-in', 
-                          desc: 'A recepção funciona 24h, mas o check-in é a partir das 14h. Lembre-se de informar o horário de sua chegada ao anfitrião.',
+                          title: lang === 'pt' ? 'Horário de Check-in' : lang === 'en' ? 'Check-in Time' : 'Horario de Check-in', 
+                          desc: lang === 'pt' ? 'A recepção funciona 24h, mas o check-in é a partir das 14h. Lembre-se de informar o horário de sua chegada ao anfitrião.' : lang === 'en' ? 'The reception operates 24h, but check-in is starting from 2:00 PM. Remember to inform the host about your arrival time.' : 'La recepción está abierta las 24 horas, pero el check-in es a partir de las 14h. Recuerde informar al anfitrión de su hora de llegada.',
                           tab: 'regras',
                           target: 'regras-checkin-visitas',
                           icon: <Clock className="w-5 h-5 text-blue-600" />,
@@ -735,8 +858,8 @@ export default function App() {
                         },
                         { 
                           key: 'voltagem', 
-                          title: 'Atenção à Voltagem (220V)', 
-                          desc: 'Todas as tomadas do flat são 220V. Cuidado para não danificar seus aparelhos.',
+                          title: lang === 'pt' ? 'Atenção à Voltagem (220V)' : lang === 'en' ? 'Voltage Alert (220V)' : 'Atención al Voltaje (220V)', 
+                          desc: lang === 'pt' ? 'Todas as tomadas do flat são 220V. Cuidado para não danificar seus aparelhos.' : lang === 'en' ? 'All power outlets in the flat are 220V. Please be careful not to damage your appliances.' : 'Todos los enchufes del apartamento son de 220V. Cuidado de no dañar sus electrodomésticos.',
                           tab: 'nosso-flat',
                           target: 'cuidados-sustentabilidade',
                           icon: <Zap className="w-5 h-5 text-amber-600" />,
@@ -744,8 +867,8 @@ export default function App() {
                         },
                         { 
                           key: 'piscina', 
-                          title: 'Uso da Piscina', 
-                          desc: 'Localizada no Mezanino. É terminantemente proibido copos ou garrafas de vidro na área.',
+                          title: lang === 'pt' ? 'Uso da Piscina' : lang === 'en' ? 'Pool Usage' : 'Uso de la Piscina', 
+                          desc: lang === 'pt' ? 'Localizada no Mezanino. É terminantemente proibido copos ou garrafas de vidro na área.' : lang === 'en' ? 'Located on the Mezzanine floor. Glass cups or bottles are strictly prohibited in the pool area.' : 'Ubicada en el Entrepiso. Queda terminantemente prohibido llevar vasos o botellas de vidrio al área.',
                           tab: 'condominio',
                           target: 'diferenciais-condominio',
                           icon: <Smile className="w-5 h-5 text-emerald-600" />,
@@ -753,8 +876,8 @@ export default function App() {
                         },
                         { 
                           key: 'lixo', 
-                          title: 'Descarte de Lixo', 
-                          desc: 'Todo o lixo ensacado deve ser levado e depositado nas lixeiras do Subsolo 1.',
+                          title: lang === 'pt' ? 'Descarte de Lixo' : lang === 'en' ? 'Trash Disposal' : 'Desecho de Basura', 
+                          desc: lang === 'pt' ? 'Todo o lixo ensacado deve ser levado e depositado nas lixeiras do Subsolo 1.' : lang === 'en' ? 'All bagged waste must be taken and deposited in the trash bins located on Basement 1 (Subsolo 1).' : 'Toda la basura en bolsas debe ser llevada y depositada en los botes de basura del Sótano 1 (Subsolo 1).',
                           tab: 'nosso-flat',
                           target: 'cuidados-sustentabilidade',
                           icon: <Trash2 className="w-5 h-5 text-rose-600" />,
@@ -783,7 +906,7 @@ export default function App() {
                   {/* Acesso Rápido - Touch Cards */}
                   <div className="flex flex-col gap-3">
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider pl-1 flex items-center gap-1.5">
-                      <Zap className="w-3.5 h-3.5 text-blue-500" /> Atalhos Úteis
+                      <Zap className="w-3.5 h-3.5 text-blue-500" /> {t.quickActionsTitle}
                     </h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       
@@ -794,8 +917,8 @@ export default function App() {
                         <div className="p-2 bg-blue-50 rounded-xl text-blue-600 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
                           <Wifi className="w-5 h-5" />
                         </div>
-                        <span className="block text-xs font-semibold text-slate-400 mb-1">Acesso à Rede</span>
-                        <span className="block text-sm font-bold text-slate-700 leading-snug">Senha Wi-Fi</span>
+                        <span className="block text-xs font-semibold text-slate-400 mb-1">{lang === 'pt' ? 'Acesso à Rede' : lang === 'en' ? 'Network Access' : 'Acceso de Red'}</span>
+                        <span className="block text-sm font-bold text-slate-700 leading-snug">{lang === 'pt' ? 'Senha Wi-Fi' : lang === 'en' ? 'Wi-Fi Password' : 'Contraseña Wi-Fi'}</span>
                       </button>
 
                       <button 
@@ -805,8 +928,8 @@ export default function App() {
                         <div className="p-2 bg-blue-50 rounded-xl text-blue-600 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
                           <VolumeX className="w-5 h-5" />
                         </div>
-                        <span className="block text-xs font-semibold text-slate-400 mb-1">Convivência</span>
-                        <span className="block text-sm font-bold text-slate-700 leading-snug">Lei do Silêncio</span>
+                        <span className="block text-xs font-semibold text-slate-400 mb-1">{lang === 'pt' ? 'Convivência' : lang === 'en' ? 'Coexistence' : 'Convivencia'}</span>
+                        <span className="block text-sm font-bold text-slate-700 leading-snug">{lang === 'pt' ? 'Lei do Silêncio' : lang === 'en' ? 'Silence Rules' : 'Reglas de Silencio'}</span>
                       </button>
 
                       <button 
@@ -819,8 +942,8 @@ export default function App() {
                         <div className="p-2 bg-red-100 text-red-600 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-red-600 group-hover:text-white transition-all duration-300 rounded-xl">
                           <ShieldAlert className="w-5 h-5" />
                         </div>
-                        <span className="block text-xs font-semibold text-red-500 mb-1">Canais Oficiais</span>
-                        <span className="block text-sm font-bold text-slate-800 leading-snug">Emergências</span>
+                        <span className="block text-xs font-semibold text-red-500 mb-1">{lang === 'pt' ? 'Canais Oficiais' : lang === 'en' ? 'Official Channels' : 'Canales Oficiales'}</span>
+                        <span className="block text-sm font-bold text-slate-800 leading-snug">{lang === 'pt' ? 'Emergências' : lang === 'en' ? 'Emergencies' : 'Emergencias'}</span>
                       </button>
 
                       <button 
@@ -835,8 +958,8 @@ export default function App() {
                         <div className="p-2 bg-blue-50 rounded-xl text-blue-600 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
                           <MessageSquare className="w-5 h-5" />
                         </div>
-                        <span className="block text-xs font-semibold text-slate-400 mb-1">Suporte Admin</span>
-                        <span className="block text-sm font-bold text-slate-700 leading-snug">Fale Conosco</span>
+                        <span className="block text-xs font-semibold text-slate-400 mb-1">{lang === 'pt' ? 'Suporte Admin' : lang === 'en' ? 'Admin Support' : 'Soporte Admin'}</span>
+                        <span className="block text-sm font-bold text-slate-700 leading-snug">{lang === 'pt' ? 'Fale Conosco' : lang === 'en' ? 'Contact Us' : 'Contáctenos'}</span>
                       </button>
 
                     </div>
@@ -844,7 +967,7 @@ export default function App() {
 
                   {/* Artigos Dinâmicos de "Nosso Flat" */}
                   <div className="flex flex-col gap-4">
-                    {guideArticles.filter(art => art.tab === 'nosso-flat').map((art) => {
+                    {activeArticles.filter(art => art.tab === 'nosso-flat').map((art) => {
                       const isHighlighted = highlightedArticleId === art.id;
                       return (
                         <div 
@@ -966,22 +1089,22 @@ export default function App() {
                   <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex flex-col gap-4">
                     <div>
                       <h3 className="font-display font-bold text-slate-800 text-sm md:text-base flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-blue-600" /> Mapa de Infraestrutura Interativo
+                        <MapPin className="w-4 h-4 text-blue-600" /> {t.floorMapTitle}
                       </h3>
-                      <p className="text-xs text-slate-400 mt-0.5">Explore as instalações por andar e seus horários de funcionamento.</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{t.floorMapSubtitle}</p>
                     </div>
 
                     {/* Floor Buttons */}
                     <div className="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-xl">
                       {[
-                        { id: 'mezanino', label: 'Mezanino', info: 'Lazer Completo' },
-                        { id: 'terreo', label: 'Térreo', info: 'Porte-Cochère' },
-                        { id: 'subsolo', label: 'Subsolos', info: 'Manobrista' }
+                        { id: 'mezanino', label: lang === 'pt' ? 'Mezanino' : lang === 'en' ? 'Mezzanine' : 'Entrepiso', info: lang === 'pt' ? 'Lazer Completo' : lang === 'en' ? 'Full Leisure' : 'Ocio Completo' },
+                        { id: 'terreo', label: lang === 'pt' ? 'Térreo' : lang === 'en' ? 'Ground Floor' : 'Planta Baja', info: lang === 'pt' ? 'Porte-Cochère' : lang === 'en' ? 'Main Access' : 'Acceso Principal' },
+                        { id: 'subsolo', label: lang === 'pt' ? 'Subsolos' : lang === 'en' ? 'Basement' : 'Sótano', info: lang === 'pt' ? 'Manobrista' : lang === 'en' ? 'Valet & Services' : 'Acomodador' }
                       ].map((floor) => (
                         <button
                           key={floor.id}
                           onClick={() => setActiveFloor(floor.id as any)}
-                          className={`py-2 px-1 rounded-lg text-[11px] font-bold transition-all text-center flex flex-col items-center justify-center outline-none select-none ${
+                          className={`py-2 px-1 rounded-lg text-[11px] font-bold transition-all text-center flex flex-col items-center justify-center outline-none select-none cursor-pointer ${
                             activeFloor === floor.id 
                               ? 'bg-white text-blue-600 shadow-sm' 
                               : 'text-slate-500 hover:text-slate-800'
@@ -999,24 +1122,44 @@ export default function App() {
                         <div className="flex flex-col gap-2.5">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="p-1.5 bg-blue-50 text-blue-600 rounded-lg"><Smile className="w-4 h-4" /></span>
-                            <h4 className="text-sm font-bold text-slate-800">Mezanino (Lazer Completo)</h4>
+                            <h4 className="text-sm font-bold text-slate-800">{t.floorMapMezanino}</h4>
                           </div>
                           <div className="text-xs text-slate-600 leading-relaxed space-y-1.5">
-                            <p>O andar central de lazer do condomínio, concentrando as seguintes comodidades:</p>
-                            <p>• <strong>Piscina Climatizada:</strong> Espaço ideal para relaxar e nadar com toda a segurança.</p>
-                            <p>• <strong>Saunas Seca e a Vapor:</strong> Disponíveis para o bem-estar dos moradores (solicite liberação prévia na recepção).</p>
-                            <p>• <strong>Academia (Fitness Centre):</strong> Espaço moderno equipado para seus treinos.</p>
-                            <p>• <strong>Sala de Jogos:</strong> Ambiente divertido e equipado para momentos de lazer.</p>
-                            <p>• <strong>Espaço de Trabalho:</strong> Infraestrutura corporativa com mesas ergonômicas, internet fibra ultra rápida e salas de reunião.</p>
+                            <p>{t.floorMapMezaninoDesc}</p>
+                            {lang === 'pt' ? (
+                              <>
+                                <p>• <strong>Piscina Climatizada:</strong> Espaço ideal para relaxar e nadar com toda a segurança.</p>
+                                <p>• <strong>Saunas Seca e a Vapor:</strong> Disponíveis para o bem-estar dos moradores (solicite liberação prévia na recepção).</p>
+                                <p>• <strong>Academia (Fitness Centre):</strong> Espaço moderno equipado para seus treinos.</p>
+                                <p>• <strong>Sala de Jogos:</strong> Ambiente divertido e equipado para momentos de lazer.</p>
+                                <p>• <strong>Espaço de Trabalho:</strong> Infraestrutura corporativa com mesas ergonômicas, internet fibra ultra rápida e salas de reunião.</p>
+                              </>
+                            ) : lang === 'en' ? (
+                              <>
+                                <p>• <strong>Climatized Pool:</strong> Ideal space to relax and swim safely.</p>
+                                <p>• <strong>Dry & Steam Saunas:</strong> Available for guest wellness (request activation at the front desk).</p>
+                                <p>• <strong>Gym (Fitness Centre):</strong> Modern gym fully equipped for your workouts.</p>
+                                <p>• <strong>Games Room:</strong> Fun environment equipped for leisure moments.</p>
+                                <p>• <strong>Coworking Space:</strong> Corporate infrastructure with ergonomic tables, ultra-fast fiber internet, and meeting rooms.</p>
+                              </>
+                            ) : (
+                              <>
+                                <p>• <strong>Piscina Climatizada:</strong> Espacio ideal para relajarse y nadar con total seguridad.</p>
+                                <p>• <strong>Saunas Seca y de Vapor:</strong> Disponibles para el bienestar de los huéspedes (solicite activación en recepción).</p>
+                                <p>• <strong>Gimnasio (Fitness Centre):</strong> Espacio moderno equipado para sus entrenamientos.</p>
+                                <p>• <strong>Sala de Juegos:</strong> Ambiente divertido y equipado para momentos de ocio.</p>
+                                <p>• <strong>Espacio de Trabajo:</strong> Infraestructura corporativa con mesas ergonómicas, internet de fibra ultra rápido y salas de reuniones.</p>
+                              </>
+                            )}
                           </div>
                           <div className="grid grid-cols-2 gap-3 mt-1.5 text-[11px] bg-white p-2.5 rounded-lg border border-slate-100">
                             <div>
-                              <p className="text-slate-400 font-medium">Horários</p>
-                              <p className="font-bold text-slate-700">Piscina & Saunas: Ter-Dom (07h-22h) | Academia: 24h</p>
+                              <p className="text-slate-400 font-medium">{lang === 'pt' ? 'Horários' : lang === 'en' ? 'Hours' : 'Horarios'}</p>
+                              <p className="font-bold text-slate-700">{lang === 'pt' ? 'Piscina & Saunas: Ter-Dom (07h-22h) | Academia: 24h' : lang === 'en' ? 'Pool & Saunas: Tue-Sun (7am-10pm) | Gym: 24h' : 'Piscina y Saunas: Mar-Dom (07h-22h) | Gimnasio: 24h'}</p>
                             </div>
                             <div>
-                              <p className="text-slate-400 font-medium">Regras</p>
-                              <p className="font-bold text-slate-700">Proibido garrafas/copos de vidro nas áreas úmidas</p>
+                              <p className="text-slate-400 font-medium">{lang === 'pt' ? 'Regras' : lang === 'en' ? 'Rules' : 'Reglas'}</p>
+                              <p className="font-bold text-slate-700">{lang === 'pt' ? 'Proibido garrafas/copos de vidro nas áreas úmidas' : lang === 'en' ? 'No glass cups/bottles in the pool area' : 'Prohibido llevar vasos/botellas de vidrio al área de piscina'}</p>
                             </div>
                           </div>
                         </div>
@@ -1026,21 +1169,19 @@ export default function App() {
                         <div className="flex flex-col gap-2.5">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="p-1.5 bg-blue-50 text-blue-600 rounded-lg"><Home className="w-4 h-4" /></span>
-                            <h4 className="text-sm font-bold text-slate-800">Térreo (Entrada Principal & Recepção)</h4>
+                            <h4 className="text-sm font-bold text-slate-800">{t.floorMapTerreo}</h4>
                           </div>
                           <p className="text-xs text-slate-600 leading-relaxed">
-                            O acesso oficial do edifício. Conta com portaria e recepção 24h prontas para receber correspondências, encomendas e identificar visitas de forma segura. 
-                            <br /><br />
-                            Na entrada, você conta com o exclusivo <strong>Porte-cochère (área de embarque e desembarque)</strong>, ideal para paradas rápidas com total conforto, segurança e proteção contra chuva/sol ao chamar Uber, táxi ou ao descarregar bagagens.
+                            {t.floorMapTerreoDesc}
                           </p>
                           <div className="grid grid-cols-2 gap-3 mt-1.5 text-[11px] bg-white p-2.5 rounded-lg border border-slate-100">
                             <div>
-                              <p className="text-slate-400 font-medium">Segurança</p>
-                              <p className="font-bold text-slate-700">Monitoramento e Portaria 24h</p>
+                              <p className="text-slate-400 font-medium">{lang === 'pt' ? 'Segurança' : lang === 'en' ? 'Security' : 'Seguridad'}</p>
+                              <p className="font-bold text-slate-700">{lang === 'pt' ? 'Monitoramento e Portaria 24h' : lang === 'en' ? 'CCTV & 24h Front Desk' : 'Monitoreo y Recepción 24h'}</p>
                             </div>
                             <div>
                               <p className="text-slate-400 font-medium">Porte-cochère</p>
-                              <p className="font-bold text-slate-700">Apenas paradas rápidas (embarque/desembarque)</p>
+                              <p className="font-bold text-slate-700">{lang === 'pt' ? 'Apenas paradas rápidas (embarque/desembarque)' : lang === 'en' ? 'Quick drop-offs and pick-ups only' : 'Solo paradas rápidas (embarque y desembarque)'}</p>
                             </div>
                           </div>
                         </div>
@@ -1050,22 +1191,41 @@ export default function App() {
                         <div className="flex flex-col gap-2.5">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="p-1.5 bg-blue-50 text-blue-600 rounded-lg"><Car className="w-4 h-4" /></span>
-                            <h4 className="text-sm font-bold text-slate-800">Subsolos (Estacionamento Rotativo & Reciclagem)</h4>
+                            <h4 className="text-sm font-bold text-slate-800">{t.floorMapSubsolo}</h4>
                           </div>
                           <div className="text-xs text-slate-600 leading-relaxed space-y-1">
-                            <p>• <strong>Vagas Rotativas:</strong> O condomínio possui vagas de garagem rotativas (sujeitas a disponibilidade).</p>
-                            <p>• <strong>Serviço de Manobrista:</strong> Manobrista profissional incluso na garagem para maior comodidade e organização ao estacionar o veículo.</p>
-                            <p>• <strong>Bicicletário & Recarga:</strong> Bicicletário seguro e carregadores elétricos rápidos no Subsolo 1.</p>
-                            <p>• <strong>Centro de Reciclagem:</strong> Localizado no Subsolo 1 para o descarte correto do lixo reciclável.</p>
+                            <p>{t.floorMapSubsoloDesc}</p>
+                            {lang === 'pt' ? (
+                              <>
+                                <p>• <strong>Vagas Rotativas:</strong> O condomínio possui vagas de garagem rotativas (sujeitas a disponibilidade).</p>
+                                <p>• <strong>Serviço de Manobrista:</strong> Manobrista profissional incluso na garagem para maior comodidade e organização ao estacionar o veículo.</p>
+                                <p>• <strong>Bicicletário & Recarga:</strong> Bicicletário seguro e carregadores elétricos rápidos no Subsolo 1.</p>
+                                <p>• <strong>Centro de Reciclagem:</strong> Localizado no Subsolo 1 para o descarte correto do lixo reciclável.</p>
+                              </>
+                            ) : lang === 'en' ? (
+                              <>
+                                <p>• <strong>Rotative Parking Spaces:</strong> The condominium has rotative parking spaces (subject to availability).</p>
+                                <p>• <strong>Valet Parking:</strong> Professional valet service included in the parking lot for extra convenience and order.</p>
+                                <p>• <strong>Bicycle Parking & EV Charging:</strong> Secure bicycle rack and rapid EV chargers on Basement 1.</p>
+                                <p>• <strong>Recycling Centre:</strong> Located on Basement 1 for eco-friendly trash disposal.</p>
+                              </>
+                            ) : (
+                              <>
+                                <p>• <strong>Estacionamiento Rotativo:</strong> El condominio dispone de plazas de garaje rotativas (sujetas a disponibilidad).</p>
+                                <p>• <strong>Servicio de Acomodador:</strong> Acomodador profesional incluido en el garaje para mayor comodidad y organización.</p>
+                                <p>• <strong>Bicicletero y Carga Eléctrica:</strong> Bicicletero seguro y cargadores rápidos para vehículos eléctricos en el Sótano 1.</p>
+                                <p>• <strong>Centro de Reciclaje:</strong> Ubicado en el Sótano 1 para la correcta disposición de residuos.</p>
+                              </>
+                            )}
                           </div>
                           <div className="grid grid-cols-2 gap-3 mt-1.5 text-[11px] bg-white p-2.5 rounded-lg border border-slate-100">
                             <div>
-                              <p className="text-slate-400 font-medium">Estacionamento</p>
-                              <p className="font-bold text-slate-700">Rotativo com Manobrista</p>
+                              <p className="text-slate-400 font-medium">{lang === 'pt' ? 'Estacionamento' : lang === 'en' ? 'Parking' : 'Estacionamiento'}</p>
+                              <p className="font-bold text-slate-700">{lang === 'pt' ? 'Rotativo com Manobrista' : lang === 'en' ? 'Rotative with Valet Service' : 'Rotativo con Acomodador'}</p>
                             </div>
                             <div>
-                              <p className="text-slate-400 font-medium">Coleta de Lixo</p>
-                              <p className="font-bold text-slate-700">Entregues no Subsolo 1</p>
+                              <p className="text-slate-400 font-medium">{lang === 'pt' ? 'Coleta de Lixo' : lang === 'en' ? 'Waste Disposal' : 'Recolección de Basura'}</p>
+                              <p className="font-bold text-slate-700">{lang === 'pt' ? 'Entregues no Subsolo 1' : lang === 'en' ? 'Delivered on Basement 1' : 'Depositar en Sótano 1'}</p>
                             </div>
                           </div>
                         </div>
@@ -1075,7 +1235,7 @@ export default function App() {
 
                   {/* Artigos Dinâmicos do Condomínio */}
                   <div className="flex flex-col gap-4">
-                    {guideArticles.filter(art => art.tab === 'condominio').map((art) => {
+                    {activeArticles.filter(art => art.tab === 'condominio').map((art) => {
                       const isHighlighted = highlightedArticleId === art.id;
                       return (
                         <div 
@@ -1126,14 +1286,18 @@ export default function App() {
                   
                   {/* Introdução ao Guia Local */}
                   <div className="flex flex-col gap-1 pl-1">
-                    <h3 className="font-display font-bold text-slate-800 text-sm md:text-base">Guia de Localização e Arredores</h3>
-                    <p className="text-xs text-slate-400">Descubra as melhores atrações, gastronomia e serviços perto do Sun Square.</p>
+                    <h3 className="font-display font-bold text-slate-800 text-sm md:text-base">
+                      {lang === 'pt' ? 'Guia de Localização e Arredores' : lang === 'en' ? 'Location & Surroundings' : 'Guía de Ubicación y Alrededores'}
+                    </h3>
+                    <p className="text-xs text-slate-400">
+                      {lang === 'pt' ? 'Descubra as melhores atrações, gastronomia e serviços perto do Sun Square.' : lang === 'en' ? 'Discover the best attractions, restaurants, and services near Sun Square.' : 'Descubre las mejores atracciones, restaurantes y servicios cerca de Sun Square.'}
+                    </p>
                   </div>
 
                   {/* Artigos Dinâmicos de "Guia Local" */}
                   <div className="flex flex-col gap-4">
-                    {guideArticles
-                      .filter(art => art.tab === 'guia-local' && (guideFilter === 'Todos' || art.category === guideFilter))
+                    {activeArticles
+                      .filter(art => art.tab === 'guia-local' && isCategoryMatched(art.category, guideFilter))
                       .map((art) => {
                       const isHighlighted = highlightedArticleId === art.id;
                       return (
@@ -1159,7 +1323,7 @@ export default function App() {
                             
                             {isHighlighted && (
                               <span className="text-[9px] font-bold uppercase bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
-                                Buscado
+                                {lang === 'pt' ? 'Buscado' : lang === 'en' ? 'Found' : 'Encontrado'}
                               </span>
                             )}
                           </div>
@@ -1171,7 +1335,7 @@ export default function App() {
                           <div className="text-xs text-slate-600 space-y-3 leading-relaxed whitespace-pre-line">
                             {art.id.startsWith('guia-local-') ? (
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                {localGuideItems
+                                {activeLocalGuideItems
                                   .filter((item) => item.articleId === art.id)
                                   .map((item) => (
                                     <div 
@@ -1189,7 +1353,7 @@ export default function App() {
                                           </h4>
                                           {item.id === 'don-will' && (
                                             <span className="text-[9px] font-extrabold uppercase bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full tracking-wide shrink-0">
-                                              No Sun Square
+                                              {lang === 'pt' ? 'No Sun Square' : lang === 'en' ? 'At Sun Square' : 'En el Sun Square'}
                                             </span>
                                           )}
                                         </div>
@@ -1229,7 +1393,7 @@ export default function App() {
                                             referrerPolicy="no-referrer"
                                             className="w-full text-[10px] font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 py-1.5 px-2 rounded-lg border border-rose-200 flex items-center justify-center gap-1.5 active:scale-95 transition-all mt-1"
                                           >
-                                            <ExternalLink className="w-3 h-3 text-rose-500" /> Pedir Online
+                                            <ExternalLink className="w-3 h-3 text-rose-500" /> {lang === 'pt' ? 'Pedir Online' : lang === 'en' ? 'Order Online' : 'Pedir en Línea'}
                                           </a>
                                         )}
                                       </div>
@@ -1260,13 +1424,13 @@ export default function App() {
                         <button
                           key={cat}
                           onClick={() => setRulesFilter(cat)}
-                          className={`py-1.5 px-3 rounded-xl text-xs font-semibold whitespace-nowrap outline-none transition-all ${
+                          className={`py-1.5 px-3 rounded-xl text-xs font-semibold whitespace-nowrap outline-none transition-all cursor-pointer ${
                             isSelected 
                               ? 'bg-blue-600 text-white shadow-xs' 
                               : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
                           }`}
                         >
-                          {cat}
+                          {getRulesCategoryLabel(cat)}
                         </button>
                       );
                     })}
@@ -1276,16 +1440,22 @@ export default function App() {
                   <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-blue-900 text-xs flex gap-3 shadow-2xs">
                     <ShieldAlert className="w-5 h-5 text-blue-600 shrink-0 mt-0.5 animate-pulse" />
                     <div>
-                      <p className="font-bold">Aviso sobre Infrações e Multas</p>
-                      <p className="opacity-90 mt-0.5 leading-relaxed">Conforme deliberado na última Convenção do Sun Square, infrações sistemáticas ao silêncio ou descarte inadequado de lixo geram uma advertência inicial. Na reincidência, a multa equivale a 50% de uma taxa condominial ordinária.</p>
+                      <p className="font-bold">{lang === 'pt' ? 'Aviso sobre Infrações e Multas' : lang === 'en' ? 'Warning on Violations & Fines' : 'Aviso sobre Infracciones y Multas'}</p>
+                      <p className="opacity-90 mt-0.5 leading-relaxed">
+                        {lang === 'pt' 
+                          ? 'Conforme deliberado na última Convenção do Sun Square, infrações sistemáticas ao silêncio ou descarte inadequado de lixo geram uma advertência inicial. Na reincidência, a multa equivale a 50% de uma taxa condominial ordinária.' 
+                          : lang === 'en' 
+                          ? 'As decided in the last Sun Square Assembly, systematic silence or trash disposal violations result in an initial warning. In case of relapse, the fine equals 50% of a regular condominium fee.' 
+                          : 'De acuerdo con lo decidido en la última Asamblea de Sun Square, las violaciones sistemáticas al silencio o desecho incorrecto de basura generan una advertencia inicial. En caso de reincidencia, la multa equivale al 50% de una cuota ordinaria de condominio.'}
+                      </p>
                     </div>
                   </div>
 
                   {/* Lista de Regras (Filtrada) */}
                   <div className="flex flex-col gap-4">
-                    {guideArticles
+                    {activeArticles
                       .filter(art => art.tab === 'regras')
-                      .filter(art => rulesFilter === 'Todas' || art.category === rulesFilter)
+                      .filter(art => isRulesCategoryMatched(art.category, rulesFilter))
                       .map((art) => {
                         const isHighlighted = highlightedArticleId === art.id;
                         return (
@@ -1342,26 +1512,28 @@ export default function App() {
                         <span className="p-2 bg-blue-50 text-blue-600 rounded-xl">
                           <Phone className="w-5 h-5" />
                         </span>
-                        <h3 className="font-display font-bold text-slate-800 text-sm md:text-base">Telefones Úteis e Emergência</h3>
+                        <h3 className="font-display font-bold text-slate-800 text-sm md:text-base">
+                          {lang === 'pt' ? 'Telefones Úteis e Emergência' : lang === 'en' ? 'Useful & Emergency Numbers' : 'Teléfonos Útiles y Emergencias'}
+                        </h3>
                       </div>
                     </div>
 
                     <p className="text-xs text-slate-500 mb-4 leading-relaxed">
-                      Em situações críticas, entre em contato imediatamente com os órgãos públicos de emergência da cidade:
+                      {lang === 'pt' ? 'Em situações críticas, entre em contato imediatamente com os órgãos públicos de emergência da cidade:' : lang === 'en' ? 'In critical situations, immediately contact the city emergency public services:' : 'En situaciones críticas, póngase en contacto de inmediato con los servicios de emergencia de la ciudad:'}
                     </p>
 
                     <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 text-[11px] text-slate-600">
                       <div className="grid grid-cols-3 gap-2.5 text-center font-bold">
                         <div className="p-2.5 bg-white border border-slate-200 rounded-lg text-slate-800">
-                          <p className="text-xs text-slate-400 font-semibold mb-0.5">Polícia Militar</p>
+                          <p className="text-[10px] text-slate-400 font-semibold mb-0.5">{lang === 'pt' ? 'Polícia Militar' : lang === 'en' ? 'Military Police' : 'Policía Militar'}</p>
                           <span className="text-sm font-bold text-slate-800">190</span>
                         </div>
                         <div className="p-2.5 bg-white border border-slate-200 rounded-lg text-slate-800">
-                          <p className="text-xs text-slate-400 font-semibold mb-0.5">SAMU</p>
+                          <p className="text-[10px] text-slate-400 font-semibold mb-0.5">SAMU</p>
                           <span className="text-sm font-bold text-slate-800">192</span>
                         </div>
                         <div className="p-2.5 bg-white border border-slate-200 rounded-lg text-slate-800">
-                          <p className="text-xs text-slate-400 font-semibold mb-0.5">Bombeiros</p>
+                          <p className="text-[10px] text-slate-400 font-semibold mb-0.5">{lang === 'pt' ? 'Bombeiros' : lang === 'en' ? 'Fire Department' : 'Bomberos'}</p>
                           <span className="text-sm font-bold text-slate-800">193</span>
                         </div>
                       </div>
@@ -1371,14 +1543,14 @@ export default function App() {
                   {/* Lista Completa da Equipe (Staff) */}
                   <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm" id="staff-contacts">
                     <h3 className="font-display font-bold text-slate-800 text-sm md:text-base mb-3 flex items-center gap-2">
-                      <User className="w-4 h-4 text-blue-600" /> Contato do Anfitrião
+                      <User className="w-4 h-4 text-blue-600" /> {lang === 'pt' ? 'Contato do Anfitrião' : lang === 'en' ? 'Host Contact' : 'Contacto del Anfitrión'}
                     </h3>
                     <p className="text-xs text-slate-500 mb-4 leading-relaxed">
-                      Fale diretamente com o anfitrião Wellington para tirar dúvidas ou solicitar suporte durante sua estadia.
+                      {lang === 'pt' ? 'Fale diretamente com o anfitrião Wellington para tirar dúvidas ou solicitar suporte durante sua estadia.' : lang === 'en' ? 'Speak directly with host Wellington to clear up doubts or request support during your stay.' : 'Hable directamente con el anfitrión Wellington para resolver dudas o solicitar asistencia durante su estadía.'}
                     </p>
 
                     <div className="flex flex-col gap-3">
-                      {contactList.map((contact, idx) => (
+                      {activeContacts.map((contact, idx) => (
                         <div key={idx} className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                           <div>
                             <span className="text-[9px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md inline-block mb-1">
@@ -1395,19 +1567,19 @@ export default function App() {
                               target="_blank"
                               rel="noopener noreferrer"
                               referrerPolicy="no-referrer"
-                              className="text-[10px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 py-1.5 px-3 rounded-lg flex items-center gap-1.5 active:scale-95 transition-all shadow-xs"
+                              className="text-[10px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 py-1.5 px-3 rounded-lg flex items-center gap-1.5 active:scale-95 transition-all shadow-xs cursor-pointer"
                             >
                               <MessageSquare className="w-3.5 h-3.5 text-white" /> WhatsApp
                             </a>
                             <button
                               onClick={() => copyToClipboard(contact.phone, contact.name)}
-                              className="text-[10px] font-bold text-slate-700 bg-white hover:bg-slate-100 py-1.5 px-3 rounded-lg border border-slate-200 flex items-center gap-1 active:scale-95 transition-all"
+                              className="text-[10px] font-bold text-slate-700 bg-white hover:bg-slate-100 py-1.5 px-3 rounded-lg border border-slate-200 flex items-center gap-1 active:scale-95 transition-all cursor-pointer"
                             >
                               <Phone className="w-3.5 h-3.5 text-slate-500" /> {contact.phone}
                             </button>
                             <button
                               onClick={() => copyToClipboard(contact.email, contact.name)}
-                              className="text-[10px] font-bold text-slate-700 bg-white hover:bg-slate-100 py-1.5 px-3 rounded-lg border border-slate-200 flex items-center gap-1 active:scale-95 transition-all animate-none"
+                              className="text-[10px] font-bold text-slate-700 bg-white hover:bg-slate-100 py-1.5 px-3 rounded-lg border border-slate-200 flex items-center gap-1 active:scale-95 transition-all cursor-pointer animate-none"
                             >
                               <Mail className="w-3.5 h-3.5 text-slate-500" /> E-mail
                             </button>
@@ -1420,16 +1592,18 @@ export default function App() {
                    {/* Canal Fale Conosco / Enviar Solicitação (FORMULÁRIO ATIVO) */}
                   <div className="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 shadow-sm" id="ticket-form-section">
                     <h3 className="font-display font-bold text-slate-800 text-sm md:text-base mb-1 flex items-center gap-2">
-                      <MessageSquare className="w-4 h-4 text-blue-600" /> Fale com o Anfitrião!
+                      <MessageSquare className="w-4 h-4 text-blue-600" /> {lang === 'pt' ? 'Fale com o Anfitrião!' : lang === 'en' ? 'Message the Host!' : '¡Hable con el Anfitrión!'}
                     </h3>
-                    <p className="text-xs text-slate-400 mb-5">Envie uma dúvida, solicitação de manutenção ou sugestão diretamente para o anfitrião.</p>
+                    <p className="text-xs text-slate-400 mb-5">
+                      {lang === 'pt' ? 'Envie uma dúvida, solicitação de manutenção ou sugestão diretamente para o anfitrião.' : lang === 'en' ? 'Send a question, maintenance request, or suggestion directly to the host.' : 'Envíe una duda, solicitud de mantenimiento o sugerencia directamente al anfitrión.'}
+                    </p>
 
                     <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
                       
                       {/* Dados fixos do usuário autenticado */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Remetente</label>
+                          <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{lang === 'pt' ? 'Remetente' : lang === 'en' ? 'Sender' : 'Remitente'}</label>
                           <input 
                             type="text" 
                             disabled 
@@ -1438,7 +1612,7 @@ export default function App() {
                           />
                         </div>
                         <div>
-                          <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">E-mail Cadastrado</label>
+                          <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{lang === 'pt' ? 'E-mail Cadastrado' : lang === 'en' ? 'Registered Email' : 'Correo Registrado'}</label>
                           <input 
                             type="email" 
                             disabled 
@@ -1450,32 +1624,35 @@ export default function App() {
 
                       {/* Categoria do chamado */}
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Categoria do Chamado</label>
+                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{lang === 'pt' ? 'Categoria do Chamado' : lang === 'en' ? 'Category of Request' : 'Categoría del Ticket'}</label>
                         <div className="grid grid-cols-4 gap-2">
-                          {['Dúvida', 'Manutenção', 'Sugestão', 'Outro'].map((cat) => (
-                            <button
-                              key={cat}
-                              type="button"
-                              onClick={() => setFormCategory(cat as any)}
-                              className={`py-2 px-1 text-center rounded-xl text-xs font-semibold border transition-all ${
-                                formCategory === cat 
-                                  ? 'bg-blue-50 border-blue-300 text-blue-600 shadow-2xs' 
-                                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                              }`}
-                            >
-                              {cat}
-                            </button>
-                          ))}
+                          {['Dúvida', 'Manutenção', 'Sugestão', 'Outro'].map((cat) => {
+                            const label = lang === 'pt' ? cat : lang === 'en' ? (cat === 'Dúvida' ? 'Question' : cat === 'Manutenção' ? 'Maintenance' : cat === 'Sugestão' ? 'Suggestion' : 'Other') : (cat === 'Dúvida' ? 'Duda' : cat === 'Manutenção' ? 'Mantenimiento' : cat === 'Sugestão' ? 'Sugerencia' : 'Otro');
+                            return (
+                              <button
+                                key={cat}
+                                type="button"
+                                onClick={() => setFormCategory(cat as any)}
+                                className={`py-2 px-1 text-center rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                                  formCategory === cat 
+                                    ? 'bg-blue-50 border-blue-300 text-blue-600 shadow-2xs' 
+                                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                                }`}
+                              >
+                                {label}
+                              </button>
+                            );
+                          })}
                         </div>
                       </div>
 
                       {/* Assunto */}
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Assunto</label>
+                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{lang === 'pt' ? 'Assunto' : lang === 'en' ? 'Subject' : 'Asunto'}</label>
                         <input
                           type="text"
                           required
-                          placeholder="Ex: Reserva do Gourmet, barulho no 13º andar, lâmpada queimada..."
+                          placeholder={lang === 'pt' ? "Ex: Reserva do Gourmet, barulho no 13º andar, lâmpada queimada..." : lang === 'en' ? "e.g., Gourmet reservation, noise on the 13th floor, burnt lightbulb..." : "Ej: Reserva de Gourmet, ruido en el piso 13, bombilla quemada..."}
                           value={formSubject}
                           onChange={(e) => setFormSubject(e.target.value)}
                           className="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-3.5 py-2.5 text-xs outline-none transition-all"
@@ -1484,11 +1661,11 @@ export default function App() {
 
                       {/* Mensagem */}
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Mensagem Detalhada</label>
+                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{lang === 'pt' ? 'Mensagem Detalhada' : lang === 'en' ? 'Detailed Message' : 'Mensaje Detallado'}</label>
                         <textarea
                           required
                           rows={4}
-                          placeholder="Descreva seu problem ou solicitação de maneira clara para agilizarmos o atendimento..."
+                          placeholder={lang === 'pt' ? "Descreva seu problema ou solicitação de maneira clara para agilizarmos o atendimento..." : lang === 'en' ? "Describe your issue or request clearly so we can process it quickly..." : "Describa su problema o solicitud claramente para agilizar la atención..."}
                           value={formMessage}
                           onChange={(e) => setFormMessage(e.target.value)}
                           className="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl px-3.5 py-2.5 text-xs outline-none transition-all resize-none"
@@ -1499,15 +1676,15 @@ export default function App() {
                       <button
                         type="submit"
                         disabled={submitting || !formSubject.trim() || !formMessage.trim()}
-                        className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-bold text-xs rounded-xl shadow-md shadow-blue-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-bold text-xs rounded-xl shadow-md shadow-blue-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
                       >
                         {submitting ? (
                           <>
-                            <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Enviando...
+                            <RefreshCw className="w-3.5 h-3.5 animate-spin" /> {lang === 'pt' ? 'Enviando...' : lang === 'en' ? 'Sending...' : 'Enviando...'}
                           </>
                         ) : (
                           <>
-                            <Send className="w-3.5 h-3.5" /> Enviar Mensagem à Administração
+                            <Send className="w-3.5 h-3.5" /> {lang === 'pt' ? 'Enviar Mensagem ao Anfitrião' : lang === 'en' ? 'Send Message to Host' : 'Enviar Mensaje al Anfitrión'}
                           </>
                         )}
                       </button>
@@ -1526,13 +1703,13 @@ export default function App() {
                           <div className="flex items-center gap-2">
                             <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                             <div>
-                              <p className="font-bold">Solicitação registrada!</p>
-                              <p className="opacity-95 text-[11px]">Sua mensagem foi enviada à gerência do Sun Square. Retornamos em até 24h.</p>
+                              <p className="font-bold">{lang === 'pt' ? 'Solicitação registrada!' : lang === 'en' ? 'Request registered!' : '¡Solicitud registrada!'}</p>
+                              <p className="opacity-95 text-[11px]">{lang === 'pt' ? 'Sua mensagem foi enviada ao anfitrião do Sun Square. Retornamos em breve.' : lang === 'en' ? 'Your message has been sent to the Sun Square host. We will reply shortly.' : 'Su mensaje ha sido enviado al anfitrión de Sun Square. Responderemos pronto.'}</p>
                             </div>
                           </div>
                           <button 
                             onClick={() => setFormSuccess(false)}
-                            className="text-emerald-700 hover:text-emerald-900 font-bold ml-4"
+                            className="text-emerald-700 hover:text-emerald-900 font-bold ml-4 cursor-pointer"
                           >
                             OK
                           </button>
@@ -1546,17 +1723,17 @@ export default function App() {
                     <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
                       <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-50">
                         <h3 className="font-display font-bold text-slate-800 text-xs md:text-sm flex items-center gap-2">
-                          <ClipboardList className="w-4 h-4 text-blue-600" /> Meus Chamados Registrados ({tickets.length})
+                          <ClipboardList className="w-4 h-4 text-blue-600" /> {lang === 'pt' ? 'Meus Chamados Registrados' : lang === 'en' ? 'My Logged Tickets' : 'Mis Tickets Registrados'} ({tickets.length})
                         </h3>
                         <button 
                           onClick={() => {
-                            if (confirm('Deseja limpar o histórico local de chamados?')) {
+                            if (confirm(lang === 'pt' ? 'Deseja limpar o histórico local de chamados?' : lang === 'en' ? 'Clear local ticket history?' : '¿Borrar historial local de tickets?')) {
                               setTickets([]);
                             }
                           }}
-                          className="text-[10px] text-slate-400 hover:text-red-500 font-bold"
+                          className="text-[10px] text-slate-400 hover:text-red-500 font-bold cursor-pointer"
                         >
-                          Limpar Histórico
+                          {lang === 'pt' ? 'Limpar Histórico' : lang === 'en' ? 'Clear History' : 'Limpiar Historial'}
                         </button>
                       </div>
 
@@ -1566,11 +1743,15 @@ export default function App() {
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1.5">
                                 <span className="text-[10px] font-bold text-slate-800 font-mono">{t.id}</span>
-                                <span className="text-[9px] font-bold uppercase bg-blue-50 text-blue-600 px-1.5 py-0.2 rounded">{t.category}</span>
+                                <span className="text-[9px] font-bold uppercase bg-blue-50 text-blue-600 px-1.5 py-0.2 rounded">
+                                  {lang === 'pt' ? t.category : lang === 'en' ? (t.category === 'Dúvida' ? 'Question' : t.category === 'Manutenção' ? 'Maintenance' : t.category === 'Sugestão' ? 'Suggestion' : 'Other') : (t.category === 'Dúvida' ? 'Duda' : t.category === 'Manutenção' ? 'Mantenimiento' : t.category === 'Sugestão' ? 'Sugerencia' : 'Otro')}
+                                </span>
                               </div>
                               <div className="flex items-center gap-1">
                                 <span className="inline-block w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                                <span className="text-[10px] text-blue-700 font-semibold">{t.status}</span>
+                                <span className="text-[10px] text-blue-700 font-semibold">
+                                  {lang === 'pt' ? t.status : lang === 'en' ? 'Pendente' : 'Pendiente'}
+                                </span>
                               </div>
                             </div>
                             
@@ -1580,8 +1761,8 @@ export default function App() {
                             </div>
                             
                             <div className="pt-2 border-t border-slate-200/50 flex items-center justify-between text-[9px] text-slate-400">
-                              <span>Enviado em: {t.date}</span>
-                              <span>Canal: Digital</span>
+                              <span>{lang === 'pt' ? 'Enviado em:' : lang === 'en' ? 'Sent on:' : 'Enviado el:'} {t.date}</span>
+                              <span>{lang === 'pt' ? 'Canal: Digital' : lang === 'en' ? 'Channel: Digital' : 'Canal: Digital'}</span>
                             </div>
                           </div>
                         ))}
@@ -1592,12 +1773,14 @@ export default function App() {
                   {/* Perguntas Frequentes Accordion (FAQ) */}
                   <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm" id="faq-section">
                     <h3 className="font-display font-bold text-slate-800 text-sm md:text-base mb-1.5 flex items-center gap-2">
-                      <HelpCircle className="w-4 h-4 text-blue-600" /> Perguntas Frequentes (FAQ)
+                      <HelpCircle className="w-4 h-4 text-blue-600" /> {lang === 'pt' ? 'Perguntas Frequentes (FAQ)' : lang === 'en' ? 'Frequently Asked Questions (FAQ)' : 'Preguntas Frecuentes (FAQ)'}
                     </h3>
-                    <p className="text-xs text-slate-400 mb-4">Esclareça dúvidas comuns sobre as normas e funcionamento geral do condomínio.</p>
+                    <p className="text-xs text-slate-400 mb-4">
+                      {lang === 'pt' ? 'Esclareça dúvidas comuns sobre as normas e funcionamento geral do condomínio.' : lang === 'en' ? 'Clear up common questions about condominium rules and general operations.' : 'Aclare dudas comunes sobre las normas y el funcionamiento general del condominio.'}
+                    </p>
 
                     <div className="flex flex-col gap-2">
-                      {faqItems.map((faq, index) => {
+                      {activeFaqs.map((faq, index) => {
                         const isOpen = faqOpenIndex === index;
                         return (
                           <div 
