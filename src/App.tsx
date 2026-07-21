@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Sun, MapPin, Briefcase, Truck, Wifi, Shield, Zap, VolumeX, Trash2, Smile, Car, Phone, 
   Search, Info, AlertTriangle, ArrowRight, CheckCircle2, MessageSquare, ChevronDown, ChevronUp, 
-  Mail, Clock, User, HelpCircle, ExternalLink, RefreshCw, Send, Check, X, Building, 
+  Mail, Clock, User, HelpCircle, ExternalLink, RefreshCw, Send, Check, X, Building, Copy, 
   PhoneCall, Calendar, CheckSquare, ClipboardList, ShieldAlert, Home, Cloud, CloudSun, CloudRain
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -1002,7 +1002,66 @@ export default function App() {
                           </p>
 
                           <div className="text-xs text-slate-600 space-y-3 leading-relaxed whitespace-pre-line">
-                            {art.id.startsWith('guia-local-') ? (
+                            {art.id === 'wi-fi-flat' ? (
+                              <div className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-2xl bg-blue-50/20 border border-blue-100/50 mt-2 w-full text-left">
+                                <div className="flex-1 space-y-3 w-full">
+                                  <div className="space-y-1">
+                                    <span className="text-[10px] uppercase font-bold text-slate-400 block">{lang === 'pt' ? 'Nome da Rede (SSID)' : lang === 'en' ? 'Network Name (SSID)' : 'Nombre de Red (SSID)'}</span>
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-mono text-sm font-bold text-slate-800 bg-white px-2.5 py-1 rounded-lg border border-slate-200">1308a</span>
+                                      <button 
+                                        onClick={() => copyToClipboard('1308a', 'Rede Wi-Fi')} 
+                                        className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-blue-600 transition-colors cursor-pointer"
+                                        title={lang === 'pt' ? 'Copiar Rede' : 'Copy Network'}
+                                      >
+                                        <Copy className="w-4 h-4" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                  <div className="space-y-1">
+                                    <span className="text-[10px] uppercase font-bold text-slate-400 block">{lang === 'pt' ? 'Senha' : lang === 'en' ? 'Password' : 'Contraseña'}</span>
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-mono text-sm font-bold text-slate-800 bg-white px-2.5 py-1 rounded-lg border border-slate-200">lualap1308a</span>
+                                      <button 
+                                        onClick={() => copyToClipboard('lualap1308a', 'Senha Wi-Fi')} 
+                                        className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-blue-600 transition-colors cursor-pointer"
+                                        title={lang === 'pt' ? 'Copiar Senha' : 'Copy Password'}
+                                      >
+                                        <Copy className="w-4 h-4" />
+                                      </button>
+                                    </div>
+                                  </div>
+
+                                  <div className="pt-2">
+                                    <a 
+                                      href="wifi:S:1308a;T:WPA;P:lualap1308a;;" 
+                                      className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm shadow-blue-100 hover:shadow-md cursor-pointer active:scale-95 animate-pulse hover:animate-none"
+                                      onClick={() => {
+                                        copyToClipboard('lualap1308a', 'Senha Wi-Fi');
+                                      }}
+                                    >
+                                      <Wifi className="w-4 h-4" />
+                                      {lang === 'pt' ? 'Conectar ao Wi-Fi' : lang === 'en' ? 'Connect to Wi-Fi' : 'Conectarse al Wi-Fi'}
+                                    </a>
+                                    <p className="text-[10px] text-slate-400 mt-1.5 leading-relaxed">
+                                      {lang === 'pt' ? '*Em alguns aparelhos compatíveis, clicar acima inicia a conexão automática. Caso não inicie, copie as credenciais acima e conecte manualmente.' : lang === 'en' ? '*On supported devices, clicking above starts the automatic connection. Otherwise, copy the credentials above and connect manually.' : '*En dispositivos compatibles, hacer clic arriba inicia la conexión automática. De lo contrario, copie las credenciales arriba y conéctese manualmente.'}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="flex flex-col items-center gap-2 bg-white p-3.5 rounded-2xl border border-slate-100 shadow-2xs shrink-0">
+                                  <img 
+                                    src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=WIFI:S:1308a;T:WPA;P:lualap1308a;;" 
+                                    alt="Wi-Fi QR Code" 
+                                    className="w-28 h-28"
+                                    referrerPolicy="no-referrer"
+                                  />
+                                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    {lang === 'pt' ? 'Escaneie para Conectar' : lang === 'en' ? 'Scan to Connect' : 'Escanee para Conectar'}
+                                  </span>
+                                </div>
+                              </div>
+                            ) : art.id.startsWith('guia-local-') ? (
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                 {localGuideItems
                                   .filter((item) => item.articleId === art.id)
@@ -1860,12 +1919,12 @@ export default function App() {
             <div className="text-left">
               <p className="font-display font-bold text-white tracking-tight text-xs sm:text-sm">Sun Square – Unidade 1208A</p>
               <a 
-                href="https://maps.app.goo.gl/yH81sR7RntbgCLRw5" 
+                href="https://maps.app.goo.gl/c2XQVsG32S27UmpV7" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-[10px] text-slate-400 hover:text-blue-400 hover:underline transition-colors flex items-center gap-1"
               >
-                Setor Oeste, Goiânia - GO • Frente à Praça do Sol
+                R. 9, 1053 - St. Oeste, Goiânia - GO, 74120-010 • Frente à Praça do Sol
                 <ExternalLink className="w-2.5 h-2.5 shrink-0 text-slate-500" />
               </a>
             </div>

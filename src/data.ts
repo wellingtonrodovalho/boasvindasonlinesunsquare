@@ -50,7 +50,7 @@ export const guideArticles: GuideArticle[] = [
     category: 'Conectividade',
     title: 'Wi-Fi de Alta Velocidade',
     excerpt: 'Acesse a rede de internet de fibra óptica ultra rápida do apartamento.',
-    content: 'O flat conta com internet banda larga de alta velocidade (fibra óptica), ideal para home office, chamadas de vídeo e streaming.\n\n• Rede: 1308a\n• Senha: lualap\n\nCaso a conexão apresente instabilidade, basta reiniciar o modem que fica localizado no painel abaixo da TV da sala.',
+    content: 'O flat conta com internet banda larga de alta velocidade (fibra óptica), ideal para home office, chamadas de vídeo e streaming.\n\n• Rede: 1308a\n• Senha: lualap1308a',
     icon: 'Wifi',
     tags: ['wi-fi', 'wifi', 'internet', 'senha', 'rede', 'fibra']
   },

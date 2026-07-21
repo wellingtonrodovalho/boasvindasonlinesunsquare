@@ -263,7 +263,7 @@ export const translatedArticles: { [lang: string]: any[] } = {
       category: "Connectivity",
       title: "High-Speed Wi-Fi",
       excerpt: "Access the ultra-fast fiber optic internet network of the apartment.",
-      content: "The flat features high-speed broadband internet (fiber optic), ideal for home office, video calls, and streaming.\n\n• Network: 1308a\n• Password: lualap\n\nIf the connection becomes unstable, simply restart the modem located in the panel below the living room TV.",
+      content: "The flat features high-speed broadband internet (fiber optic), ideal for home office, video calls, and streaming.\n\n• Network: 1308a\n• Password: lualap1308a",
       icon: "Wifi",
       tags: ["wi-fi", "wifi", "internet", "password", "network", "fiber"]
     },
@@ -375,7 +375,7 @@ export const translatedArticles: { [lang: string]: any[] } = {
       category: "Conectividad",
       title: "Wi-Fi de Alta Velocidad",
       excerpt: "Acceda a la red de internet de fibra óptica ultrarrápida del apartamento.",
-      content: "El apartamento cuenta con internet de banda ancha de alta velocidad (fibra óptica), ideal para trabajo remoto, videollamadas y streaming.\n\n• Red: 1308a\n• Contraseña: lualap\n\nSi la conexión presenta inestabilidad, simplemente reinicie el módem ubicado en el panel debajo del televisor de la sala.",
+      content: "El apartamento cuenta con internet de banda ancha de alta velocidad (fibra óptica), ideal para trabajo remoto, videollamadas y streaming.\n\n• Red: 1308a\n• Contraseña: lualap1308a",
       icon: "Wifi",
       tags: ["wi-fi", "wifi", "internet", "contraseña", "red", "fibra"]
     },

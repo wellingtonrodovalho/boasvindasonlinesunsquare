@@ -16,9 +16,175 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: #fcfcfd;
-  color: #1f2937;
+  background-color: #080c14;
+  color: #f1f5f9;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* --- Premium Night Mode (Modo Noturno) Theme Overrides --- */
+
+/* Main wrapping backgrounds */
+.bg-slate-50\/50, .bg-slate-50 {
+  background-color: #080c14 !important;
+}
+
+/* Card components & background containers */
+.bg-white {
+  background-color: #0f172a !important; /* slate-900 */
+  border-color: #1e293b !important; /* slate-800 */
+}
+
+/* Specific component containers */
+.border-slate-100, .border-slate-200, .border-slate-200\/80, .border-slate-100\/50 {
+  border-color: #1e293b !important;
+}
+
+/* Header container */
+header.bg-white\/95 {
+  background-color: rgba(8, 12, 20, 0.95) !important;
+  border-bottom-color: #1e293b !important;
+}
+
+/* All headings and standard text elements */
+.text-slate-900, .text-slate-800, .text-slate-700 {
+  color: #f8fafc !important; /* slate-50 */
+}
+
+.text-slate-600, .text-slate-500 {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
+.text-slate-400 {
+  color: #64748b !important; /* slate-500 */
+}
+
+/* Standard nested elements styled with backgrounds */
+.bg-slate-50, .bg-slate-100 {
+  background-color: #1e293b !important;
+}
+
+/* Input Fields, Textareas, Select elements */
+input, textarea, select {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+input:focus, textarea:focus, select:focus {
+  background-color: #0f172a !important;
+  border-color: #3b82f6 !important;
+}
+
+/* Custom interactive item hover states */
+.hover\:bg-slate-50:hover, .hover\:bg-slate-100\/50:hover, .hover\:bg-slate-50\/30:hover {
+  background-color: #1e293b !important;
+}
+
+/* Global search bar custom adjustments */
+input#global-search-bar {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+}
+input#global-search-bar::placeholder {
+  color: #64748b !important;
+}
+
+/* Language switcher active card */
+.bg-slate-100 button.bg-white {
+  background-color: #334155 !important;
+  color: #3b82f6 !important;
+}
+
+/* Interactive floor buttons active/inactive state */
+.bg-white.text-blue-600 {
+  background-color: #1e293b !important;
+  color: #3b82f6 !important;
+}
+
+/* Navigation tabs layout text & active line */
+nav.border-b button {
+  color: #94a3b8 !important;
+}
+nav.border-b button:hover {
+  color: #f8fafc !important;
+}
+nav.border-b button.text-blue-600 {
+  color: #3b82f6 !important;
+}
+
+/* Useful emergency & contact boxes inside details */
+.bg-slate-50 .bg-white {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+/* Quick Actions buttons */
+button.bg-white:hover {
+  background-color: #1e293b !important;
+  border-color: #3b82f6 !important;
+}
+
+/* Accordion interactive items */
+.bg-slate-50\/70, .bg-slate-50\/30 {
+  background-color: #1e293b !important;
+}
+
+/* Copy buttons in staff contact cards */
+.bg-slate-50 button.bg-white {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #cbd5e1 !important;
+}
+.bg-slate-50 button.bg-white:hover {
+  background-color: #334155 !important;
+}
+
+/* Alert boxes adjustments for dark mode readability */
+.bg-blue-50 {
+  background-color: rgba(37, 99, 235, 0.15) !important;
+  border-color: rgba(37, 99, 235, 0.4) !important;
+  color: #93c5fd !important;
+}
+.bg-blue-50 * {
+  color: #93c5fd !important;
+}
+.bg-blue-50 span {
+  color: #3b82f6 !important;
+  background-color: rgba(59, 130, 246, 0.25) !important;
+}
+
+.bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  color: #a7f3d0 !important;
+}
+.bg-emerald-50 * {
+  color: #a7f3d0 !important;
+}
+
+.bg-blue-100 {
+  background-color: rgba(37, 99, 235, 0.25) !important;
+  color: #93c5fd !important;
+}
+
+.bg-emerald-600 {
+  background-color: #059669 !important;
+}
+.bg-emerald-600:hover {
+  background-color: #047857 !important;
+}
+
+/* Red alerts / EMERGENCY elements */
+.bg-red-50\/50 {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+.text-red-500 {
+  color: #fca5a5 !important;
+}
+.bg-red-100 {
+  background-color: rgba(239, 68, 68, 0.2) !important;
+  color: #fca5a5 !important;
 }
 
 @keyframes police-strobe {
