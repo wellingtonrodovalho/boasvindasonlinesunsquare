@@ -268,6 +268,16 @@ export const translatedArticles: { [lang: string]: any[] } = {
       tags: ["wi-fi", "wifi", "internet", "password", "network", "fiber"]
     },
     {
+      id: "tv-stick",
+      tab: "nosso-flat",
+      category: "Entertainment",
+      title: "How to use the TV (TV Stick)",
+      excerpt: "A simple and practical guide to turning on, navigating, and watching your favorite apps on the Smart TV.",
+      content: "A quick guide to using the TV Stick.",
+      icon: "Zap",
+      tags: ["tv", "television", "streaming", "remote", "netflix", "youtube", "tv stick", "entertainment"]
+    },
+    {
       id: "diferenciais-condominio",
       tab: "condominio",
       category: "Structure",
@@ -378,6 +388,16 @@ export const translatedArticles: { [lang: string]: any[] } = {
       content: "El apartamento cuenta con internet de banda ancha de alta velocidad (fibra óptica), ideal para trabajo remoto, videollamadas y streaming.\n\n• Red: 1308a\n• Contraseña: lualap1308a",
       icon: "Wifi",
       tags: ["wi-fi", "wifi", "internet", "contraseña", "red", "fibra"]
+    },
+    {
+      id: "tv-stick",
+      tab: "nosso-flat",
+      category: "Entretenimiento",
+      title: "Cómo usar la TV (TV Stick)",
+      excerpt: "Guía sencilla y práctica para encender, navegar y ver tus aplicaciones favoritas en la Smart TV.",
+      content: "Una guía rápida para usar el TV Stick.",
+      icon: "Zap",
+      tags: ["tv", "television", "streaming", "control", "netflix", "youtube", "tv stick", "entretenimiento"]
     },
     {
       id: "diferenciais-condominio",

@@ -141,6 +141,10 @@ export default function App() {
   // Logo Error State for Fallback
   const [logoError, setLogoError] = useState(false);
 
+  // TV Stick interactive states
+  const [activeRemoteButton, setActiveRemoteButton] = useState<string | null>(null);
+  const [activeTvApp, setActiveTvApp] = useState<string | null>(null);
+
   // Greetings based on local hour
   const [currentTime, setCurrentTime] = useState('');
   const [currentDateStr, setCurrentDateStr] = useState('');
@@ -1059,6 +1063,291 @@ export default function App() {
                                   <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                                     {lang === 'pt' ? 'Escaneie para Conectar' : lang === 'en' ? 'Scan to Connect' : 'Escanee para Conectar'}
                                   </span>
+                                </div>
+                              </div>
+                            ) : art.id === 'tv-stick' ? (
+                              <div className="space-y-6 mt-2">
+                                {/* Passo 1: Entendendo o Controle Remoto */}
+                                <div className="p-4 rounded-2xl bg-slate-50/50 border border-slate-100 flex flex-col md:flex-row gap-6 items-start">
+                                  <div className="flex-1 space-y-4">
+                                    <div className="flex items-center gap-2">
+                                      <span className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-[11px] font-bold">1</span>
+                                      <h4 className="font-display font-bold text-slate-800 text-sm">{lang === 'pt' ? 'Entendendo o Controle Remoto' : lang === 'en' ? 'Understanding the Remote Control' : 'Entendiendo el Control Remoto'}</h4>
+                                    </div>
+                                    <p className="text-xs text-slate-500 leading-relaxed">
+                                      {lang === 'pt' 
+                                        ? 'O controle do TV Stick é super simples. Conheça e clique ou passe o cursor sobre os botões do controle ao lado para destacar o que cada um faz:' 
+                                        : lang === 'en' 
+                                          ? 'The TV Stick remote is super simple. Learn about the buttons by clicking or hovering over the remote control on the right:' 
+                                          : 'El control del TV Stick es súper simple. Conozca y haga clic o pase el cursor sobre los botones del control al lado para ver qué hace cada uno:'}
+                                    </p>
+
+                                    <div className="space-y-2.5">
+                                      {/* Setas */}
+                                      <div 
+                                        className={`p-2.5 rounded-xl border transition-all cursor-pointer ${activeRemoteButton === 'arrows' ? 'bg-blue-50/60 border-blue-200 shadow-2xs' : 'bg-white border-slate-200/60 hover:bg-slate-50'}`}
+                                        onMouseEnter={() => setActiveRemoteButton('arrows')}
+                                        onMouseLeave={() => setActiveRemoteButton(null)}
+                                        onClick={() => setActiveRemoteButton(activeRemoteButton === 'arrows' ? null : 'arrows')}
+                                      >
+                                        <p className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                                          {lang === 'pt' ? 'Setas (Círculo):' : lang === 'en' ? 'Arrows (Circle):' : 'Flechas (Círculo):'}
+                                        </p>
+                                        <p className="text-[11px] text-slate-500 mt-0.5 ml-3">
+                                          {lang === 'pt' ? 'Serve para você andar para cima, baixo, esquerda e direita na tela da TV.' : lang === 'en' ? 'Use to move up, down, left, and right on the TV screen.' : 'Sirve para moverse hacia arriba, abajo, izquierda y derecha en la pantalla del televisor.'}
+                                        </p>
+                                      </div>
+
+                                      {/* Botão OK */}
+                                      <div 
+                                        className={`p-2.5 rounded-xl border transition-all cursor-pointer ${activeRemoteButton === 'ok' ? 'bg-blue-50/60 border-blue-200 shadow-2xs' : 'bg-white border-slate-200/60 hover:bg-slate-50'}`}
+                                        onMouseEnter={() => setActiveRemoteButton('ok')}
+                                        onMouseLeave={() => setActiveRemoteButton(null)}
+                                        onClick={() => setActiveRemoteButton(activeRemoteButton === 'ok' ? null : 'ok')}
+                                      >
+                                        <p className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                                          {lang === 'pt' ? 'Botão OK (Centro do círculo):' : lang === 'en' ? 'OK Button (Center of circle):' : 'Botón OK (Centro del círculo):'}
+                                        </p>
+                                        <p className="text-[11px] text-slate-500 mt-0.5 ml-3">
+                                          {lang === 'pt' ? 'É o botão de "Confirmar". Você aperta ele para entrar em um aplicativo ou para dar Play e Pause em um filme.' : lang === 'en' ? 'The "Confirm" button. Press to open an app or to Play and Pause a video.' : 'Es el botón de "Confirmar". Presione para entrar en una aplicación o para dar Reproducir y Pausar en un video.'}
+                                        </p>
+                                      </div>
+
+                                      {/* Botão Casinha */}
+                                      <div 
+                                        className={`p-2.5 rounded-xl border transition-all cursor-pointer ${activeRemoteButton === 'home' ? 'bg-blue-50/60 border-blue-200 shadow-2xs' : 'bg-white border-slate-200/60 hover:bg-slate-50'}`}
+                                        onMouseEnter={() => setActiveRemoteButton('home')}
+                                        onMouseLeave={() => setActiveRemoteButton(null)}
+                                        onClick={() => setActiveRemoteButton(activeRemoteButton === 'home' ? null : 'home')}
+                                      >
+                                        <p className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                                          {lang === 'pt' ? 'Botão Casinha (Home):' : lang === 'en' ? 'Home Button (House):' : 'Botón Casita (Home):'}
+                                        </p>
+                                        <p className="text-[11px] text-slate-500 mt-0.5 ml-3">
+                                          {lang === 'pt' ? 'O botão de salvamento. Se você se perder ou quiser trocar de aplicativo, aperta ele para ir direto para a tela inicial.' : lang === 'en' ? 'The safety button. If you get lost or want to switch apps, press this to return directly to the main screen.' : 'El botón de guardado. Si se pierde o quiere cambiar de aplicación, presiónelo para ir directo a la pantalla de inicio.'}
+                                        </p>
+                                      </div>
+
+                                      {/* Botão Voltar */}
+                                      <div 
+                                        className={`p-2.5 rounded-xl border transition-all cursor-pointer ${activeRemoteButton === 'back' ? 'bg-blue-50/60 border-blue-200 shadow-2xs' : 'bg-white border-slate-200/60 hover:bg-slate-50'}`}
+                                        onMouseEnter={() => setActiveRemoteButton('back')}
+                                        onMouseLeave={() => setActiveRemoteButton(null)}
+                                        onClick={() => setActiveRemoteButton(activeRemoteButton === 'back' ? null : 'back')}
+                                      >
+                                        <p className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                                          {lang === 'pt' ? 'Seta Curva (Voltar):' : lang === 'en' ? 'Curved Arrow (Back):' : 'Flecha Curva (Volver):'}
+                                        </p>
+                                        <p className="text-[11px] text-slate-500 mt-0.5 ml-3">
+                                          {lang === 'pt' ? 'Dá um passo para trás. Serve para sair de um filme ou voltar ao menu anterior.' : lang === 'en' ? 'Goes back one step. Used to exit a movie or return to the previous menu.' : 'Da un paso atrás. Sirve para salir de una película o volver al menú anterior.'}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Desenho do Controle Interativo em CSS */}
+                                  <div className="w-full md:w-auto flex justify-center items-center shrink-0 self-center">
+                                    <div className="relative w-36 h-80 bg-slate-900 rounded-[36px] border border-slate-800 shadow-2xl flex flex-col items-center p-4">
+                                      {/* LED indicador */}
+                                      <div className="w-2 h-2 rounded-full bg-red-500/80 mb-6 animate-pulse" />
+
+                                      {/* Botão Power */}
+                                      <div className="w-7 h-7 rounded-full bg-red-600 border border-red-700 flex items-center justify-center cursor-pointer mb-6 hover:bg-red-500 transition-colors shadow-sm">
+                                        <span className="text-[9px] text-white font-bold font-mono">I/O</span>
+                                      </div>
+
+                                      {/* Círculo Direcional (Setas) */}
+                                      <div 
+                                        className={`relative w-24 h-24 rounded-full bg-slate-800 border-2 transition-colors flex items-center justify-center ${activeRemoteButton === 'arrows' ? 'border-blue-500 shadow-xs' : 'border-slate-700'}`}
+                                        onMouseEnter={() => setActiveRemoteButton('arrows')}
+                                        onMouseLeave={() => setActiveRemoteButton(null)}
+                                      >
+                                        {/* Botão Cima */}
+                                        <button className="absolute top-1 text-slate-400 hover:text-white transition-colors cursor-pointer text-xs" onClick={() => setActiveRemoteButton('arrows')}>▲</button>
+                                        {/* Botão Baixo */}
+                                        <button className="absolute bottom-1 text-slate-400 hover:text-white transition-colors cursor-pointer text-xs" onClick={() => setActiveRemoteButton('arrows')}>▼</button>
+                                        {/* Botão Esquerda */}
+                                        <button className="absolute left-1 text-slate-400 hover:text-white transition-colors cursor-pointer text-xs" onClick={() => setActiveRemoteButton('arrows')}>◀</button>
+                                        {/* Botão Direita */}
+                                        <button className="absolute right-1 text-slate-400 hover:text-white transition-colors cursor-pointer text-xs" onClick={() => setActiveRemoteButton('arrows')}>▶</button>
+
+                                        {/* Botão OK (Centro) */}
+                                        <div 
+                                          className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs transition-all cursor-pointer active:scale-95 z-10 ${activeRemoteButton === 'ok' ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-700 text-slate-200 hover:bg-slate-600'}`}
+                                          onMouseEnter={(e) => {
+                                            e.stopPropagation();
+                                            setActiveRemoteButton('ok');
+                                          }}
+                                          onMouseLeave={() => setActiveRemoteButton(null)}
+                                          onClick={() => setActiveRemoteButton('ok')}
+                                        >
+                                          OK
+                                        </div>
+                                      </div>
+
+                                      {/* Botões do Meio (Voltar & Home) */}
+                                      <div className="flex gap-4 mt-6">
+                                        {/* Botão Voltar */}
+                                        <div 
+                                          className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer border ${activeRemoteButton === 'back' ? 'bg-blue-600 border-blue-500 text-white shadow-xs' : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white'}`}
+                                          onMouseEnter={() => setActiveRemoteButton('back')}
+                                          onMouseLeave={() => setActiveRemoteButton(null)}
+                                          onClick={() => setActiveRemoteButton('back')}
+                                        >
+                                          <RefreshCw className="w-4 h-4 -scale-x-100" />
+                                        </div>
+
+                                        {/* Botão Home */}
+                                        <div 
+                                          className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer border ${activeRemoteButton === 'home' ? 'bg-blue-600 border-blue-500 text-white shadow-xs' : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white'}`}
+                                          onMouseEnter={() => setActiveRemoteButton('home')}
+                                          onMouseLeave={() => setActiveRemoteButton(null)}
+                                          onClick={() => setActiveRemoteButton('home')}
+                                        >
+                                          <Home className="w-4 h-4" />
+                                        </div>
+                                      </div>
+
+                                      {/* Logo / Marca fictícia */}
+                                      <span className="text-[8px] text-slate-600 font-bold uppercase tracking-widest mt-6">TV Stick</span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Passo 2: Escolhendo o que Assistir (Tela Inicial) */}
+                                <div className="p-4 rounded-2xl bg-slate-50/50 border border-slate-100 flex flex-col md:flex-row gap-6 items-start">
+                                  <div className="flex-1 space-y-3">
+                                    <div className="flex items-center gap-2">
+                                      <span className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-[11px] font-bold">2</span>
+                                      <h4 className="font-display font-bold text-slate-800 text-sm">{lang === 'pt' ? 'Escolhendo o que Assistir (Tela Inicial)' : lang === 'en' ? 'Choosing What to Watch (Home Screen)' : 'Elegir qué Ver (Pantalla de Inicio)'}</h4>
+                                    </div>
+                                    <p className="text-xs text-slate-500 leading-relaxed">
+                                      {lang === 'pt' 
+                                        ? 'Ao ligar a TV, você verá a tela principal (representação abaixo). Use as Setas do controle para navegar e selecione com OK:' 
+                                        : lang === 'en' 
+                                          ? 'When you turn on the TV, you will see the home screen (representation below). Use the arrows on the remote to navigate and OK to select:' 
+                                          : 'Al encender el televisor, verá la pantalla principal (representación abajo). Use las flechas para navegar y presione OK para seleccionar:'}
+                                    </p>
+
+                                    <div className="text-[11px] text-slate-500 space-y-1 ml-1 font-medium">
+                                      <p>1. {lang === 'pt' ? 'Use as Setas do controle para navegar pela tela.' : lang === 'en' ? 'Use the Arrows on the remote to navigate.' : 'Use las Flechas del control para navegar.'}</p>
+                                      <p>2. {lang === 'pt' ? 'Vá até a fileira com os blocos de aplicativos (Netflix, YouTube, Prime Video).' : lang === 'en' ? 'Go to the row where the app blocks are located.' : 'Vaya a la fila donde están los bloques de aplicaciones.'}</p>
+                                      <p>3. {lang === 'pt' ? 'Quando o aplicativo desejado estiver destacado, aperte OK para entrar.' : lang === 'en' ? 'When the desired app is highlighted, press OK to enter.' : 'Cuando la aplicación que quiera esté destacada, presione OK para entrar.'}</p>
+                                    </div>
+                                  </div>
+
+                                  {/* Desenho de uma TV / Tela em CSS */}
+                                  <div className="w-full md:w-auto flex flex-col items-center shrink-0 self-center">
+                                    <div className="relative w-64 h-36 bg-slate-950 rounded-lg border-4 border-slate-800 shadow-xl overflow-hidden flex flex-col p-2.5 justify-between">
+                                      {/* Header da TV */}
+                                      <div className="flex justify-between items-center text-[7px] text-slate-500 border-b border-slate-900 pb-1">
+                                        <span className="font-bold text-blue-400">TV STICK HOME</span>
+                                        <span className="font-mono">20:45</span>
+                                      </div>
+
+                                      {/* Grid de Apps */}
+                                      <div className="grid grid-cols-4 gap-1.5 py-2">
+                                        {[
+                                          { name: 'YouTube', color: 'bg-red-600', icon: 'YT' },
+                                          { name: 'Netflix', color: 'bg-red-700', icon: 'N' },
+                                          { name: 'Prime Video', color: 'bg-sky-500', icon: 'PV' },
+                                          { name: 'Disney+', color: 'bg-blue-900', icon: 'D+' }
+                                        ].map((app) => (
+                                          <div 
+                                            key={app.name}
+                                            className={`rounded-md p-1 flex flex-col items-center justify-center transition-all cursor-pointer h-10 border ${activeTvApp === app.name ? 'scale-110 border-blue-400 bg-slate-800 shadow-xs' : 'border-slate-900 bg-slate-900 hover:bg-slate-800/80'}`}
+                                            onMouseEnter={() => setActiveTvApp(app.name)}
+                                            onMouseLeave={() => setActiveTvApp(null)}
+                                          >
+                                            <div className={`w-5 h-5 rounded-md flex items-center justify-center text-[8px] font-bold text-white ${app.color}`}>
+                                              {app.icon}
+                                            </div>
+                                            <span className="text-[6px] text-slate-400 font-semibold mt-1 truncate max-w-full text-center">{app.name}</span>
+                                          </div>
+                                        ))}
+                                      </div>
+
+                                      {/* Legenda inferior */}
+                                      <div className="text-[6px] text-center text-slate-400 truncate">
+                                        {activeTvApp ? (
+                                          <span className="text-blue-400 font-bold">{lang === 'pt' ? 'Entrar no ' : lang === 'en' ? 'Open ' : 'Entrar en '}{activeTvApp}</span>
+                                        ) : (
+                                          <span>{lang === 'pt' ? 'Use o controle para selecionar' : 'Use the remote to select'}</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div className="w-12 h-3 bg-slate-800" />
+                                    <div className="w-20 h-1 bg-slate-700 rounded-full" />
+                                  </div>
+                                </div>
+
+                                {/* Passo 3: Assistindo na Prática */}
+                                <div className="p-4 rounded-2xl bg-slate-50/50 border border-slate-100 space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <span className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-[11px] font-bold">3</span>
+                                    <h4 className="font-display font-bold text-slate-800 text-sm">{lang === 'pt' ? 'Assistindo na Prática (Passo a Passo)' : lang === 'en' ? 'Watching in Practice (Step-by-Step)' : 'Ver en la Práctica (Paso a Paso)'}</h4>
+                                  </div>
+
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+                                    {[
+                                      {
+                                        step: "1",
+                                        pt: "Ligue a TV no controle original dela e selecione a entrada HDMI correspondente.",
+                                        en: "Turn on the TV with its original remote control and select the correct HDMI input.",
+                                        es: "Encienda el televisor con su control original y seleccione la entrada HDMI correspondiente."
+                                      },
+                                      {
+                                        step: "2",
+                                        pt: "A tela do TV Stick vai aparecer. Use as Setas do controle do TV Stick para ir até o aplicativo desejado.",
+                                        en: "The TV Stick screen will appear. Use the remote arrows to navigate to your desired app.",
+                                        es: "Aparecerá la pantalla del TV Stick. Use las flechas del control para ir al aplicativo deseado."
+                                      },
+                                      {
+                                        step: "3",
+                                        pt: "Aperte o botão central OK para entrar no aplicativo selecionado.",
+                                        en: "Press the central OK button to open the selected app.",
+                                        es: "Presione el botón central OK para ingresar al aplicativo seleccionado."
+                                      },
+                                      {
+                                        step: "4",
+                                        pt: "Dentro do aplicativo, use as Setas para escolher o vídeo, série ou filme que quer assistir.",
+                                        en: "Inside the app, use the arrows to select the video, show, or movie you want to watch.",
+                                        es: "Dentro de la aplicación, use las flechas para elegir el video, serie o película que desea ver."
+                                      },
+                                      {
+                                        step: "5",
+                                        pt: "Aperte OK em cima da capa do conteúdo escolhido para começar a reprodução.",
+                                        en: "Press OK on the poster/cover of the selected video to start playing.",
+                                        es: "Presione OK sobre la portada del contenido elegido para comenzar la reproducción."
+                                      },
+                                      {
+                                        step: "6",
+                                        pt: "Para pausar o vídeo a qualquer momento, aperte OK. Para continuar assistindo, aperte OK de novo.",
+                                        en: "To pause the video at any time, press OK. To resume watching, press OK again.",
+                                        es: "Para pausar el video en cualquier momento, presione OK. Para continuar viendo, presione OK de nuevo."
+                                      }
+                                    ].map((s) => (
+                                      <div key={s.step} className="p-3 bg-white rounded-xl border border-slate-200/60 flex gap-3 items-start hover:border-blue-200 hover:shadow-2xs transition-all">
+                                        <span className="w-5 h-5 flex items-center justify-center rounded-full bg-blue-50 text-blue-600 font-bold text-[10px] shrink-0 mt-0.5">{s.step}</span>
+                                        <p className="text-[11px] text-slate-600 leading-relaxed font-medium">{lang === 'pt' ? s.pt : lang === 'en' ? s.en : s.es}</p>
+                                      </div>
+                                    ))}
+                                  </div>
+
+                                  <div className="p-3 bg-blue-50/30 border border-blue-100/50 rounded-xl text-[11px] text-slate-500 flex gap-2.5 items-center mt-2 font-medium">
+                                    <Home className="w-4 h-4 text-blue-600 shrink-0 animate-bounce" />
+                                    <p>
+                                      {lang === 'pt' 
+                                        ? 'DICA DE OURO: Se perder ou quiser ver outro app, aperte o botão CASINHA (Home) no controle para voltar imediatamente ao início!' 
+                                        : lang === 'en'
+                                          ? 'PRO TIP: If you get lost or want to open another app, press the HOUSE button (Home) on the remote to go back instantly!'
+                                          : 'CONSEJO DE ORO: Si se pierde o quiere ver otra app, presione el botón CASITA (Home) en el control para regresar de inmediato.'}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             ) : art.id.startsWith('guia-local-') ? (

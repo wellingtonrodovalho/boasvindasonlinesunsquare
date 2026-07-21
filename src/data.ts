@@ -55,6 +55,16 @@ export const guideArticles: GuideArticle[] = [
     tags: ['wi-fi', 'wifi', 'internet', 'senha', 'rede', 'fibra']
   },
   {
+    id: 'tv-stick',
+    tab: 'nosso-flat',
+    category: 'Entretenimento',
+    title: 'Como usar a TV (TV Stick)',
+    excerpt: 'Guia simples e prático para ligar, navegar e assistir aos seus aplicativos favoritos na Smart TV.',
+    content: 'Guia rápido para usar o TV Stick do apartamento.',
+    icon: 'Zap',
+    tags: ['tv', 'televisão', 'streaming', 'controle', 'netflix', 'youtube', 'tv stick', 'entretenimento']
+  },
+  {
     id: 'diferenciais-condominio',
     tab: 'condominio',
     category: 'Estrutura',
