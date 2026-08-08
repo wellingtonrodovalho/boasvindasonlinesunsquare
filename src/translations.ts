@@ -115,7 +115,7 @@ export const translationStrings: { [key: string]: UIStrings } = {
     copySuccess: "Copiado para a área de transferência!",
     copyAction: "Copiar",
     welcomeCardTitle: "Bem-vindo ao Sun Square",
-    welcomeCardDesc: "Este é o seu loft privativo de temporada 1208A. Sinta-se em casa!",
+    welcomeCardDesc: "Sinta-se em casa: minha casa, sua casa. Cuide dela como se fosse sua!",
     welcomeCardLocation: "Goiânia, GO",
     welcomeCardUnit: "Flat 1208A"
   },
@@ -177,7 +177,7 @@ export const translationStrings: { [key: string]: UIStrings } = {
     copySuccess: "Copied to clipboard!",
     copyAction: "Copy",
     welcomeCardTitle: "Welcome to Sun Square",
-    welcomeCardDesc: "This is your private seasonal flat 1208A. Feel at home!",
+    welcomeCardDesc: "Feel at home: my house, your house. Please take care of it as if it were yours!",
     welcomeCardLocation: "Goiânia, GO",
     welcomeCardUnit: "Flat 1208A"
   },
@@ -239,7 +239,7 @@ export const translationStrings: { [key: string]: UIStrings } = {
     copySuccess: "¡Copiado al portapapeles!",
     copyAction: "Copiar",
     welcomeCardTitle: "Bienvenido a Sun Square",
-    welcomeCardDesc: "Este es su loft privado de temporada 1208A. ¡Siéntase como en casa!",
+    welcomeCardDesc: "Siéntase como en casa: mi casa, su casa. ¡Por favor, cuídela como si fuera suya!",
     welcomeCardLocation: "Goiânia, GO",
     welcomeCardUnit: "Flat 1208A"
   }
@@ -331,11 +331,11 @@ export const translatedArticles: { [lang: string]: any[] } = {
       id: "regras-checkin-visitas",
       tab: "regras",
       category: "Rules",
-      title: "Check-in, Check-out & Visits",
-      excerpt: "Essential instructions on check-in/out times, apartment capacity and visits.",
-      content: "To ensure the smooth running of the condominium:\n\n• Check-in: The reception is open 24 hours, but check-in is always from 2:00 PM. It is mandatory to inform the host of your expected arrival time in advance.\n• Check-out: Until 12:00 PM (noon). If you need to extend or adjust, let the host know in advance.\n• Long-term stays: Permitted for periods of 28 days or more.\n• Guest Limits: The maximum capacity of 4 guests cannot be exceeded under any circumstances.\n• Restricted Access Control: Only registered guests have access to the flat. External visitors or additional guests are only allowed with the prior authorization of the host and mandatory identification at the building's reception.",
+      title: "Check-in, Check-out & Visits (Flat 1208A)",
+      excerpt: "Step-by-step check-in guide at the 24h reception, retrieving flat 1208A access card, and house rules.",
+      content: "Step-by-step instructions to complete check-in at Flat 1208A:\n\n1. 24h Reception & Schedule: The reception is open 24 hours. Check-in starts from 2:00 PM.\n2. Present Yourself at Reception: Arrive at the reception and inform them that you are staying in flat 1208A.\n3. Present Identification Documents: Present the personal documents sent previously to the host.\n4. Receive Magnetic Access Card: Upon document verification, reception will issue your magnetic access card to the flat.\n\n• Check-out: Until 11:00 AM. If you need an extension, inform the host in advance.\n• Long-term stays: Permitted for periods of 28 days or more.\n• Guest Limit: Maximum capacity of 4 guests cannot be exceeded under any circumstances.\n• Restricted Access Control & Visitors: The Flat can receive visitors, but they must be registered in advance by the owner or property manager.",
       icon: "Shield",
-      tags: ["check-in", "check-out", "limit", "capacity", "visits", "identification", "access"]
+      tags: ["check-in", "check-out", "1208a", "flat 1208a", "reception", "access card", "magnetic card", "documents", "limit", "capacity", "visits"]
     },
     {
       id: "regras-silencio-fumo",
@@ -453,11 +453,11 @@ export const translatedArticles: { [lang: string]: any[] } = {
       id: "regras-checkin-visitas",
       tab: "regras",
       category: "Normas",
-      title: "Check-in, Check-out y Visitas",
-      excerpt: "Instrucciones esenciales sobre horarios de entrada, salida, capacidad del apartamento y visitas.",
-      content: "Para garantizar el buen funcionamiento del condominio:\n\n• Check-in: La recepción funciona las 24 horas, pero el check-in es siempre a partir de las 14:00. Es obligatorio informar al anfitrión la hora prevista de su llegada con anticipación.\n• Check-out: Hasta las 12:00 (mediodía). Si necesita extender o ajustar, avise al anfitrión con anticipación.\n• Estadías de larga duración: Permitidas para períodos de 28 días o más.\n• Límites de Huéspedes: A capacidad máxima de 4 huéspedes no puede ser superada bajo ninguna circunstancia.\n• Control de Acceso Restringido: Solo las personas debidamente registradas tienen acceso al apartamento. Visitas externas o huéspedes adicionales solo se permiten con autorización previa del anfitrión y mediante identificación obligatoria en la portería del edificio.",
+      title: "Check-in, Check-out y Visitas (Flat 1208A)",
+      excerpt: "Guía paso a paso para el check-in en recepción 24h, retiro de tarjeta del flat 1208A y normas.",
+      content: "Instrucciones paso a paso para realizar su check-in en el Flat 1208A:\n\n1. Recepción 24h y Horario: La recepción funciona las 24 horas. El check-in es a partir de las 14:00.\n2. Identificación en Recepción: Al llegar al edificio, preséntese en la recepción e informe que se hospedará en el flat 1208A.\n3. Presentación de Documentos: Presente a la recepción los documentos personales previamente enviados al anfitrión.\n4. Retiro de Tarjeta Magnética: Una vez confirmada la información, le entregarán la tarjeta magnética de acceso al flat 1208A.\n\n• Check-out: Hasta las 11:00.\n• Estadías de larga duración: Permitidas para períodos de 28 días o más.\n• Límite de Huéspedes: La capacidad máxima es de 4 personas.\n• Control de Acceso y Visitas: El Flat puede recibir visitas, pero deben ser previamente registradas por el propietario o administrador.",
       icon: "Shield",
-      tags: ["check-in", "check-out", "límite", "capacidad", "visitas", "identificación", "acceso"]
+      tags: ["check-in", "check-out", "1208a", "flat 1208a", "recepción", "tarjeta magnética", "documentos", "límite", "capacidad", "visitas"]
     },
     {
       id: "regras-silencio-fumo",
@@ -497,7 +497,7 @@ export const translatedFaqs: { [lang: string]: any[] } = {
     {
       category: 'Check-in and Check-out',
       question: 'What is the check-in and check-out time?',
-      answer: 'The reception is open 24 hours, but check-in is always from 2:00 PM. It is necessary to inform the host of your expected arrival time in advance. Check-out is until 12:00 PM (noon).'
+      answer: 'The reception is open 24 hours, but check-in is always from 2:00 PM. It is necessary to inform the host of your expected arrival time in advance. Check-out is until 11:00 AM.'
     },
     {
       category: 'Cleaning and Linens',
@@ -512,12 +512,12 @@ export const translatedFaqs: { [lang: string]: any[] } = {
     {
       category: 'Access Control',
       question: 'Who can access the flat?',
-      answer: 'Due to strict security protocols of Sun Square, only properly registered and identified people are authorized to access the flat. Any additional guest or visitor must be communicated in advance to the host for clearance at the building entrance.'
+      answer: 'Due to strict security protocols of Sun Square, only registered people can access the flat. The Flat can receive visitors, but they must be registered in advance by the owner or manager.'
     },
     {
       category: 'Visits',
       question: 'Can I receive visitors in the apartment?',
-      answer: 'External visitors are only allowed with the prior authorization of the host and with the mandatory identification of each visitor at the building\'s reception.'
+      answer: 'The Flat can receive visitors, but they must be registered in advance by the owner or property manager.'
     },
     {
       category: 'Capacity',
@@ -544,7 +544,7 @@ export const translatedFaqs: { [lang: string]: any[] } = {
     {
       category: 'Check-in y Check-out',
       question: '¿Cuál es el horario de entrada y salida?',
-      answer: 'La recepción funciona las 24 horas, pero la entrada es siempre a partir de las 14:00. Es necesario informar al anfitrión la hora prevista de su llegada con anticipación. La salida es hasta las 12:00 (mediodía).'
+      answer: 'La recepción funciona las 24 horas, pero la entrada es siempre a partir de las 14:00. Es necesario informar al anfitrión la hora prevista de su llegada con anticipación. La salida es hasta las 11:00.'
     },
     {
       category: 'Limpieza y Enseres',
@@ -559,12 +559,12 @@ export const translatedFaqs: { [lang: string]: any[] } = {
     {
       category: 'Control de Acceso',
       question: '¿Quién puede acceder al apartamento?',
-      answer: 'Debido a los estrictos protocolos de seguridad de Sun Square, solo las personas debidamente registradas e identificadas están autorizadas a acceder al apartamento. Cualquier huésped adicional o visitante debe comunicarse con anticipación al anfitrión para su habilitación en la portería.'
+      answer: 'Debido a los estrictos protocolos de seguridad de Sun Square, solo las personas registradas tienen acceso. El Flat puede recibir visitas, pero deben ser previamente registradas por el propietario o administrador.'
     },
     {
       category: 'Visitas',
       question: '¿Puedo recibir visitas en el apartamento?',
-      answer: 'Las visitas externas solo están permitidas con la autorización previa del anfitrión y con la identificación obligatoria de cada visitante en la portería del edificio.'
+      answer: 'El Flat puede recibir visitas, pero deben ser previamente registradas por el propietario o administrador.'
     },
     {
       category: 'Capacidad',

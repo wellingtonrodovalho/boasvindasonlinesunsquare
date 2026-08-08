@@ -736,29 +736,49 @@ export default function App() {
                 <div className="flex flex-col gap-6">
                   {/* Card Boas-Vindas & Widget de Clima/Hora */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="md:col-span-2 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-6 md:p-8 text-white shadow-lg relative overflow-hidden flex flex-col justify-between min-h-[220px]">
-                      <div className="absolute right-[-20px] top-[-20px] w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-                      <div className="absolute left-[-30px] bottom-[-30px] w-36 h-36 bg-blue-300/10 rounded-full blur-xl pointer-events-none" />
+                    <div className="md:col-span-2 bg-gradient-to-br from-amber-600 via-amber-700 to-amber-800 rounded-3xl p-6 md:p-8 text-white shadow-md relative overflow-hidden flex flex-col justify-between min-h-[240px]">
+                      <div className="absolute right-[-20px] top-[-20px] w-56 h-56 bg-amber-400/20 rounded-full blur-3xl pointer-events-none" />
+                      <div className="absolute left-[-30px] bottom-[-30px] w-40 h-40 bg-orange-400/20 rounded-full blur-2xl pointer-events-none" />
                       
                       <div className="relative z-10 flex flex-col gap-3">
-                        <h2 className="text-2xl md:text-3xl font-display font-bold leading-tight">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/25 text-amber-100 text-xs font-semibold w-fit">
+                          <Home className="w-3.5 h-3.5 text-amber-200" />
+                          <span>{lang === 'pt' ? 'Hospedagem Acolhedora' : lang === 'en' ? 'Cozy Stay' : 'Hospedaje Acogedor'}</span>
+                        </div>
+
+                        <h2 className="text-2xl md:text-3xl font-display font-bold leading-tight text-white">
                           {getGreeting()}! {t.welcomeCardTitle}
                         </h2>
                         
-                        <p className="text-sm text-white/90 max-w-xl leading-relaxed font-normal">
-                          {t.welcomeCardDesc}
-                        </p>
+                        <div className="p-3.5 rounded-2xl bg-black/15 backdrop-blur-sm border border-white/15 max-w-xl my-1">
+                          <p className="text-xs md:text-sm font-medium text-amber-100 leading-relaxed italic flex items-center gap-2">
+                            <span className="text-lg leading-none select-none text-amber-200">“</span>
+                            <span>
+                              {lang === 'pt' 
+                                ? 'Minha casa, sua casa. Cuide como se fosse sua!' 
+                                : lang === 'en' 
+                                  ? 'My house, your house. Take care of it as if it were yours!' 
+                                  : 'Mi casa, su casa. ¡Cuídela como si fuera suya!'}
+                            </span>
+                            <span className="text-lg leading-none select-none text-amber-200">”</span>
+                          </p>
+                        </div>
                       </div>
 
-                      <div className="relative z-10">
+                      <div className="relative z-10 mt-2">
                         <div className="h-[1px] bg-white/20 my-3" />
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-white/80">
-                          <span className="flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5" /> {t.welcomeCardLocation}
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-amber-100/90 font-medium">
+                          <span className="flex items-center gap-1.5">
+                            <MapPin className="w-3.5 h-3.5 text-amber-200" /> {t.welcomeCardLocation}
                           </span>
-                          <span className="hidden sm:inline">&bull;</span>
-                          <span className="flex items-center gap-1">
-                            <Building className="w-3.5 h-3.5" /> {t.welcomeCardUnit}
+                          <span className="hidden sm:inline opacity-50">&bull;</span>
+                          <span className="flex items-center gap-1.5">
+                            <Building className="w-3.5 h-3.5 text-amber-200" /> {t.welcomeCardUnit}
+                          </span>
+                          <span className="hidden sm:inline opacity-50">&bull;</span>
+                          <span className="flex items-center gap-1.5 text-amber-100">
+                            <Smile className="w-3.5 h-3.5 text-amber-200" /> 
+                            {lang === 'pt' ? 'Sinta-se muito bem-vindo!' : lang === 'en' ? 'Warmest Welcome!' : '¡Muy bienvenido!'}
                           </span>
                         </div>
                       </div>
@@ -853,8 +873,8 @@ export default function App() {
                       {[
                         { 
                           key: 'checkin', 
-                          title: lang === 'pt' ? 'Horário de Check-in' : lang === 'en' ? 'Check-in Time' : 'Horario de Check-in', 
-                          desc: lang === 'pt' ? 'A recepção funciona 24h, mas o check-in é a partir das 14h. Lembre-se de informar o horário de sua chegada ao anfitrião.' : lang === 'en' ? 'The reception operates 24h, but check-in is starting from 2:00 PM. Remember to inform the host about your arrival time.' : 'La recepción está abierta las 24 horas, pero el check-in es a partir de las 14h. Recuerde informar al anfitrión de su hora de llegada.',
+                          title: lang === 'pt' ? 'Check-in & Acesso (Flat 1208A)' : lang === 'en' ? 'Check-in & Access (Flat 1208A)' : 'Check-in y Acceso (Flat 1208A)', 
+                          desc: lang === 'pt' ? 'Recepção 24h. Check-in a partir das 14h. Apresente-se na recepção, informe o Flat 1208A, mostre os documentos enviados e retire seu cartão magnético.' : lang === 'en' ? '24h reception. Check-in from 2 PM. Present yourself at reception, mention Flat 1208A, present your documents, and receive the magnetic access card.' : 'Recepción 24h. Check-in a partir de las 14:00. Preséntese en recepción, indique Flat 1208A, presente sus documentos y retire la tarjeta magnética.',
                           tab: 'regras',
                           target: 'regras-checkin-visitas',
                           icon: <Clock className="w-5 h-5 text-blue-600" />,
@@ -1347,6 +1367,139 @@ export default function App() {
                                           ? 'PRO TIP: If you get lost or want to open another app, press the HOUSE button (Home) on the remote to go back instantly!'
                                           : 'CONSEJO DE ORO: Si se pierde o quiere ver otra app, presione el botón CASITA (Home) en el control para regresar de inmediato.'}
                                     </p>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : art.id === 'regras-checkin-visitas' ? (
+                              <div className="space-y-6 mt-2">
+                                {/* Header Card / Flat Identification */}
+                                <div className="p-4 rounded-2xl bg-blue-50/40 border border-blue-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                  <div className="space-y-1">
+                                    <div className="flex items-center gap-2">
+                                      <span className="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                                        {lang === 'pt' ? 'Check-in Passo a Passo' : lang === 'en' ? 'Step-by-Step Check-in' : 'Check-in Paso a Paso'}
+                                      </span>
+                                      <span className="text-xs font-bold text-slate-700 font-mono bg-white px-2 py-0.5 rounded border border-slate-200">
+                                        Flat 1208A
+                                      </span>
+                                    </div>
+                                    <p className="text-xs text-slate-500">
+                                      {lang === 'pt' 
+                                        ? 'Siga as instruções abaixo para realizar o seu check-in com total facilidade e tranquilidade:' 
+                                        : lang === 'en' 
+                                          ? 'Follow the instructions below to complete your check-in smoothly and easily:' 
+                                          : 'Siga las instrucciones a continuación para realizar su check-in con total facilidad:'}
+                                    </p>
+                                  </div>
+
+                                  <div className="px-3.5 py-2 bg-white rounded-xl border border-blue-100 shadow-2xs flex items-center gap-2.5 shrink-0">
+                                    <Clock className="w-4 h-4 text-blue-600" />
+                                    <div>
+                                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                        {lang === 'pt' ? 'Horário Oficial' : lang === 'en' ? 'Official Schedule' : 'Horario Oficial'}
+                                      </p>
+                                      <p className="text-xs font-bold text-slate-800">
+                                        {lang === 'pt' ? 'A partir das 14h (Recepção 24h)' : lang === 'en' ? 'From 2:00 PM (24h Reception)' : 'A partir de las 14:00 (Recepción 24h)'}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* 4 Steps Grid */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                  {/* Passo 1 */}
+                                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-blue-200 hover:shadow-xs transition-all space-y-2">
+                                    <div className="flex items-center justify-between">
+                                      <span className="w-7 h-7 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+                                      <Clock className="w-4 h-4 text-blue-500" />
+                                    </div>
+                                    <h4 className="font-bold text-slate-800 text-xs">
+                                      {lang === 'pt' ? 'Recepção 24h & Horário de Entrada' : lang === 'en' ? '24h Reception & Entry Schedule' : 'Recepción 24h y Horario de Entrada'}
+                                    </h4>
+                                    <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                                      {lang === 'pt' 
+                                        ? 'A recepção do condomínio funciona 24 horas por dia. O nosso horário oficial de check-in é liberado a partir das 14:00.' 
+                                        : lang === 'en' 
+                                          ? 'The reception operates 24 hours a day. Official check-in time starts from 2:00 PM.' 
+                                          : 'La recepción funciona las 24 horas. El horario oficial de check-in es a partir de las 14:00.'}
+                                    </p>
+                                  </div>
+
+                                  {/* Passo 2 */}
+                                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-blue-200 hover:shadow-xs transition-all space-y-2">
+                                    <div className="flex items-center justify-between">
+                                      <span className="w-7 h-7 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">2</span>
+                                      <Building className="w-4 h-4 text-blue-500" />
+                                    </div>
+                                    <h4 className="font-bold text-slate-800 text-xs">
+                                      {lang === 'pt' ? 'Apresentação na Recepção' : lang === 'en' ? 'Present Yourself at Reception' : 'Identificación en Recepción'}
+                                    </h4>
+                                    <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                                      {lang === 'pt' 
+                                        ? 'Ao chegar ao condomínio, dirija-se à recepção e informe aos atendentes que você ficará hospedado no Flat 1208A.' 
+                                        : lang === 'en' 
+                                          ? 'Upon arrival at the building, go to the reception and inform them that you are staying in Flat 1208A.' 
+                                          : 'Al llegar al edificio, diríjase a la recepción e informe que se hospedará en el Flat 1208A.'}
+                                    </p>
+                                  </div>
+
+                                  {/* Passo 3 */}
+                                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-blue-200 hover:shadow-xs transition-all space-y-2">
+                                    <div className="flex items-center justify-between">
+                                      <span className="w-7 h-7 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">3</span>
+                                      <Shield className="w-4 h-4 text-blue-500" />
+                                    </div>
+                                    <h4 className="font-bold text-slate-800 text-xs">
+                                      {lang === 'pt' ? 'Apresentação de Documentos' : lang === 'en' ? 'Present Identification Documents' : 'Presentación de Documentos'}
+                                    </h4>
+                                    <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                                      {lang === 'pt' 
+                                        ? 'Apresente os seus documentos pessoais de identificação previamente enviados ao anfitrião para liberação na portaria.' 
+                                        : lang === 'en' 
+                                          ? 'Present your personal identification documents sent previously to the host for building clearance.' 
+                                          : 'Presente sus documentos personales de identificación previamente enviados al anfitrión para la autorización.'}
+                                    </p>
+                                  </div>
+
+                                  {/* Passo 4 */}
+                                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-blue-200 hover:shadow-xs transition-all space-y-2">
+                                    <div className="flex items-center justify-between">
+                                      <span className="w-7 h-7 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">4</span>
+                                      <Zap className="w-4 h-4 text-emerald-500" />
+                                    </div>
+                                    <h4 className="font-bold text-slate-800 text-xs">
+                                      {lang === 'pt' ? 'Retirada do Cartão Magnético' : lang === 'en' ? 'Retrieve Magnetic Access Card' : 'Retiro de Tarjeta Magnética'}
+                                    </h4>
+                                    <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                                      {lang === 'pt' 
+                                        ? 'Após a validação rápida pela portaria, você receberá o cartão magnético de acesso ao Flat 1208A e elevadores.' 
+                                        : lang === 'en' 
+                                          ? 'Following quick verification by reception, you will receive the magnetic access card to Flat 1208A and elevators.' 
+                                          : 'Tras la verificación rápida en recepción, le entregarán la tarjeta magnética de acceso al Flat 1208A y elevadores.'}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                {/* Informações Complementares (Check-out, Capacidade e Visitas) */}
+                                <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-100 space-y-3">
+                                  <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                                    <Info className="w-3.5 h-3.5 text-blue-600" />
+                                    {lang === 'pt' ? 'Informações Importantes sobre a Estadia' : lang === 'en' ? 'Important Stay Information' : 'Información Importante sobre la Estancia'}
+                                  </h4>
+                                  
+                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] text-slate-600">
+                                    <div className="bg-white p-3 rounded-xl border border-slate-200/60">
+                                      <span className="font-bold text-slate-800 block mb-0.5">• Check-out:</span>
+                                      {lang === 'pt' ? 'Até as 11:00. Se precisar ajustar o horário, consulte o anfitrião com antecedência.' : lang === 'en' ? 'Until 11:00 AM. If you need an extension, inform the host in advance.' : 'Hasta las 11:00. Si necesita ajustar el horario, consulte al anfitrión con anticipación.'}
+                                    </div>
+                                    <div className="bg-white p-3 rounded-xl border border-slate-200/60">
+                                      <span className="font-bold text-slate-800 block mb-0.5">• Capacidade Máxima:</span>
+                                      {lang === 'pt' ? 'O limite máximo de 4 hóspedes não pode ser ultrapassado sob nenhuma hipótese.' : lang === 'en' ? 'Maximum capacity of 4 guests cannot be exceeded under any circumstances.' : 'El límite máximo de 4 huéspedes no se puede superar bajo ninguna circunstancia.'}
+                                    </div>
+                                    <div className="bg-white p-3 rounded-xl border border-slate-200/60">
+                                      <span className="font-bold text-slate-800 block mb-0.5">• Visitas & Acesso:</span>
+                                      {lang === 'pt' ? 'O Flat pode receber visitas, mas devem ser previamente cadastradas pelo proprietário ou administrador.' : lang === 'en' ? 'The Flat can receive visitors, but they must be registered in advance by the owner or manager.' : 'El Flat puede recibir visitas, pero deben ser previamente registradas por el propietario o administrador.'}
+                                    </div>
                                   </div>
                                 </div>
                               </div>

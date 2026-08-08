@@ -120,11 +120,11 @@ export const guideArticles: GuideArticle[] = [
     id: 'regras-checkin-visitas',
     tab: 'regras',
     category: 'Normas',
-    title: 'Check-in, Check-out e Visitas',
-    excerpt: 'Instruções essenciais sobre horários de entrada, saída, capacidade do apartamento e visitas.',
-    content: 'Para garantir o bom funcionamento do condomínio:\n\n• Check-in: A recepção do condomínio funciona 24 horas, mas o check-in é sempre realizado a partir das 14h. É obrigatório informar o horário previsto de sua chegada ao anfitrião com antecedência.\n• Check-out: Até as 12h (meio-dia). Se precisar estender ou ajustar, avise o anfitrião com antecedência.\n• Estadias de longa duração: Permitidas para períodos de 28 dias ou mais.\n• Limites de Hóspedes: A capacidade máxima de 4 hóspedes não pode ser ultrapassada de forma alguma.\n• Controle de Acesso Restrito: Somente pessoas devidamente registradas possuem acesso ao flat. Visitas externas ou hóspedes adicionais só são permitidos com autorização prévia do anfitrião e mediante identificação obrigatória na portaria do prédio.',
+    title: 'Check-in, Check-out e Visitas (Flat 1208A)',
+    excerpt: 'Guia passo a passo para recepção 24h, identificação, envio de documentos e retirada do cartão do Flat 1208A.',
+    content: 'Instruções passo a passo para realizar o seu check-in no Flat 1208A:\n\n1. Recepção 24h & Horário: A recepção do condomínio funciona 24 horas por dia. Nosso check-in é realizado a partir das 14h.\n2. Apresentação na Portaria: Ao chegar ao edifício, apresente-se na recepção e informe que ficará hospedado no Flat 1208A.\n3. Apresentação de Documentos: Apresente à portaria os documentos pessoais de identificação enviados previamente ao anfitrião.\n4. Retirada do Cartão Magnético: Após a conferência dos documentos, a recepção entregará o seu cartão magnético de acesso ao apartamento.\n\n• Check-out: Deve ser realizado até as 11h. Para necessidade de alteração de horário, consulte o anfitrião com antecedência.\n• Estadias de longa duração: Permitidas para períodos de 28 dias ou mais.\n• Limites de Hóspedes: A capacidade máxima de 4 hóspedes não pode ser ultrapassada em hipótese alguma.\n• Controle de Acesso e Visitas: O Flat pode receber visitas, mas devem ser previamente cadastradas pelo proprietário ou administrador.',
     icon: 'Shield',
-    tags: ['check-in', 'check-out', 'limite', 'capacidade', 'visitas', 'portaria', 'identificação', 'acesso', 'registrado']
+    tags: ['check-in', 'check-out', '1208a', 'flat 1208a', 'cartão magnético', 'documentos', 'limite', 'capacidade', 'visitas', 'portaria', 'identificação', 'acesso', 'registrado']
   },
   {
     id: 'regras-silencio-fumo',
@@ -162,7 +162,7 @@ export const faqItems: FAQItem[] = [
   {
     category: 'Check-in e Check-out',
     question: 'Qual é o horário de check-in e check-out?',
-    answer: 'A recepção funciona 24 horas, mas o check-in é sempre a partir das 14h. É necessário informar o seu horário previsto de chegada ao anfitrião previamente. O check-out é até as 12h (meio-dia).'
+    answer: 'A recepção funciona 24 horas, mas o check-in é sempre a partir das 14h. É necessário informar o seu horário previsto de chegada ao anfitrião previamente. O check-out é até as 11h.'
   },
   {
     category: 'Limpeza e Enxoval',
@@ -177,12 +177,12 @@ export const faqItems: FAQItem[] = [
   {
     category: 'Controle de Acesso',
     question: 'Quem pode acessar o flat?',
-    answer: 'Por rígidos protocolos de segurança do Sun Square, somente pessoas devidamente registradas e cadastradas possuem autorização para acessar o flat. Qualquer hóspede adicional ou visitante deve ser comunicado antecipadamente ao anfitrião para liberação na portaria.'
+    answer: 'Por rígidos protocolos de segurança do Sun Square, somente pessoas devidamente cadastradas possuem autorização para acessar o flat. O Flat pode receber visitas, mas devem ser previamente cadastradas pelo proprietário ou administrador.'
   },
   {
     category: 'Visitas',
     question: 'Posso receber visitas no apartamento?',
-    answer: 'Visitas externas só são permitidas mediante autorização prévia do anfitrião e com a identificação obrigatória de cada visitante na portaria do prédio.'
+    answer: 'O Flat pode receber visitas, mas devem ser previamente cadastradas pelo proprietário ou administrador.'
   },
   {
     category: 'Capacidade',
