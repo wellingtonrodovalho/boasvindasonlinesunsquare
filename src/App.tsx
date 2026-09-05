@@ -158,6 +158,12 @@ export default function App() {
   // Daily Venues Subcategory Filter (Mercados, Feiras, Pontos Turísticos)
   const [dailySubCategory, setDailySubCategory] = useState<'Todos' | 'Mercados' | 'Feiras' | 'Pontos Turísticos'>('Todos');
 
+  // Nosso Flat Sub-section filter & quick navigation
+  const [flatSubSection, setFlatSubSection] = useState<string>('todos');
+
+  // Suporte Sub-section filter & quick navigation
+  const [supportSubSection, setSupportSubSection] = useState<string>('todos');
+
   // Logo Error State for Fallback
   const [logoError, setLogoError] = useState(false);
 
@@ -240,6 +246,18 @@ export default function App() {
   const [dailyCanScrollLeft, setDailyCanScrollLeft] = useState(false);
   const [dailyCanScrollRight, setDailyCanScrollRight] = useState(false);
 
+  // Nosso Flat Sub-navigation Refs & States
+  const flatSubNavRef = useRef<HTMLDivElement | null>(null);
+  const flatSubRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const [flatCanScrollLeft, setFlatCanScrollLeft] = useState(false);
+  const [flatCanScrollRight, setFlatCanScrollRight] = useState(false);
+
+  // Suporte Sub-navigation Refs & States
+  const supportSubNavRef = useRef<HTMLDivElement | null>(null);
+  const supportSubRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const [supportCanScrollLeft, setSupportCanScrollLeft] = useState(false);
+  const [supportCanScrollRight, setSupportCanScrollRight] = useState(false);
+
   // Helper para verificar rolagem de contêineres horizontais
   const checkScrollState = (el: HTMLElement | null, setLeft: (v: boolean) => void, setRight: (v: boolean) => void) => {
     if (!el) return;
@@ -262,6 +280,8 @@ export default function App() {
     checkScrollState(guideNavRef.current, setGuideCanScrollLeft, setGuideCanScrollRight);
     checkScrollState(rulesNavRef.current, setRulesCanScrollLeft, setRulesCanScrollRight);
     checkScrollState(dailySubNavRef.current, setDailyCanScrollLeft, setDailyCanScrollRight);
+    checkScrollState(flatSubNavRef.current, setFlatCanScrollLeft, setFlatCanScrollRight);
+    checkScrollState(supportSubNavRef.current, setSupportCanScrollLeft, setSupportCanScrollRight);
   };
 
   useEffect(() => {
@@ -269,7 +289,7 @@ export default function App() {
     const handleResize = () => refreshAllScrollStates();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [activeTab, guideFilter, rulesFilter, dailySubCategory]);
+  }, [activeTab, guideFilter, rulesFilter, dailySubCategory, flatSubSection, supportSubSection]);
 
   // Auto-scroll para centralizar a aba ativa no topo
   useEffect(() => {
@@ -334,6 +354,62 @@ export default function App() {
     }, 60);
     return () => clearTimeout(timer);
   }, [dailySubCategory, activeTab]);
+
+  // Auto-scroll para centralizar sub-aba de Nosso Flat
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const btn = flatSubRefs.current[flatSubSection];
+      if (btn && flatSubNavRef.current) {
+        btn.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+      checkScrollState(flatSubNavRef.current, setFlatCanScrollLeft, setFlatCanScrollRight);
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [flatSubSection, activeTab]);
+
+  // Auto-scroll para centralizar sub-aba de Suporte
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const btn = supportSubRefs.current[supportSubSection];
+      if (btn && supportSubNavRef.current) {
+        btn.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+      checkScrollState(supportSubNavRef.current, setSupportCanScrollLeft, setSupportCanScrollRight);
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [supportSubSection, activeTab]);
+
+  const handleFlatSubSectionClick = (id: string, targetId?: string) => {
+    setFlatSubSection(id);
+    if (targetId) {
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleSupportSubSectionClick = (id: string, targetId?: string) => {
+    setSupportSubSection(id);
+    if (targetId) {
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   const scrollToArticle = (articleId: string) => {
     setHighlightedArticleId(articleId);
@@ -1100,8 +1176,73 @@ export default function App() {
               {activeTab === 'nosso-flat' && (
                 <div className="flex flex-col gap-6">
                   
+                  {/* Barra de Sub-abas de "Nosso Flat" com navegação fluida e auto-scroll no Celular */}
+                  <div className="relative -mx-4 px-4 sm:mx-0 sm:px-0 py-1" id="flat-subtabs-bar">
+                    {/* Botão Scroll Esquerda */}
+                    {flatCanScrollLeft && (
+                      <>
+                        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+                        <button
+                          type="button"
+                          onClick={() => scrollContainer(flatSubNavRef.current, 'left', 160)}
+                          aria-label="Rolar seções para a esquerda"
+                          className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 bg-white/95 backdrop-blur-xs text-slate-700 hover:text-blue-600 rounded-full shadow-md border border-slate-200/80 flex items-center justify-center transition-all cursor-pointer active:scale-90"
+                        >
+                          <ChevronLeft className="w-3.5 h-3.5" />
+                        </button>
+                      </>
+                    )}
+
+                    {/* Botão Scroll Direita */}
+                    {flatCanScrollRight && (
+                      <>
+                        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+                        <button
+                          type="button"
+                          onClick={() => scrollContainer(flatSubNavRef.current, 'right', 160)}
+                          aria-label="Rolar seções para a direita"
+                          className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 bg-white/95 backdrop-blur-xs text-slate-700 hover:text-blue-600 rounded-full shadow-md border border-slate-200/80 flex items-center justify-center transition-all cursor-pointer active:scale-90"
+                        >
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </>
+                    )}
+
+                    <div 
+                      ref={flatSubNavRef}
+                      onScroll={() => checkScrollState(flatSubNavRef.current, setFlatCanScrollLeft, setFlatCanScrollRight)}
+                      className="flex gap-1.5 overflow-x-auto scrollbar-none scroll-smooth touch-pan-x px-1 py-1"
+                    >
+                      {[
+                        { id: 'todos', label: lang === 'pt' ? 'Tudo do Flat' : lang === 'en' ? 'All in Flat' : 'Todo del Flat', icon: Home, target: undefined },
+                        { id: 'wifi', label: lang === 'pt' ? 'Wi-Fi 1208A' : lang === 'en' ? 'Wi-Fi 1208A' : 'Wi-Fi 1208A', icon: Wifi, target: 'wi-fi-flat' },
+                        { id: 'tv', label: lang === 'pt' ? 'TV Stick & Canais' : lang === 'en' ? 'TV Stick & Channels' : 'TV Stick y Canales', icon: Tv, target: 'tv-stick' },
+                        { id: 'boas-vindas', label: lang === 'pt' ? 'Voltagem & Dicas' : lang === 'en' ? 'Voltage & Tips' : 'Voltaje y Consejos', icon: Info, target: 'flat-welcome-card' },
+                        { id: 'atalhos', label: lang === 'pt' ? 'Acesso Rápido' : lang === 'en' ? 'Quick Access' : 'Acceso Rápido', icon: Zap, target: 'flat-quick-actions' }
+                      ].map((item) => {
+                        const IconComp = item.icon;
+                        const isSelected = flatSubSection === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            ref={(el) => { flatSubRefs.current[item.id] = el; }}
+                            onClick={() => handleFlatSubSectionClick(item.id, item.target)}
+                            className={`shrink-0 py-2 px-3.5 rounded-xl text-xs font-bold whitespace-nowrap outline-none transition-all duration-150 flex items-center gap-1.5 cursor-pointer min-h-[40px] active:scale-95 ${
+                              isSelected
+                                ? 'bg-blue-600 text-white shadow-xs'
+                                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/70 shadow-2xs'
+                            }`}
+                          >
+                            <IconComp className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-slate-400'}`} />
+                            <span>{item.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   {/* Instruções de Boas-Vindas (Informações Essenciais de Entrada) */}
-                  <div className="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 shadow-sm">
+                  <div className="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 shadow-sm scroll-mt-36" id="flat-welcome-card">
                     <div className="mb-5">
                       <h3 className="font-display font-bold text-slate-800 text-sm md:text-base flex items-center gap-2">
                         <Info className="w-4 h-4 text-blue-600" /> {lang === 'pt' ? 'Instruções de Boas-Vindas' : lang === 'en' ? 'Welcome Instructions' : 'Instrucciones de Bienvenida'}
@@ -1178,7 +1319,7 @@ export default function App() {
                   </div>
 
                   {/* Acesso Rápido - Touch Cards */}
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 scroll-mt-36" id="flat-quick-actions">
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider pl-1 flex items-center gap-1.5">
                       <Zap className="w-3.5 h-3.5 text-blue-500" /> {t.quickActionsTitle}
                     </h3>
@@ -1247,7 +1388,7 @@ export default function App() {
                         <div 
                           key={art.id} 
                           id={art.id}
-                          className={`bg-white rounded-2xl p-5 md:p-6 border transition-all duration-300 scroll-mt-28 ${
+                          className={`bg-white rounded-2xl p-5 md:p-6 border transition-all duration-300 scroll-mt-36 ${
                             isHighlighted 
                               ? 'border-blue-400 ring-4 ring-blue-100 shadow-md scale-[1.01]' 
                               : 'border-slate-100 shadow-sm hover:shadow-md'
@@ -1914,311 +2055,6 @@ export default function App() {
                                   </div>
                                 </div>
                               </div>
-                            ) : art.id === 'guia-local-programacao-semanal' ? (
-                              <div className="space-y-4 mt-2">
-                                <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200/70 text-[11px] text-amber-900 flex items-start gap-2">
-                                  <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
-                                  <span>
-                                    {lang === 'pt' 
-                                      ? '⚠️ Horários de feiras podem sofrer alterações conforme o clima ou datas comemorativas. Recomendamos sempre verificar antes de sair.' 
-                                      : lang === 'en'
-                                        ? '⚠️ Street fair schedules may vary according to weather or holidays. We recommend checking before going.'
-                                        : '⚠️ Los horarios de las ferias pueden variar según el clima o días festivos. Recomendamos verificar antes de salir.'}
-                                  </span>
-                                </div>
-
-                                <div className="grid grid-cols-1 gap-3">
-                                  {weeklyScheduleDays.map((sched) => (
-                                    <div key={sched.dayId} className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
-                                      <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-100 flex-wrap">
-                                        <div className="flex items-center gap-2">
-                                          <Calendar className="w-4 h-4 text-blue-600" />
-                                          <span className="text-xs font-extrabold text-slate-800 uppercase tracking-wide">
-                                            {sched.dayName}
-                                          </span>
-                                        </div>
-                                        {sched.badge && (
-                                          <span className="text-[10px] font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
-                                            {sched.badge}
-                                          </span>
-                                        )}
-                                      </div>
-
-                                      <div className="space-y-2">
-                                        <div className="flex items-center justify-between gap-2 flex-wrap">
-                                          <h4 className="text-xs font-bold text-slate-800">{sched.title}</h4>
-                                          {sched.distance && (
-                                            <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-                                              {sched.distance}
-                                            </span>
-                                          )}
-                                        </div>
-
-                                        <p className="text-[11px] text-slate-600 leading-relaxed">
-                                          {sched.details}
-                                        </p>
-
-                                        {sched.extra && (
-                                          <p className="text-[11px] text-slate-500 italic bg-slate-50 p-2 rounded-lg border border-slate-100">
-                                            {sched.extra}
-                                          </p>
-                                        )}
-
-                                        {sched.mapsUrl && (
-                                          <div className="pt-2 flex">
-                                            <a
-                                              href={sched.mapsUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              referrerPolicy="no-referrer"
-                                              className="text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-1.5 px-3 rounded-lg border border-emerald-200 flex items-center gap-1.5 transition-all"
-                                            >
-                                              <MapPin className="w-3.5 h-3.5 text-emerald-600" /> Abrir no Google Maps
-                                            </a>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            ) : art.id === 'guia-local-todos-os-dias' ? (
-                              <div className="space-y-4 mt-2">
-                                {/* Informational Header Banner */}
-                                <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-50/70 via-indigo-50/40 to-blue-50/70 border border-slate-200/80">
-                                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                    <div>
-                                      <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                                        <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                                        {lang === 'pt' 
-                                          ? 'Todos os Dias: Mercados, Feiras e Pontos Turísticos' 
-                                          : lang === 'en' 
-                                            ? 'Every Day: Markets, Fairs & Sights' 
-                                            : 'Todos los Días: Mercados, Ferias y Puntos Turísticos'}
-                                      </h4>
-                                      <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
-                                        {lang === 'pt' 
-                                          ? 'Reunimos os mercados gastronômicos tradicionais, as feiras ao ar livre mais famosas e os principais atrativos culturais e turísticos abertos para você aproveitar em Goiânia.' 
-                                          : lang === 'en'
-                                            ? 'We gathered traditional food markets, famous outdoor street fairs, and top cultural and tourist attractions open for you in Goiânia.'
-                                            : 'Reunimos los mercados gastronómicos tradicionales, las ferias al aire libre más famosas y las principales atracciones culturales y turísticas de Goiânia.'}
-                                      </p>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-[10px] font-semibold text-slate-600 shrink-0 bg-white/80 px-3 py-1.5 rounded-xl border border-slate-200/60 shadow-2xs">
-                                      <Clock className="w-3.5 h-3.5 text-blue-600" />
-                                      <span>{dailyVenues.length} {lang === 'pt' ? 'locais mapeados' : lang === 'en' ? 'mapped spots' : 'lugares mapeados'}</span>
-                                    </div>
-                                  </div>
-
-                                  {/* Subcategory Filter Tabs com Rolagem Horizontal no Mobile */}
-                                  <div className="relative mt-3 pt-3 border-t border-slate-200/60">
-                                    {dailyCanScrollLeft && (
-                                      <div className="absolute left-0 top-3 bottom-0 w-6 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
-                                    )}
-                                    {dailyCanScrollRight && (
-                                      <div className="absolute right-0 top-3 bottom-0 w-6 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
-                                    )}
-                                    <div 
-                                      ref={dailySubNavRef}
-                                      onScroll={() => checkScrollState(dailySubNavRef.current, setDailyCanScrollLeft, setDailyCanScrollRight)}
-                                      className="flex items-center gap-2 overflow-x-auto scrollbar-none scroll-smooth touch-pan-x py-1"
-                                    >
-                                      {[
-                                        { id: 'Todos', label: lang === 'pt' ? 'Todos' : lang === 'en' ? 'All' : 'Todos', count: dailyVenues.length, icon: MapPin },
-                                        { id: 'Mercados', label: lang === 'pt' ? 'Mercados' : lang === 'en' ? 'Markets' : 'Mercados', count: dailyVenues.filter(v => v.category === 'Mercados').length, icon: Store },
-                                        { id: 'Feiras', label: lang === 'pt' ? 'Feiras' : lang === 'en' ? 'Fairs' : 'Ferias', count: dailyVenues.filter(v => v.category === 'Feiras').length, icon: Tent },
-                                        { id: 'Pontos Turísticos', label: lang === 'pt' ? 'Pontos Turísticos' : lang === 'en' ? 'Sights' : 'Turismo', count: dailyVenues.filter(v => v.category === 'Pontos Turísticos').length, icon: Landmark }
-                                      ].map((sub) => {
-                                        const IconComp = sub.icon;
-                                        const isCurrent = dailySubCategory === sub.id;
-                                        return (
-                                          <button
-                                            key={sub.id}
-                                            ref={(el) => { dailySubRefs.current[sub.id] = el; }}
-                                            type="button"
-                                            onClick={() => setDailySubCategory(sub.id as any)}
-                                            className={`shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs whitespace-nowrap cursor-pointer min-h-[40px] active:scale-95 ${
-                                              isCurrent
-                                                ? 'bg-slate-900 text-white shadow-xs'
-                                                : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/80'
-                                            }`}
-                                          >
-                                            <IconComp className={`w-3.5 h-3.5 ${isCurrent ? 'text-white' : 'text-slate-500'}`} />
-                                            <span>{sub.label}</span>
-                                            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                                              isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
-                                            }`}>
-                                              {sub.count}
-                                            </span>
-                                          </button>
-                                        );
-                                      })}
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* Venue Grid */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                  {dailyVenues
-                                    .filter(venue => dailySubCategory === 'Todos' || venue.category === dailySubCategory)
-                                    .map((venue) => {
-                                      const isMarket = venue.category === 'Mercados';
-                                      const isFair = venue.category === 'Feiras';
-                                      const isSight = venue.category === 'Pontos Turísticos';
-
-                                      return (
-                                        <div 
-                                          key={venue.id} 
-                                          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between"
-                                        >
-                                          <div className="space-y-2.5">
-                                            {/* Badges & Header */}
-                                            <div className="flex items-start justify-between gap-2 flex-wrap">
-                                              <div className="flex items-center gap-1.5 flex-wrap">
-                                                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border flex items-center gap-1 ${
-                                                  isMarket 
-                                                    ? 'bg-amber-50 text-amber-800 border-amber-200' 
-                                                    : isFair 
-                                                      ? 'bg-purple-50 text-purple-800 border-purple-200' 
-                                                      : 'bg-blue-50 text-blue-800 border-blue-200'
-                                                }`}>
-                                                  {isMarket && <Store className="w-2.5 h-2.5" />}
-                                                  {isFair && <Tent className="w-2.5 h-2.5" />}
-                                                  {isSight && <Landmark className="w-2.5 h-2.5" />}
-                                                  {venue.category}
-                                                </span>
-
-                                                {venue.badge && (
-                                                  <span className="text-[9px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-2 py-0.5 rounded-md">
-                                                    {venue.badge}
-                                                  </span>
-                                                )}
-                                              </div>
-
-                                              {venue.distance && (
-                                                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1">
-                                                  <MapPin className="w-2.5 h-2.5 text-emerald-600" />
-                                                  {venue.distance}
-                                                </span>
-                                              )}
-                                            </div>
-
-                                            {/* Venue Name */}
-                                            <h4 className="text-xs font-bold text-slate-800 leading-snug">
-                                              {venue.name}
-                                            </h4>
-
-                                            {/* Description */}
-                                            <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                                              {venue.description}
-                                            </p>
-
-                                            {/* Info rows: Hours & Address */}
-                                            <div className="space-y-1.5 text-[10px] text-slate-500 pt-1">
-                                              <p className="flex items-start gap-1.5 font-semibold text-slate-700">
-                                                <Clock className="w-3 h-3 text-slate-400 mt-0.5 shrink-0" />
-                                                <span>{venue.hours}</span>
-                                              </p>
-                                              <p className="flex items-start gap-1.5 text-slate-500">
-                                                <MapPin className="w-3 h-3 text-slate-400 mt-0.5 shrink-0" />
-                                                <span>{venue.address}</span>
-                                              </p>
-                                            </div>
-                                          </div>
-
-                                          {/* Action Buttons: Google Maps & Waze */}
-                                          <div className="mt-4 pt-3 border-t border-slate-100 flex gap-2">
-                                            <a
-                                              href={venue.mapsUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              referrerPolicy="no-referrer"
-                                              className="flex-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-2 px-2.5 rounded-xl border border-emerald-200/70 flex items-center justify-center gap-1.5 transition-all shadow-2xs"
-                                            >
-                                              <MapPin className="w-3 h-3 text-emerald-600" /> Google Maps
-                                            </a>
-                                            <a
-                                              href={venue.wazeUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              referrerPolicy="no-referrer"
-                                              className="flex-1 text-[10px] font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 py-2 px-2.5 rounded-xl border border-sky-200/70 flex items-center justify-center gap-1.5 transition-all shadow-2xs"
-                                            >
-                                              <Car className="w-3 h-3 text-sky-500" /> Waze
-                                            </a>
-                                          </div>
-                                        </div>
-                                      );
-                                    })}
-                                </div>
-                              </div>
-                            ) : art.id.startsWith('guia-local-') ? (
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                {activeLocalGuideItems
-                                  .filter((item) => item.articleId === art.id)
-                                  .map((item) => (
-                                    <div 
-                                      key={item.id} 
-                                      className={`p-4 rounded-2xl border transition-all flex flex-col justify-between shadow-2xs hover:shadow-xs ${
-                                        item.id === 'don-will'
-                                          ? 'bg-blue-50/40 border-blue-200/80 hover:border-blue-300'
-                                          : 'bg-slate-50 hover:bg-slate-100/50 border-slate-200/80 hover:border-blue-200'
-                                      }`}
-                                    >
-                                      <div>
-                                        <div className="flex items-start justify-between gap-2 mb-1 flex-wrap">
-                                          <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                                            {item.name}
-                                          </h4>
-                                          {item.id === 'don-will' && (
-                                            <span className="text-[9px] font-extrabold uppercase bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full tracking-wide shrink-0">
-                                              No Sun Square
-                                            </span>
-                                          )}
-                                        </div>
-                                        {item.description && (
-                                          <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                                            {item.description}
-                                          </p>
-                                        )}
-                                      </div>
-                                      
-                                      <div className="mt-4 pt-3 border-t border-slate-200/60 flex flex-wrap gap-2">
-                                        <a
-                                          href={item.mapsUrl}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          referrerPolicy="no-referrer"
-                                          className="flex-1 min-w-[85px] text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-1.5 px-2 rounded-lg border border-emerald-200 flex items-center justify-center gap-1 active:scale-95 transition-all"
-                                        >
-                                          <MapPin className="w-3 h-3 text-emerald-600" /> Google Maps
-                                        </a>
-
-                                        <a
-                                          href={item.wazeUrl}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          referrerPolicy="no-referrer"
-                                          className="flex-1 min-w-[85px] text-[10px] font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 py-1.5 px-2 rounded-lg border border-sky-200 flex items-center justify-center gap-1 active:scale-95 transition-all"
-                                        >
-                                          <Car className="w-3 h-3 text-sky-500" /> Waze
-                                        </a>
-
-                                        {item.orderUrl && (
-                                          <a
-                                            href={item.orderUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            referrerPolicy="no-referrer"
-                                            className="w-full text-[10px] font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 py-1.5 px-2 rounded-lg border border-rose-200 flex items-center justify-center gap-1.5 active:scale-95 transition-all mt-1"
-                                          >
-                                            <ExternalLink className="w-3 h-3 text-rose-500" /> Pedir Online
-                                          </a>
-                                        )}
-                                      </div>
-                                    </div>
-                                  ))}
-                              </div>
                             ) : (
                               art.content
                             )}
@@ -2502,7 +2338,281 @@ export default function App() {
                           </p>
 
                           <div className="text-xs text-slate-600 space-y-3 leading-relaxed whitespace-pre-line">
-                            {art.id.startsWith('guia-local-') ? (
+                            {art.id === 'guia-local-programacao-semanal' ? (
+                              <div className="space-y-4 mt-2">
+                                {/* Informational Banner */}
+                                <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-50/90 via-orange-50/60 to-amber-50/90 border border-amber-200/80 text-xs text-amber-900 flex items-start gap-2.5 shadow-2xs">
+                                  <Clock className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                                  <div className="space-y-1">
+                                    <span className="font-bold block text-amber-950 text-xs">
+                                      {lang === 'pt' ? 'Feiras e programação, de segunda a domingo' : lang === 'en' ? 'Street markets and schedule, Monday to Sunday' : 'Ferias y programación, de lunes a domingo'}
+                                    </span>
+                                    <p className="text-[11px] text-amber-800 leading-relaxed">
+                                      {lang === 'pt' 
+                                        ? '⚠️ Horários de feiras podem sofrer alterações conforme o clima ou feriados. Recomendamos sempre confirmar antes de sair.' 
+                                        : lang === 'en'
+                                          ? '⚠️ Street market hours may vary with weather or holidays. Always check beforehand.'
+                                          : '⚠️ Los horarios de las ferias pueden variar según el clima o días festivos. Recomendamos verificar antes de salir.'}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                {/* Weekly Schedule Cards */}
+                                <div className="grid grid-cols-1 gap-3.5">
+                                  {weeklyScheduleDays.map((sched) => (
+                                    <div 
+                                      key={sched.dayId} 
+                                      className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-blue-200 transition-all space-y-3"
+                                    >
+                                      {/* Header with Day Pill and Badges */}
+                                      <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100 flex-wrap">
+                                        <div className="flex items-center gap-2.5">
+                                          <span className="px-2.5 py-1 rounded-lg bg-blue-600 text-white text-xs font-black tracking-wide uppercase shadow-2xs">
+                                            {sched.dayShort}
+                                          </span>
+                                          <span className="text-xs font-bold text-slate-700">
+                                            {sched.dayName}
+                                          </span>
+                                        </div>
+                                        {sched.badge && (
+                                          <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                                            sched.distance === '3 min a pé' || sched.distance === 'Na sua porta'
+                                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                              : 'bg-blue-50 text-blue-700 border border-blue-100'
+                                          }`}>
+                                            {sched.badge}
+                                          </span>
+                                        )}
+                                      </div>
+
+                                      {/* Main Event */}
+                                      <div className="space-y-1.5">
+                                        <h4 className="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
+                                          {sched.title}
+                                        </h4>
+                                        <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                                          {sched.details}
+                                        </p>
+                                        {sched.mapsUrl && (
+                                          <div className="pt-1.5 flex flex-wrap gap-2">
+                                            <a
+                                              href={sched.mapsUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-1.5 px-3 rounded-xl border border-emerald-200 active:scale-95 transition-all shadow-2xs"
+                                            >
+                                              <MapPin className="w-3.5 h-3.5 text-emerald-600" />
+                                              <span>{sched.mapsLabel || 'Google Maps'}</span>
+                                            </a>
+                                          </div>
+                                        )}
+                                      </div>
+
+                                      {/* Secondary Event (e.g. Negrão de Lima, Orgânicos 74, Feira das Nuvens) */}
+                                      {sched.secondaryEvent && (
+                                        <div className="mt-2.5 pt-2.5 border-t border-slate-100 bg-slate-50/70 p-3 rounded-xl border border-slate-200/60 space-y-1.5">
+                                          <div className="flex items-center justify-between gap-2 flex-wrap">
+                                            <span className="text-[11px] font-bold text-slate-800">
+                                              {sched.secondaryEvent.details}
+                                            </span>
+                                            {sched.secondaryEvent.badge && (
+                                              <span className="text-[9px] font-bold bg-amber-100/90 text-amber-800 px-2 py-0.5 rounded-full border border-amber-200/60">
+                                                {sched.secondaryEvent.badge}
+                                              </span>
+                                            )}
+                                          </div>
+                                          {sched.secondaryEvent.mapsUrl && (
+                                            <div className="pt-0.5">
+                                              <a
+                                                href={sched.secondaryEvent.mapsUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                referrerPolicy="no-referrer"
+                                                className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 py-1 px-2.5 rounded-lg border border-blue-200 active:scale-95 transition-all"
+                                              >
+                                                <MapPin className="w-3 h-3 text-blue-600" />
+                                                <span>{sched.secondaryEvent.mapsLabel || 'Google Maps'}</span>
+                                              </a>
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : art.id === 'guia-local-todos-os-dias' ? (
+                              <div className="space-y-4 mt-2">
+                                {/* Informational Header Banner */}
+                                <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-50/70 via-indigo-50/40 to-blue-50/70 border border-slate-200/80">
+                                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                    <div>
+                                      <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                        <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                                        {lang === 'pt' 
+                                          ? 'Todos os Dias: Mercados, Feiras e Pontos Turísticos' 
+                                          : lang === 'en' 
+                                            ? 'Every Day: Markets, Fairs & Sights' 
+                                            : 'Todos los Días: Mercados, Ferias y Puntos Turísticos'}
+                                      </h4>
+                                      <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                                        {lang === 'pt' 
+                                          ? 'Reunimos os mercados gastronômicos tradicionais, as feiras ao ar livre mais famosas e os principais atrativos culturais e turísticos abertos para você aproveitar em Goiânia.' 
+                                          : lang === 'en'
+                                            ? 'We gathered traditional food markets, famous outdoor street fairs, and top cultural and tourist attractions open for you in Goiânia.'
+                                            : 'Reunimos los mercados gastronómicos tradicionales, las ferias al aire libre más famosas y las principales atracciones culturales y turísticas de Goiânia.'}
+                                      </p>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-[10px] font-semibold text-slate-600 shrink-0 bg-white/80 px-3 py-1.5 rounded-xl border border-slate-200/60 shadow-2xs">
+                                      <Clock className="w-3.5 h-3.5 text-blue-600" />
+                                      <span>{dailyVenues.length} {lang === 'pt' ? 'locais mapeados' : lang === 'en' ? 'mapped spots' : 'lugares mapeados'}</span>
+                                    </div>
+                                  </div>
+
+                                  {/* Subcategory Filter Tabs com Rolagem Horizontal no Mobile */}
+                                  <div className="relative mt-3 pt-3 border-t border-slate-200/60">
+                                    {dailyCanScrollLeft && (
+                                      <div className="absolute left-0 top-3 bottom-0 w-6 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+                                    )}
+                                    {dailyCanScrollRight && (
+                                      <div className="absolute right-0 top-3 bottom-0 w-6 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+                                    )}
+                                    <div 
+                                      ref={dailySubNavRef}
+                                      onScroll={() => checkScrollState(dailySubNavRef.current, setDailyCanScrollLeft, setDailyCanScrollRight)}
+                                      className="flex items-center gap-2 overflow-x-auto scrollbar-none scroll-smooth touch-pan-x py-1"
+                                    >
+                                      {[
+                                        { id: 'Todos', label: lang === 'pt' ? 'Todos' : lang === 'en' ? 'All' : 'Todos', count: dailyVenues.length, icon: MapPin },
+                                        { id: 'Mercados', label: lang === 'pt' ? 'Mercados' : lang === 'en' ? 'Markets' : 'Mercados', count: dailyVenues.filter(v => v.category === 'Mercados').length, icon: Store },
+                                        { id: 'Feiras', label: lang === 'pt' ? 'Feiras' : lang === 'en' ? 'Fairs' : 'Ferias', count: dailyVenues.filter(v => v.category === 'Feiras').length, icon: Tent },
+                                        { id: 'Pontos Turísticos', label: lang === 'pt' ? 'Pontos Turísticos' : lang === 'en' ? 'Sights' : 'Turismo', count: dailyVenues.filter(v => v.category === 'Pontos Turísticos').length, icon: Landmark }
+                                      ].map((sub) => {
+                                        const IconComp = sub.icon;
+                                        const isCurrent = dailySubCategory === sub.id;
+                                        return (
+                                          <button
+                                            key={sub.id}
+                                            ref={(el) => { dailySubRefs.current[sub.id] = el; }}
+                                            type="button"
+                                            onClick={() => setDailySubCategory(sub.id as any)}
+                                            className={`shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs whitespace-nowrap cursor-pointer min-h-[40px] active:scale-95 ${
+                                              isCurrent
+                                                ? 'bg-slate-900 text-white shadow-xs'
+                                                : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/80'
+                                            }`}
+                                          >
+                                            <IconComp className={`w-3.5 h-3.5 ${isCurrent ? 'text-white' : 'text-slate-500'}`} />
+                                            <span>{sub.label}</span>
+                                            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                                              isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                                            }`}>
+                                              {sub.count}
+                                            </span>
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Venue Grid */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  {dailyVenues
+                                    .filter(venue => dailySubCategory === 'Todos' || venue.category === dailySubCategory)
+                                    .map((venue) => {
+                                      const isMarket = venue.category === 'Mercados';
+                                      const isFair = venue.category === 'Feiras';
+                                      const isSight = venue.category === 'Pontos Turísticos';
+
+                                      return (
+                                        <div 
+                                          key={venue.id} 
+                                          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between"
+                                        >
+                                          <div className="space-y-2.5">
+                                            {/* Badges & Header */}
+                                            <div className="flex items-start justify-between gap-2 flex-wrap">
+                                              <div className="flex items-center gap-1.5 flex-wrap">
+                                                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border flex items-center gap-1 ${
+                                                  isMarket 
+                                                    ? 'bg-amber-50 text-amber-800 border-amber-200' 
+                                                    : isFair 
+                                                      ? 'bg-purple-50 text-purple-800 border-purple-200' 
+                                                      : 'bg-blue-50 text-blue-800 border-blue-200'
+                                                }`}>
+                                                  {isMarket && <Store className="w-2.5 h-2.5" />}
+                                                  {isFair && <Tent className="w-2.5 h-2.5" />}
+                                                  {isSight && <Landmark className="w-2.5 h-2.5" />}
+                                                  {venue.category}
+                                                </span>
+
+                                                {venue.badge && (
+                                                  <span className="text-[9px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-2 py-0.5 rounded-md">
+                                                    {venue.badge}
+                                                  </span>
+                                                )}
+                                              </div>
+
+                                              {venue.distance && (
+                                                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1">
+                                                  <MapPin className="w-2.5 h-2.5 text-emerald-600" />
+                                                  {venue.distance}
+                                                </span>
+                                              )}
+                                            </div>
+
+                                            {/* Venue Name */}
+                                            <h4 className="text-xs font-bold text-slate-800 leading-snug">
+                                              {venue.name}
+                                            </h4>
+
+                                            {/* Description */}
+                                            <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
+                                              {venue.description}
+                                            </p>
+
+                                            {/* Info rows: Hours & Address */}
+                                            <div className="space-y-1.5 text-[10px] text-slate-500 pt-1">
+                                              <p className="flex items-start gap-1.5 font-semibold text-slate-700">
+                                                <Clock className="w-3 h-3 text-slate-400 mt-0.5 shrink-0" />
+                                                <span>{venue.hours}</span>
+                                              </p>
+                                              <p className="flex items-start gap-1.5 text-slate-500">
+                                                <MapPin className="w-3 h-3 text-slate-400 mt-0.5 shrink-0" />
+                                                <span>{venue.address}</span>
+                                              </p>
+                                            </div>
+                                          </div>
+
+                                          {/* Action Buttons: Google Maps & Waze */}
+                                          <div className="mt-4 pt-3 border-t border-slate-100 flex gap-2">
+                                            <a
+                                              href={venue.mapsUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="flex-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-2 px-2.5 rounded-xl border border-emerald-200/70 flex items-center justify-center gap-1.5 transition-all shadow-2xs"
+                                            >
+                                              <MapPin className="w-3 h-3 text-emerald-600" /> Google Maps
+                                            </a>
+                                            <a
+                                              href={venue.wazeUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="flex-1 text-[10px] font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 py-2 px-2.5 rounded-xl border border-sky-200/70 flex items-center justify-center gap-1.5 transition-all shadow-2xs"
+                                            >
+                                              <Car className="w-3 h-3 text-sky-500" /> Waze
+                                            </a>
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                </div>
+                              </div>
+                            ) : art.id.startsWith('guia-local-') ? (
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                 {activeLocalGuideItems
                                   .filter((item) => item.articleId === art.id)
@@ -2718,8 +2828,73 @@ export default function App() {
               {activeTab === 'suporte' && (
                 <div className="flex flex-col gap-6">
                   
+                  {/* Barra de Sub-abas de "Suporte" com navegação fluida e auto-scroll no Celular */}
+                  <div className="relative -mx-4 px-4 sm:mx-0 sm:px-0 py-1" id="support-subtabs-bar">
+                    {/* Botão Scroll Esquerda */}
+                    {supportCanScrollLeft && (
+                      <>
+                        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+                        <button
+                          type="button"
+                          onClick={() => scrollContainer(supportSubNavRef.current, 'left', 160)}
+                          aria-label="Rolar canais para a esquerda"
+                          className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 bg-white/95 backdrop-blur-xs text-slate-700 hover:text-blue-600 rounded-full shadow-md border border-slate-200/80 flex items-center justify-center transition-all cursor-pointer active:scale-90"
+                        >
+                          <ChevronLeft className="w-3.5 h-3.5" />
+                        </button>
+                      </>
+                    )}
+
+                    {/* Botão Scroll Direita */}
+                    {supportCanScrollRight && (
+                      <>
+                        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+                        <button
+                          type="button"
+                          onClick={() => scrollContainer(supportSubNavRef.current, 'right', 160)}
+                          aria-label="Rolar canais para a direita"
+                          className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 bg-white/95 backdrop-blur-xs text-slate-700 hover:text-blue-600 rounded-full shadow-md border border-slate-200/80 flex items-center justify-center transition-all cursor-pointer active:scale-90"
+                        >
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </>
+                    )}
+
+                    <div 
+                      ref={supportSubNavRef}
+                      onScroll={() => checkScrollState(supportSubNavRef.current, setSupportCanScrollLeft, setSupportCanScrollRight)}
+                      className="flex gap-1.5 overflow-x-auto scrollbar-none scroll-smooth touch-pan-x px-1 py-1"
+                    >
+                      {[
+                        { id: 'todos', label: lang === 'pt' ? 'Todos os Canais' : lang === 'en' ? 'All Channels' : 'Todos los Canales', icon: Phone, target: undefined },
+                        { id: 'emergencia', label: lang === 'pt' ? 'Emergência (190/192/193)' : lang === 'en' ? 'Emergency' : 'Emergencia', icon: ShieldAlert, target: 'contatos-uteis' },
+                        { id: 'anfitriao', label: lang === 'pt' ? 'Anfitrião & WhatsApp' : lang === 'en' ? 'Host & WhatsApp' : 'Anfitrión y WhatsApp', icon: User, target: 'staff-contacts' },
+                        { id: 'chamado', label: lang === 'pt' ? 'Abrir Chamado' : lang === 'en' ? 'Open Ticket' : 'Abrir Ticket', icon: MessageSquare, target: 'ticket-form-section' },
+                        { id: 'faq', label: lang === 'pt' ? 'Dúvidas (FAQ)' : lang === 'en' ? 'FAQ' : 'Preguntas Frecuentes', icon: HelpCircle, target: 'faq-section' }
+                      ].map((item) => {
+                        const IconComp = item.icon;
+                        const isSelected = supportSubSection === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            ref={(el) => { supportSubRefs.current[item.id] = el; }}
+                            onClick={() => handleSupportSubSectionClick(item.id, item.target)}
+                            className={`shrink-0 py-2 px-3.5 rounded-xl text-xs font-bold whitespace-nowrap outline-none transition-all duration-150 flex items-center gap-1.5 cursor-pointer min-h-[40px] active:scale-95 ${
+                              isSelected
+                                ? 'bg-blue-600 text-white shadow-xs'
+                                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/70 shadow-2xs'
+                            }`}
+                          >
+                            <IconComp className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-slate-400'}`} />
+                            <span>{item.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   {/* Canais Públicos de Emergência */}
-                  <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm" id="contatos-uteis">
+                  <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm scroll-mt-36" id="contatos-uteis">
                     <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-50">
                       <div className="flex items-center gap-2.5">
                         <span className="p-2 bg-blue-50 text-blue-600 rounded-xl">
@@ -2754,7 +2929,7 @@ export default function App() {
                   </div>
 
                   {/* Lista Completa da Equipe (Staff) */}
-                  <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm" id="staff-contacts">
+                  <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm scroll-mt-36" id="staff-contacts">
                     <h3 className="font-display font-bold text-slate-800 text-sm md:text-base mb-3 flex items-center gap-2">
                       <User className="w-4 h-4 text-blue-600" /> {lang === 'pt' ? 'Contato do Anfitrião' : lang === 'en' ? 'Host Contact' : 'Contacto del Anfitrión'}
                     </h3>
@@ -2803,7 +2978,7 @@ export default function App() {
                   </div>
 
                    {/* Canal Fale Conosco / Enviar Solicitação (FORMULÁRIO ATIVO) */}
-                  <div className="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 shadow-sm" id="ticket-form-section">
+                  <div className="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 shadow-sm scroll-mt-36" id="ticket-form-section">
                     <h3 className="font-display font-bold text-slate-800 text-sm md:text-base mb-1 flex items-center gap-2">
                       <MessageSquare className="w-4 h-4 text-blue-600" /> {lang === 'pt' ? 'Fale com o Anfitrião!' : lang === 'en' ? 'Message the Host!' : '¡Hable con el Anfitrión!'}
                     </h3>
@@ -2984,7 +3159,7 @@ export default function App() {
                   )}
 
                   {/* Perguntas Frequentes Accordion (FAQ) */}
-                  <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm" id="faq-section">
+                  <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm scroll-mt-36" id="faq-section">
                     <h3 className="font-display font-bold text-slate-800 text-sm md:text-base mb-1.5 flex items-center gap-2">
                       <HelpCircle className="w-4 h-4 text-blue-600" /> {lang === 'pt' ? 'Perguntas Frequentes (FAQ)' : lang === 'en' ? 'Frequently Asked Questions (FAQ)' : 'Preguntas Frecuentes (FAQ)'}
                     </h3>

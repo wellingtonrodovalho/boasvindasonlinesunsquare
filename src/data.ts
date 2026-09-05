@@ -39,6 +39,13 @@ export interface LocalGuideItem {
   whatsappUrl?: string;
 }
 
+export interface WeeklyScheduleSecondaryEvent {
+  details: string;
+  badge?: string;
+  mapsUrl?: string;
+  mapsLabel?: string;
+}
+
 export interface WeeklyScheduleDay {
   dayId: 'seg' | 'ter' | 'qua' | 'qui' | 'sex' | 'sab' | 'dom';
   dayName: string;
@@ -50,6 +57,8 @@ export interface WeeklyScheduleDay {
   extra?: string;
   notice?: string;
   mapsUrl?: string;
+  mapsLabel?: string;
+  secondaryEvent?: WeeklyScheduleSecondaryEvent;
 }
 
 export interface DailyVenueItem {
@@ -112,11 +121,11 @@ export const guideArticles: GuideArticle[] = [
     id: 'guia-local-programacao-semanal',
     tab: 'guia-local',
     category: 'A Semana',
-    title: 'A Semana na Região (Feiras & Programação)',
-    excerpt: 'Feiras de rua, artesanato e gastronomia de segunda a domingo em Goiânia.',
-    content: 'Goiânia respira cultura ao ar livre e suas feiras são verdadeiras atrações turísticas. Confira o cronograma completo da semana, com feiras tradicionais a passos do flat.\n\n⚠️ Horários de feira mudam com frequência — vale sempre confirmar antes de sair.',
+    title: 'A semana na região',
+    excerpt: 'Feiras e programação, de segunda a domingo',
+    content: 'A semana na região: Feiras e programação, de segunda a domingo.\n\nSeg: Dia tranquilo: parques e mercados. Bosque dos Buritis, Lago das Rosas ou almoço no Mercado da Rua 74 (aberto até 23h).\nTer: Feira UP Marista gastronômica (Rua 144, Setor Marista · 17h–22h).\nQua: Feira do Parque Amazônia (Praça José Rodrigues de Morais Filho · 16h–23h).\nQui: Feira do Cerrado artesanato (Rua 72, Parque da Criança · 16h–22h · música ao vivo).\nSex: Abre a Feira Hippie — funciona direto até domingo 15h (Praça do Trabalhador / Região da 44 · maior feira de roupas da América Latina) e Feira gastronômica do Negrão de Lima · 17h–23h.\nSáb: Feira da Lua 3 min a pé (Praça Tamandaré · ~15h–22h · comida caseira e artesanato) e Manhã: Feira de Orgânicos no Mercado da 74 · 6h–10h.\nDom: Feira do Sol na sua porta (Praça do Sol · ~15h–22h) e Manhã: Feira do Cerrado 9h–13h · Feira Hippie até 15h. Tarde: Feira das Nuvens (Av. T-1, Setor Coimbra) 16h–22h.',
     icon: 'Calendar',
-    tags: ['semana', 'feira', 'feiras', 'feira da lua', 'feira do sol', 'feira hippie', 'feira do cerrado', 'up marista', 'feira das nuvens', 'programação', 'artesanato', 'comida de rua']
+    tags: ['a semana na região', 'semana', 'feiras e programação, de segunda a domingo', 'feiras', 'feira da lua', 'feira do sol', 'feira hippie', 'feira do cerrado', 'up marista', 'feira das nuvens', 'mercado da 74', 'parque amazônia', 'negrão de lima']
   },
   {
     id: 'guia-local-todos-os-dias',
@@ -248,75 +257,91 @@ export const weeklyScheduleDays: WeeklyScheduleDay[] = [
     dayName: 'Segunda-feira',
     dayShort: 'Seg',
     title: 'Dia tranquilo: parques e mercados',
-    badge: 'Passeio & Gastronomia',
+    badge: 'Parques & Mercados',
     details: 'Bosque dos Buritis, Lago das Rosas ou almoço no Mercado da Rua 74 (aberto até 23h).',
-    extra: 'Dia perfeito para caminhar sob a sombra das árvores e provar petiscos goianos com tranquilidade.'
+    extra: 'Dia tranquilo para passear nos bosques e almoçar comida típica goiana.',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Mercado+Rua+74+Goiania',
+    mapsLabel: 'Mercado da Rua 74'
   },
   {
     dayId: 'ter',
     dayName: 'Terça-feira',
     dayShort: 'Ter',
-    title: 'Feira UP Marista',
+    title: 'Feira UP Marista gastronômica',
     badge: 'Gastronômica',
-    distance: '~2 km',
     details: 'Rua 144, Setor Marista · 17h–22h',
-    extra: 'Comidas artesanais, food trucks e ambiente agradável no coração do Setor Marista.',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+UP+Marista+Rua+144+Setor+Marista+Goiania'
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+UP+Marista+Rua+144+Setor+Marista+Goiania',
+    mapsLabel: 'Feira UP Marista'
   },
   {
     dayId: 'qua',
     dayName: 'Quarta-feira',
     dayShort: 'Qua',
     title: 'Feira do Parque Amazônia',
-    badge: 'Gastronomia & Lazer',
-    distance: '~6 km',
+    badge: 'Feira Noturna',
     details: 'Praça José Rodrigues de Morais Filho · 16h–23h',
-    extra: 'Diversidade gastronômica, pastéis de feira, espetinhos e bancas de produtos locais.',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Praca+Jose+Rodrigues+de+Morais+Filho+Parque+Amazonia+Goiania'
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Praca+Jose+Rodrigues+de+Morais+Filho+Parque+Amazonia+Goiania',
+    mapsLabel: 'Praça José Rodrigues'
   },
   {
     dayId: 'qui',
     dayName: 'Quinta-feira',
     dayShort: 'Qui',
-    title: 'Feira do Cerrado',
-    badge: 'Artesanato & Música ao vivo',
-    distance: '~4 km',
-    details: 'Rua 72, Parque da Criança (Jardim Goiás) · 16h–22h · música ao vivo',
-    extra: 'Artesanato genuíno do Centro-Oeste, cerâmica, tecelagem e apresentações musicais ao vivo.',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+do+Cerrado+Parque+da+Crianca+Goiania'
+    title: 'Feira do Cerrado artesanato',
+    badge: 'Artesanato & Música',
+    details: 'Rua 72, Parque da Criança · 16h–22h · música ao vivo',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+do+Cerrado+Parque+da+Crianca+Goiania',
+    mapsLabel: 'Feira do Cerrado'
   },
   {
     dayId: 'sex',
     dayName: 'Sexta-feira',
     dayShort: 'Sex',
-    title: 'Feira Hippie & Gastronômica Negrão de Lima',
+    title: 'Abre a Feira Hippie — funciona direto até domingo 15h',
     badge: 'Maior da América Latina',
-    distance: '~4 km',
-    details: 'Abre a Feira Hippie — funciona direto até domingo 15h: Praça do Trabalhador / Região da 44 (maior feira de roupas da América Latina).',
-    extra: 'À noite: Feira gastronômica do Setor Negrão de Lima · 17h–23h.',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+Hippie+Praca+do+Trabalhador+Goiania'
+    details: 'Praça do Trabalhador / Região da 44 · maior feira de roupas da América Latina',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+Hippie+Praca+do+Trabalhador+Goiania',
+    mapsLabel: 'Feira Hippie',
+    secondaryEvent: {
+      details: 'Feira gastronômica do Negrão de Lima · 17h–23h',
+      badge: 'Gastronômica',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+Gastronomica+Setor+Negrao+de+Lima+Goiania',
+      mapsLabel: 'Feira Negrão de Lima'
+    }
   },
   {
     dayId: 'sab',
     dayName: 'Sábado',
     dayShort: 'Sáb',
-    title: 'Feira da Lua',
-    badge: 'Destaque da semana',
+    title: 'Feira da Lua 3 min a pé',
+    badge: '3 min a pé',
     distance: '3 min a pé',
-    details: 'Praça Tamandaré · ~15h–22h · comida caseira, artesanato e moda.',
-    extra: 'Pela manhã: Feira de Orgânicos no Mercado da Rua 74 · 6h–10h.',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+da+Lua+Praca+Tamandare+Goiania'
+    details: 'Praça Tamandaré · ~15h–22h · comida caseira e artesanato',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+da+Lua+Praca+Tamandare+Goiania',
+    mapsLabel: 'Feira da Lua (Praça Tamandaré)',
+    secondaryEvent: {
+      details: 'Manhã: Feira de Orgânicos no Mercado da 74 · 6h–10h',
+      badge: 'Orgânicos',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Mercado+Rua+74+Goiania',
+      mapsLabel: 'Mercado da 74'
+    }
   },
   {
     dayId: 'dom',
     dayName: 'Domingo',
     dayShort: 'Dom',
-    title: 'Feira do Sol',
+    title: 'Feira do Sol na sua porta',
     badge: 'Na sua porta',
-    distance: 'Em frente ao hotel',
-    details: 'Praça do Sol · ~15h–22h · artesanato, comidas típicas, plantas e flores.',
-    extra: 'Pela manhã: Feira do Cerrado (9h–13h) e Feira Hippie (até 15h) · Tarde: Feira das Nuvens (Av. T-1, Setor Coimbra · 16h–22h).',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+do+Sol+Praca+do+Sol+Goiania'
+    distance: 'Na sua porta',
+    details: 'Praça do Sol · ~15h–22h',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+do+Sol+Praca+do+Sol+Goiania',
+    mapsLabel: 'Feira do Sol (Praça do Sol)',
+    secondaryEvent: {
+      details: 'Manhã: Feira do Cerrado 9h–13h · Feira Hippie até 15h. Tarde: Feira das Nuvens (Av. T-1, Setor Coimbra) 16h–22h',
+      badge: 'Manhã & Tarde',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Feira+das+Nuvens+Avenida+T-1+Setor+Coimbra+Goiania',
+      mapsLabel: 'Feira das Nuvens'
+    }
   }
 ];
 
