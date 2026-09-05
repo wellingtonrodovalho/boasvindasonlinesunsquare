@@ -10,7 +10,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   guideArticles, faqItems, contactList, GuideArticle, FAQItem, ContactInfo, localGuideItems, LocalGuideItem,
-  weeklyScheduleDays, dailyVenues, everydaySpots
+  weeklyScheduleDays, dailyVenues, everydaySpots, touristSpots
 } from './data';
 import {
   translationStrings,
@@ -44,7 +44,8 @@ export default function App() {
       'Lavanderias': ['Lavanderias', 'Laundry', 'Laundromats', 'Lavandería'],
       'Serviços': ['Serviços', 'Services', 'Servicios'],
       'Saúde e Estética': ['Saúde e Estética', 'Estética & Veículos', 'Health & Beauty', 'Salud y Belleza', 'Aesthetics', 'Vehicles, Charging & Aesthetics', 'Vehículos, Recarga y Estética'],
-      'Lazer e Cultura': ['Lazer e Cultura', 'Lazer & Cultura', 'Leisure & Culture', 'Ocio y Cultura']
+      'Pontos Turísticos': ['Pontos Turísticos', 'Pontos turísticos', 'Tourist Sights', 'Puntos Turísticos', 'Lazer e Cultura', 'Lazer & Parques', 'Leisure & Culture', 'Ocio y Cultura'],
+      'Lazer e Cultura': ['Lazer e Cultura', 'Lazer & Cultura', 'Leisure & Culture', 'Ocio y Cultura', 'Pontos Turísticos', 'Pontos turísticos', 'Tourist Sights', 'Puntos Turísticos']
     };
     const list = ptToOther[filter];
     if (!list) return artCategory.toLowerCase() === filter.toLowerCase();
@@ -843,6 +844,7 @@ export default function App() {
               >
                 {[
                   { id: 'Todos', label: lang === 'pt' ? 'Todos' : lang === 'en' ? 'All' : 'Todos', icon: MapPin },
+                  { id: 'Pontos Turísticos', label: lang === 'pt' ? 'Pontos Turísticos' : lang === 'en' ? 'Tourist Sights' : 'Puntos Turísticos', icon: Landmark },
                   { id: 'A Semana', label: lang === 'pt' ? 'A Semana (Feiras)' : lang === 'en' ? 'Weekly Fairs' : 'La Semana (Ferias)', icon: Calendar },
                   { id: 'Todos os Dias', label: lang === 'pt' ? 'Todos os Dias (Abre a semana)' : lang === 'en' ? 'Every Day (Open all week)' : 'Todos los Días (Abre la semana)', icon: Clock },
                   { id: 'Gastronomia', label: lang === 'pt' ? 'Gastronomia' : lang === 'en' ? 'Gastronomy' : 'Gastronomía', icon: Utensils },
@@ -2709,6 +2711,228 @@ export default function App() {
                                     })}
                                 </div>
                               </div>
+                            ) : art.id === 'guia-local-parques-cultura' ? (
+                              <div className="space-y-4 mt-2">
+                                {/* Header Card */}
+                                <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-emerald-50/80 via-slate-50 to-teal-50/70 border border-emerald-100/90 shadow-2xs space-y-3">
+                                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                                    <div>
+                                      <div className="flex items-center gap-2">
+                                        <span className="p-1.5 bg-emerald-600 text-white rounded-xl shadow-2xs">
+                                          <Landmark className="w-4 h-4" />
+                                        </span>
+                                        <span className="text-xs font-black uppercase text-emerald-800 tracking-wider">
+                                          {lang === 'pt' ? 'Goiânia & Setor Oeste' : lang === 'en' ? 'Goiânia & Setor Oeste' : 'Goiânia y Setor Oeste'}
+                                        </span>
+                                      </div>
+                                      <h4 className="text-sm sm:text-base font-display font-extrabold text-slate-800 mt-1">
+                                        {lang === 'pt' ? 'Pontos turísticos' : lang === 'en' ? 'Tourist Sights' : 'Puntos turísticos'}
+                                      </h4>
+                                    </div>
+                                    <span className="text-[11px] font-bold text-emerald-800 bg-white/95 border border-emerald-200/80 px-3 py-1 rounded-full shadow-2xs">
+                                      {touristSpots.length} {lang === 'pt' ? 'locais mapeados' : lang === 'en' ? 'mapped spots' : 'lugares mapeados'}
+                                    </span>
+                                  </div>
+                                  <p className="text-[11px] text-slate-600 leading-relaxed max-w-2xl">
+                                    {lang === 'pt' 
+                                      ? 'Praças arborizadas a pé, centros culturais, arte urbana, o marco histórico Art Déco e os principais parques da capital organizados por proximidade.' 
+                                      : lang === 'en'
+                                        ? 'Leafy squares within walking distance, cultural centers, street art, Art Déco heritage, and top parks organized by proximity.'
+                                        : 'Plazas arboladas a pie, centros culturales, arte urbano, patrimonio Art Déco y los principales parques organizados por proximidad.'}
+                                  </p>
+                                </div>
+
+                                {/* Grid dos 8 Pontos Turísticos */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                                  {touristSpots.map((spot) => {
+                                    const isImmediate = spot.distanceBadge === 'em frente';
+                                    const isWalk = spot.distanceBadge === '3 min a pé';
+                                    const isCar = spot.distanceBadge === 'carro';
+
+                                    return (
+                                      <div 
+                                        key={spot.id}
+                                        className={`p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 shadow-2xs hover:shadow-xs ${
+                                          isImmediate 
+                                            ? 'bg-emerald-50/40 border-emerald-200 hover:border-emerald-300' 
+                                            : isWalk
+                                              ? 'bg-sky-50/30 border-sky-200 hover:border-sky-300'
+                                              : 'bg-white border-slate-200/90 hover:border-blue-200'
+                                        }`}
+                                      >
+                                        <div className="space-y-1.5">
+                                          <div className="flex items-center justify-between gap-2 flex-wrap">
+                                            <h5 className="font-display font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
+                                              <MapPin className={`w-3.5 h-3.5 ${
+                                                isImmediate ? 'text-emerald-600' : isWalk ? 'text-sky-600' : isCar ? 'text-amber-600' : 'text-slate-500'
+                                              }`} />
+                                              <span>{spot.name}</span>
+                                            </h5>
+                                            <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wide border shadow-2xs ${
+                                              isImmediate
+                                                ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                                : isWalk
+                                                  ? 'bg-sky-100 text-sky-800 border-sky-300'
+                                                  : isCar
+                                                    ? 'bg-amber-100 text-amber-800 border-amber-300'
+                                                    : 'bg-slate-100 text-slate-700 border-slate-200'
+                                            }`}>
+                                              {spot.distanceBadge}
+                                            </span>
+                                          </div>
+
+                                          <p className="text-xs text-slate-700 font-semibold leading-relaxed">
+                                            {spot.details}
+                                          </p>
+
+                                          {spot.address && (
+                                            <p className="text-[11px] text-slate-400 font-medium">
+                                              {spot.address}
+                                            </p>
+                                          )}
+                                        </div>
+
+                                        <div className="pt-2 border-t border-slate-100 flex items-center gap-2">
+                                          <a
+                                            href={spot.mapsUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            referrerPolicy="no-referrer"
+                                            className="flex-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 py-2 px-3 rounded-xl border border-emerald-200 flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-2xs"
+                                          >
+                                            <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                            <span>Google Maps</span>
+                                          </a>
+
+                                          {spot.wazeUrl && (
+                                            <a
+                                              href={spot.wazeUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="text-[11px] font-bold text-sky-800 bg-sky-50 hover:bg-sky-100 py-2 px-3 rounded-xl border border-sky-200 flex items-center justify-center gap-1 active:scale-95 transition-all shadow-2xs"
+                                              title="Abrir no Waze"
+                                            >
+                                              <Car className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                                              <span>Waze</span>
+                                            </a>
+                                          )}
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ) : art.id === 'guia-local-gastronomia' ? (
+                              <div className="space-y-4 mt-2">
+                                <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-amber-50/80 via-slate-50 to-orange-50/70 border border-amber-100/90 shadow-2xs space-y-2">
+                                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                                    <div className="flex items-center gap-2">
+                                      <span className="p-1.5 bg-amber-600 text-white rounded-xl shadow-2xs">
+                                        <Utensils className="w-4 h-4" />
+                                      </span>
+                                      <span className="text-xs font-black uppercase text-amber-800 tracking-wider">
+                                        {lang === 'pt' ? 'Setor Oeste & Marista' : lang === 'en' ? 'Setor Oeste & Marista' : 'Setor Oeste y Marista'}
+                                      </span>
+                                    </div>
+                                    <span className="text-[11px] font-bold text-amber-800 bg-white/95 border border-amber-200/80 px-3 py-1 rounded-full shadow-2xs">
+                                      {lang === 'pt' ? 'Restaurantes a pé & táxi' : lang === 'en' ? 'On foot & taxi' : 'A pie y taxi'}
+                                    </span>
+                                  </div>
+                                  <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
+                                    {lang === 'pt'
+                                      ? 'Do japonês mais bem avaliado da vizinhança aos premiados pelo circuito gastronômico 2026, parrilla, adegas e churrascarias tradicionais a poucos minutos da Praça do Sol.'
+                                      : lang === 'en'
+                                        ? 'From the neighborhood’s top-rated Japanese to 2026 award winners, parrilla, cellars and traditional steakhouses minutes away from Praça do Sol.'
+                                        : 'Desde el japonés mejor valorado del barrio hasta los premiados del circuito gastronómico 2026, parrilla, bodegas y churrasquerías a minutos de Praça do Sol.'}
+                                  </p>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  {activeLocalGuideItems
+                                    .filter((item) => item.articleId === art.id)
+                                    .map((item) => (
+                                      <div 
+                                        key={item.id} 
+                                        className={`p-4 rounded-2xl border transition-all flex flex-col justify-between shadow-2xs hover:shadow-xs ${
+                                          item.id === 'don-will'
+                                            ? 'bg-blue-50/40 border-blue-200/80 hover:border-blue-300'
+                                            : 'bg-slate-50 hover:bg-slate-100/50 border-slate-200/80 hover:border-amber-200'
+                                        }`}
+                                      >
+                                        <div>
+                                          <div className="flex items-start justify-between gap-2 mb-1.5 flex-wrap">
+                                            <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                              {item.name}
+                                            </h4>
+                                            <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
+                                              {item.distance && (
+                                                <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wide border shadow-2xs ${
+                                                  item.distance.toLowerCase().includes('táxi') || item.distance.toLowerCase().includes('taxi')
+                                                    ? 'bg-amber-100 text-amber-800 border-amber-300'
+                                                    : item.distance.toLowerCase().includes('edifício')
+                                                      ? 'bg-blue-100 text-blue-800 border-blue-300'
+                                                      : 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                                }`}>
+                                                  {item.distance}
+                                                </span>
+                                              )}
+                                              {item.badge && item.id !== 'don-will' && (
+                                                <span className="text-[9px] font-semibold text-slate-600 bg-white/90 border border-slate-200 px-2 py-0.5 rounded-full shadow-2xs">
+                                                  {item.badge}
+                                                </span>
+                                              )}
+                                              {item.id === 'don-will' && (
+                                                <span className="text-[9px] font-extrabold uppercase bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full tracking-wide shrink-0 border border-blue-200">
+                                                  {lang === 'pt' ? 'No Sun Square' : lang === 'en' ? 'At Sun Square' : 'En el Sun Square'}
+                                                </span>
+                                              )}
+                                            </div>
+                                          </div>
+                                          {item.description && (
+                                            <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                                              {item.description}
+                                            </p>
+                                          )}
+                                        </div>
+                                        
+                                        <div className="mt-4 pt-3 border-t border-slate-200/60 flex flex-wrap gap-2">
+                                          <a
+                                            href={item.mapsUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            referrerPolicy="no-referrer"
+                                            className="flex-1 min-w-[85px] text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-1.5 px-2 rounded-lg border border-emerald-200 flex items-center justify-center gap-1 active:scale-95 transition-all"
+                                          >
+                                            <MapPin className="w-3 h-3 text-emerald-600" /> Google Maps
+                                          </a>
+
+                                          <a
+                                            href={item.wazeUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            referrerPolicy="no-referrer"
+                                            className="flex-1 min-w-[85px] text-[10px] font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 py-1.5 px-2 rounded-lg border border-sky-200 flex items-center justify-center gap-1 active:scale-95 transition-all"
+                                          >
+                                            <Car className="w-3 h-3 text-sky-500" /> Waze
+                                          </a>
+
+                                          {item.orderUrl && (
+                                            <a
+                                              href={item.orderUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="w-full text-[10px] font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 py-1.5 px-2 rounded-lg border border-rose-200 flex items-center justify-center gap-1.5 active:scale-95 transition-all mt-1"
+                                            >
+                                              <ExternalLink className="w-3 h-3 text-rose-500" /> {lang === 'pt' ? 'Pedir Online' : lang === 'en' ? 'Order Online' : 'Pedir en Línea'}
+                                            </a>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))}
+                                </div>
+                              </div>
                             ) : art.id.startsWith('guia-local-') ? (
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                 {activeLocalGuideItems
@@ -2727,11 +2951,23 @@ export default function App() {
                                           <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                                             {item.name}
                                           </h4>
-                                          {item.id === 'don-will' && (
-                                            <span className="text-[9px] font-extrabold uppercase bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full tracking-wide shrink-0">
-                                              {lang === 'pt' ? 'No Sun Square' : lang === 'en' ? 'At Sun Square' : 'En el Sun Square'}
-                                            </span>
-                                          )}
+                                          <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
+                                            {item.distance && (
+                                              <span className="text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wide bg-slate-100 text-slate-700 border border-slate-200">
+                                                {item.distance}
+                                              </span>
+                                            )}
+                                            {item.badge && item.id !== 'don-will' && (
+                                              <span className="text-[9px] font-semibold text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full">
+                                                {item.badge}
+                                              </span>
+                                            )}
+                                            {item.id === 'don-will' && (
+                                              <span className="text-[9px] font-extrabold uppercase bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full tracking-wide shrink-0">
+                                                {lang === 'pt' ? 'No Sun Square' : lang === 'en' ? 'At Sun Square' : 'En el Sun Square'}
+                                              </span>
+                                            )}
+                                          </div>
                                         </div>
                                         {item.description && (
                                           <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">

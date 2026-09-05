@@ -88,6 +88,17 @@ export interface EverydaySpot {
   wazeUrl?: string;
 }
 
+export interface TouristSpotItem {
+  id: string;
+  name: string;
+  distanceBadge: string;
+  details: string;
+  address?: string;
+  mapsUrl: string;
+  mapsLabel: string;
+  wazeUrl?: string;
+}
+
 export const guideArticles: GuideArticle[] = [
   {
     id: 'bem-vindo',
@@ -155,11 +166,11 @@ export const guideArticles: GuideArticle[] = [
     id: 'guia-local-gastronomia',
     tab: 'guia-local',
     category: 'Gastronomia',
-    title: 'Restaurantes a Pé & Gastronomia',
-    excerpt: 'Do japonês à culinária típica, adegas premiadas e churrasco, resolva o melhor da cidade a poucos minutos de caminhada.',
-    content: 'Rua 9, de frente para a Praça do Sol. O melhor da gastronomia de Goiânia se resolve a pé!',
+    title: 'Restaurantes a pé',
+    excerpt: 'Izu a 2 min, Panela Mágica e Bartolomeu a 5 min, Pitigliano, Celsin, Walmor, Porto Cave e o circuito de alta gastronomia.',
+    content: 'Restaurantes a pé:\n\n• Izu Japanese Food (2 min)\nJaponês · o mais bem avaliado da vizinhança\n\n• Panela Mágica (5 min)\nComida caseira · top 10 de Goiânia em 2026\n\n• Bartolomeu Restaurante e Adega (5 min)\nRua 22 · contemporâneo, top 10 de 2026\n\n• Pizzaria Pitigliano (6 min)\nPizza italiana\n\n• Celsin & Cia (5 min)\nBoteco e petiscos\n\n• Churrascaria do Walmor (5 min)\nChurrasco tradicional\n\n• Bar do Peixe (6 min)\nPeixes e frutos do mar\n\n• Porto Cave (6 min)\nCozinha portuguesa\n\n• El Argentino (10 min)\nParrilla argentina\n\n• Íz · 1929 Trattoria · Botelli · Fãmu (táxi)\nSetor Marista · alta gastronomia (Íz é o nº 1 da cidade em 2026)',
     icon: 'Utensils',
-    tags: ['comer', 'restaurante', 'bar', 'churrascaria', 'almoço', 'jantar', 'izu', 'panela mágica', 'bartolomeu', 'pitigliano', 'celsin', 'walmor', 'bar do peixe', 'porto cave', 'el argentino', 'don will', 'yakiniku', 'acai', 'habibs']
+    tags: ['comer', 'restaurante', 'bar', 'churrascaria', 'almoço', 'jantar', 'restaurantes a pé', 'gastronomia', 'izu', 'panela mágica', 'bartolomeu', 'pitigliano', 'celsin', 'walmor', 'bar do peixe', 'porto cave', 'el argentino', 'íz', '1929 trattoria', 'botelli', 'fãmu', 'alta gastronomia', 'marista']
   },
   {
     id: 'guia-local-shoppings',
@@ -174,12 +185,12 @@ export const guideArticles: GuideArticle[] = [
   {
     id: 'guia-local-parques-cultura',
     tab: 'guia-local',
-    category: 'Lazer e Cultura',
-    title: 'Pontos Turísticos & Parques',
-    excerpt: 'Praça do Sol em frente, Praça Tamandaré a 3 min, Bosque dos Buritis, museus e arquitetura Art Déco.',
-    content: 'Descubra os principais pontos turísticos perto do Sun Square:\n\n• Praça do Sol (Em frente): Praça arborizada, letreiro "Eu Amo Goiânia", playground infantil, espaço pet e palco da Feira do Sol aos domingos.\n• Praça Tamandaré (3 min a pé): Arborizada, com sorveterias, bares e a famosa Feira da Lua aos sábados.\n• Bosque dos Buritis e Museu de Arte de Goiânia (MAG) (~1,5 km): Av. Assis Chateaubriand · aberto 24h · pistas de caminhada, lagos e o MAG na Rua 1, Setor Oeste.\n• Lago das Rosas (~2 km): Alameda das Rosas · caminhada, pedalinho e ao lado do Zoológico de Goiânia.\n• Praça Cívica e Centro Art Déco (~2 km): Marco zero de Goiânia, acervo Art Déco tombado pelo IPHAN, Palácio das Esmeraldas e Museu Zoroastro Artiaga (entrada gratuita).\n• Beco da Codorna (~2,5 km): Av. Anhanguera, 5331 · museu e galeria de arte urbana e grafite a céu aberto.\n• Parque Vaca Brava (~2,5 km): Av. T-10, Setor Bueno · lago com pista de cooper, cafés ao redor e em frente ao Goiânia Shopping.\n• Centro Cultural Oscar Niemeyer (Acesso de carro): GO-020 · conjunto arquitetônico projetado por Niemeyer com museu contemporâneo (MAC), biblioteca e praça de patins.',
-    icon: 'MapPin',
-    tags: ['parque', 'lazer', 'cultura', 'turismo', 'pontos turísticos', 'praça do sol', 'praça tamandaré', 'bosque dos buritis', 'mag', 'lago das rosas', 'zoológico', 'praça cívica', 'art déco', 'beco da codorna', 'vaca brava', 'oscar niemeyer']
+    category: 'Pontos Turísticos',
+    title: 'Pontos turísticos',
+    excerpt: 'Praça do Sol em frente, Praça Tamandaré a 3 min, Bosque dos Buritis, Centro Art Déco e os principais atrativos da capital.',
+    content: 'Pontos turísticos:\n\n• Praça do Sol (em frente)\nPraça arborizada com playground; palco da Feira do Sol aos domingos.\n\n• Praça Tamandaré (3 min a pé)\nBares, sorveterias e a Feira da Lua aos sábados.\n\n• Bosque dos Buritis e Museu de Arte de Goiânia (~1,5 km)\nAv. Assis Chateaubriand · aberto 24h · MAG na Rua 1, Setor Oeste.\n\n• Lago das Rosas (~2 km)\nAlameda das Rosas · caminhada, com o Zoológico ao lado.\n\n• Praça Cívica e Centro Art Déco (~2 km)\nMuseu Zoroastro Artiaga (grátis) e a arquitetura dos anos 1930–40.\n\n• Beco da Codorna (~2,5 km)\nAv. Anhanguera, 5331 · galeria de grafite a céu aberto.\n\n• Parque Vaca Brava (~2,5 km)\nAv. T-10, Setor Bueno · lago, pista e quiosques.\n\n• Centro Cultural Oscar Niemeyer (carro)\nGO-020 · conjunto de museu, biblioteca e teatro.',
+    icon: 'Landmark',
+    tags: ['pontos turísticos', 'turismo', 'parque', 'lazer', 'cultura', 'praça do sol', 'praça tamandaré', 'bosque dos buritis', 'museu de arte de goiânia', 'mag', 'lago das rosas', 'praça cívica', 'art déco', 'beco da codorna', 'parque vaca brava', 'centro cultural oscar niemeyer']
   },
   {
     id: 'guia-local-lavanderias',
@@ -405,6 +416,89 @@ export const everydaySpots: EverydaySpot[] = [
     secondaryMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Parque+Flamboyant+Goiania',
     secondaryMapsLabel: 'Parque Flamboyant (Jardim Goiás)',
     wazeUrl: 'https://waze.com/ul?q=Parque%20Vaca%20Brava%20Goi%C3%A2nia'
+  }
+];
+
+export const touristSpots: TouristSpotItem[] = [
+  {
+    id: 'praca-do-sol',
+    name: 'Praça do Sol',
+    distanceBadge: 'em frente',
+    details: 'Praça arborizada com playground; palco da Feira do Sol aos domingos.',
+    address: 'Praça do Sol, Setor Oeste (Em frente ao Sun Square)',
+    mapsUrl: 'https://maps.app.goo.gl/7x6AeoGhnoFDbx6K8',
+    mapsLabel: 'Praça do Sol (Em frente)',
+    wazeUrl: 'https://waze.com/ul?q=Pra%C3%A7a%20do%20Sol%20Goi%C3%A2nia'
+  },
+  {
+    id: 'praca-tamandare',
+    name: 'Praça Tamandaré',
+    distanceBadge: '3 min a pé',
+    details: 'Bares, sorveterias e a Feira da Lua aos sábados.',
+    address: 'Praça Tamandaré, Setor Oeste',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Praca+Tamandare+Setor+Oeste+Goiania',
+    mapsLabel: 'Praça Tamandaré (3 min a pé)',
+    wazeUrl: 'https://waze.com/ul?q=Pra%C3%A7a%20Tamandar%C3%A9%20Goi%C3%A2nia'
+  },
+  {
+    id: 'bosque-buritis-mag',
+    name: 'Bosque dos Buritis e Museu de Arte de Goiânia',
+    distanceBadge: '~1,5 km',
+    details: 'Av. Assis Chateaubriand · aberto 24h · MAG na Rua 1, Setor Oeste.',
+    address: 'Av. Assis Chateaubriand com Rua 1, Setor Oeste',
+    mapsUrl: 'https://maps.app.goo.gl/jFp75hQMEsstTup8A',
+    mapsLabel: 'Bosque dos Buritis e MAG',
+    wazeUrl: 'https://waze.com/ul?q=Bosque%20dos%20Buritis'
+  },
+  {
+    id: 'lago-das-rosas',
+    name: 'Lago das Rosas',
+    distanceBadge: '~2 km',
+    details: 'Alameda das Rosas · caminhada, com o Zoológico ao lado.',
+    address: 'Alameda das Rosas, Setor Oeste',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Lago+das+Rosas+Goiania',
+    mapsLabel: 'Lago das Rosas & Zoo',
+    wazeUrl: 'https://waze.com/ul?q=Lago%20das%20Rosas%20Goi%C3%A2nia'
+  },
+  {
+    id: 'praca-civica-art-deco',
+    name: 'Praça Cívica e Centro Art Déco',
+    distanceBadge: '~2 km',
+    details: 'Museu Zoroastro Artiaga (grátis) e a arquitetura dos anos 1930–40.',
+    address: 'Praça Dr. Pedro Ludovico Teixeira, Centro',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Praca+Civica+Goiania',
+    mapsLabel: 'Praça Cívica (Art Déco)',
+    wazeUrl: 'https://waze.com/ul?q=Pra%C3%A7a%20C%C3%ADvica%20Goi%C3%A2nia'
+  },
+  {
+    id: 'beco-da-codorna',
+    name: 'Beco da Codorna',
+    distanceBadge: '~2,5 km',
+    details: 'Av. Anhanguera, 5331 · galeria de grafite a céu aberto.',
+    address: 'Av. Anhanguera, 5331, Centro',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Beco+da+Codorna+Av+Anhanguera+5331+Goiania',
+    mapsLabel: 'Beco da Codorna (Grafite)',
+    wazeUrl: 'https://waze.com/ul?q=Beco%20da%20Codorna%20Goi%C3%A2nia'
+  },
+  {
+    id: 'parque-vaca-brava',
+    name: 'Parque Vaca Brava',
+    distanceBadge: '~2,5 km',
+    details: 'Av. T-10, Setor Bueno · lago, pista e quiosques.',
+    address: 'Av. T-10, Setor Bueno (Em frente ao Goiânia Shopping)',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Parque+Vaca+Brava+Goiania',
+    mapsLabel: 'Parque Vaca Brava',
+    wazeUrl: 'https://waze.com/ul?q=Parque%20Vaca%20Brava%20Goi%C3%A2nia'
+  },
+  {
+    id: 'centro-cultural-oscar-niemeyer',
+    name: 'Centro Cultural Oscar Niemeyer',
+    distanceBadge: 'carro',
+    details: 'GO-020 · conjunto de museu, biblioteca e teatro.',
+    address: 'GO-020, Km 01, Jardim Goiás',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Centro+Cultural+Oscar+Niemeyer+Goiania',
+    mapsLabel: 'Centro Cultural Niemeyer',
+    wazeUrl: 'https://waze.com/ul?q=Centro%20Cultural%20Oscar%20Niemeyer%20Goi%C3%A2nia'
   }
 ];
 
@@ -732,9 +826,9 @@ export const localGuideItems: LocalGuideItem[] = [
     id: 'izu',
     articleId: 'guia-local-gastronomia',
     name: 'Izu Japanese Food',
-    badge: 'Japonês Premiado',
-    distance: '2 min a pé',
-    description: 'Japonês requintado e moderno · o mais bem avaliado de toda a vizinhança da Praça do Sol.',
+    badge: 'Japonês',
+    distance: '2 min',
+    description: 'Japonês · o mais bem avaliado da vizinhança',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Izu+Japanese+Food+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Izu%20Japanese%20Food%20Goi%C3%A2nia'
   },
@@ -743,8 +837,8 @@ export const localGuideItems: LocalGuideItem[] = [
     articleId: 'guia-local-gastronomia',
     name: 'Panela Mágica',
     badge: 'Top 10 de 2026',
-    distance: '5 min a pé',
-    description: 'Comida caseira, saudável e refinada com ingredientes frescos · eleito um dos 10 melhores de Goiânia em 2026.',
+    distance: '5 min',
+    description: 'Comida caseira · top 10 de Goiânia em 2026',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Panela+Magica+Setor+Oeste+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Panela%20M%C3%A1gica%20Goi%C3%A2nia'
   },
@@ -753,8 +847,8 @@ export const localGuideItems: LocalGuideItem[] = [
     articleId: 'guia-local-gastronomia',
     name: 'Bartolomeu Restaurante e Adega',
     badge: 'Top 10 de 2026',
-    distance: '5 min a pé',
-    description: 'Rua 22 · cozinha contemporânea, cortes nobres na brasa e adega premiada com mais de 600 rótulos.',
+    distance: '5 min',
+    description: 'Rua 22 · contemporâneo, top 10 de 2026',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Bartolomeu+Restaurante+Adega+Rua+22+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Bartolomeu%20Restaurante%20e%20Adega%20Goi%C3%A2nia'
   },
@@ -763,18 +857,18 @@ export const localGuideItems: LocalGuideItem[] = [
     articleId: 'guia-local-gastronomia',
     name: 'Pizzaria Pitigliano',
     badge: 'Pizza Italiana',
-    distance: '6 min a pé',
-    description: 'Tradicionais pizzas italianas assadas em forno a lenha, em um ambiente rústico envolto por belos jardins.',
+    distance: '6 min',
+    description: 'Pizza italiana',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Pizzaria+Pitigliano+Setor+Oeste+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Pizzaria%20Pitigliano%20Goi%C3%A2nia'
   },
   {
     id: 'celsin',
     articleId: 'guia-local-gastronomia',
-    name: 'Celsin & Cia Bar e Restaurante',
+    name: 'Celsin & Cia',
     badge: 'Boteco & Petiscos',
-    distance: '5 min a pé',
-    description: 'Rua 22 · tradicional boteco com terraço agradável, chopp geladíssimo e culinária típica goiana.',
+    distance: '5 min',
+    description: 'Boteco e petiscos',
     mapsUrl: 'https://maps.app.goo.gl/eeoxtZtkbwKtei1z9',
     wazeUrl: 'https://waze.com/ul?q=Celsin%20Bar%20e%20Restaurante'
   },
@@ -782,9 +876,9 @@ export const localGuideItems: LocalGuideItem[] = [
     id: 'walmor',
     articleId: 'guia-local-gastronomia',
     name: 'Churrascaria do Walmor',
-    badge: 'Rodízio Tradicional',
-    distance: '5 min a pé',
-    description: 'Rua 3 · churrascaria clássica com rodízio de carnes nobres, farto buffet de saladas e sobremesas.',
+    badge: 'Churrasco Tradicional',
+    distance: '5 min',
+    description: 'Churrasco tradicional',
     mapsUrl: 'https://maps.app.goo.gl/dXHQESCtDcbjXt8MA',
     wazeUrl: 'https://waze.com/ul?q=Churrascaria%20do%20Walmor'
   },
@@ -793,8 +887,8 @@ export const localGuideItems: LocalGuideItem[] = [
     articleId: 'guia-local-gastronomia',
     name: 'Bar do Peixe',
     badge: 'Frutos do Mar',
-    distance: '6 min a pé',
-    description: 'Peixes frescos de água doce e frutos do mar, com destaque para a moqueca e porções crocantes de peixe.',
+    distance: '6 min',
+    description: 'Peixes e frutos do mar',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Bar+do+Peixe+Setor+Oeste+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Bar%20do%20Peixe%20Goi%C3%A2nia'
   },
@@ -803,8 +897,8 @@ export const localGuideItems: LocalGuideItem[] = [
     articleId: 'guia-local-gastronomia',
     name: 'Porto Cave',
     badge: 'Cozinha Portuguesa',
-    distance: '6 min a pé',
-    description: 'Rua 28 · autêntica gastronomia portuguesa, receitas com bacalhau de alta qualidade e carta de vinhos finos.',
+    distance: '6 min',
+    description: 'Cozinha portuguesa',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Porto+Cave+Setor+Oeste+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Porto%20Cave%20Goi%C3%A2nia'
   },
@@ -813,18 +907,18 @@ export const localGuideItems: LocalGuideItem[] = [
     articleId: 'guia-local-gastronomia',
     name: 'El Argentino',
     badge: 'Parrilla Argentina',
-    distance: '10 min a pé',
-    description: 'Rua 4, Setor Oeste · autêntica parrilla argentina com cortes especiais de angus grelhados no ponto certo.',
+    distance: '10 min',
+    description: 'Parrilla argentina',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=El+Argentino+Setor+Oeste+Goiania',
     wazeUrl: 'https://waze.com/ul?q=El%20Argentino%20Goi%C3%A2nia'
   },
   {
     id: 'alta-gastronomia',
     articleId: 'guia-local-gastronomia',
-    name: 'Circuito Alta Gastronomia: Íz · 1929 Trattoria · Botelli · Fãmu',
-    badge: 'Íz: Nº 1 da Cidade em 2026',
-    distance: 'Poucos min de táxi',
-    description: 'Setor Marista · alta gastronomia assinada por grandes chefs premiados (Íz eleito o restaurante nº 1 da cidade).',
+    name: 'Íz · 1929 Trattoria · Botelli · Fãmu',
+    badge: 'Alta Gastronomia',
+    distance: 'táxi',
+    description: 'Setor Marista · alta gastronomia (Íz é o nº 1 da cidade em 2026)',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Iz+Restaurante+Setor+Marista+Goiania',
     wazeUrl: 'https://waze.com/ul?q=%C3%8Dz%20Restaurante%20Goi%C3%A2nia'
   },

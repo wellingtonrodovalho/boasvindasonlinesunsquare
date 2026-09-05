@@ -311,11 +311,11 @@ export const translatedArticles: { [lang: string]: any[] } = {
       id: "guia-local-gastronomia",
       tab: "guia-local",
       category: "Gastronomy",
-      title: "Dining and Cafes",
-      excerpt: "Great options of bars, steakhouses and quick snacks in the surroundings.",
-      content: "Discover the gastronomy of Setor Oeste just minutes from the flat.",
-      icon: "Smile",
-      tags: ["eat", "restaurant", "bar", "steakhouse", "lunch", "dinner"]
+      title: "Restaurants on foot",
+      excerpt: "Izu 2 min away, Panela Mágica & Bartolomeu 5 min away, Pitigliano, Celsin, Walmor, Porto Cave and fine dining circuit.",
+      content: "Restaurants on foot:\n\n• Izu Japanese Food (2 min)\nJapanese · highest rated in the neighborhood\n\n• Panela Mágica (5 min)\nHomemade food · top 10 in Goiânia in 2026\n\n• Bartolomeu Restaurante e Adega (5 min)\nRua 22 · contemporary dining, top 10 in 2026\n\n• Pizzaria Pitigliano (6 min)\nItalian pizza\n\n• Celsin & Cia (5 min)\nPub & bar snacks\n\n• Churrascaria do Walmor (5 min)\nTraditional barbecue\n\n• Bar do Peixe (6 min)\nFish and seafood\n\n• Porto Cave (6 min)\nPortuguese cuisine\n\n• El Argentino (10 min)\nArgentine parrilla\n\n• Íz · 1929 Trattoria · Botelli · Fãmu (taxi)\nSetor Marista · fine dining (Íz is #1 in the city in 2026)",
+      icon: "Utensils",
+      tags: ["eat", "restaurant", "bar", "steakhouse", "lunch", "dinner", "restaurants on foot", "izu", "panela mágica", "bartolomeu", "pitigliano", "celsin", "walmor", "bar do peixe", "porto cave", "el argentino", "íz"]
     },
     {
       id: "guia-local-servicos",
@@ -340,12 +340,12 @@ export const translatedArticles: { [lang: string]: any[] } = {
     {
       id: "guia-local-parques-cultura",
       tab: "guia-local",
-      category: "Leisure & Culture",
-      title: "Leisure, Parks & Culture",
-      excerpt: "Beautiful squares, famous street markets and museums to explore steps from the apartment.",
-      content: "Enjoy the rich cultural and natural life of Setor Oeste:\n\n• Feira do Sol: Traditional street market that takes place on Sundays in the leafy Praça do Sol, with crafts, fashion and typical food steps from your flat.\n• Bosque dos Buritis: Beautiful and extensive wooded urban park, perfect for walks and contact with nature.\n• Goiânia Zoo: A pleasant and classic tour in the city for the whole family.\n• Pedro Ludovico Museum: Historical museum that preserves the memory of the foundation of Goiânia, located in the historic Praça Dr. Pedro Ludovico Teixeira.\n• Institutional Note: The TJGO - Court of Justice of the State of Goiás is also located in the immediate vicinity of this same central region.",
-      icon: "Wifi",
-      tags: ["park", "leisure", "culture", "market", "wooded", "zoo", "museum"]
+      category: "Tourist Sights",
+      title: "Tourist Sights",
+      excerpt: "Praça do Sol right in front, Praça Tamandaré, Bosque dos Buritis, Art Déco center and main capital attractions.",
+      content: "Tourist sights:\n\n• Praça do Sol (in front)\nLeafy square with playground; host to Feira do Sol on Sundays.\n\n• Praça Tamandaré (3 min walk)\nBars, ice cream shops and Feira da Lua on Saturdays.\n\n• Bosque dos Buritis & Goiânia Art Museum (~1.5 km)\nAv. Assis Chateaubriand · open 24h · MAG on Rua 1, Setor Oeste.\n\n• Lago das Rosas (~2 km)\nAlameda das Rosas · walking path with Goiânia Zoo next door.\n\n• Praça Cívica & Art Déco Center (~2 km)\nZoroastro Artiaga Museum (free entry) and 1930s–40s architecture.\n\n• Beco da Codorna (~2.5 km)\nAv. Anhanguera, 5331 · open-air graffiti art gallery.\n\n• Parque Vaca Brava (~2.5 km)\nAv. T-10, Setor Bueno · lake, jogging track and kiosks.\n\n• Oscar Niemeyer Cultural Center (car)\nGO-020 · complex with museum, library and theater.",
+      icon: "Landmark",
+      tags: ["tourist sights", "sights", "tourism", "park", "culture", "praça do sol", "praça tamandaré", "bosque dos buritis", "mag", "lago das rosas", "praça cívica", "beco da codorna", "vaca brava", "niemeyer"]
     },
     {
       id: "regras-checkin-visitas",
@@ -463,11 +463,11 @@ export const translatedArticles: { [lang: string]: any[] } = {
       id: "guia-local-gastronomia",
       tab: "guia-local",
       category: "Gastronomía",
-      title: "Alimentación y Cafés",
-      excerpt: "Excelentes opciones de bares, churrasquerías y refrigerios rápidos en los alrededores.",
-      content: "Descubra la gastronomía de Setor Oeste a pocos minutos del apartamento.",
-      icon: "Smile",
-      tags: ["comer", "restaurante", "bar", "churrasquería", "almuerzo", "cena"]
+      title: "Restaurantes a pie",
+      excerpt: "Izu a 2 min, Panela Mágica y Bartolomeu a 5 min, Pitigliano, Celsin, Walmor, Porto Cave y circuito de alta gastronomía.",
+      content: "Restaurantes a pie:\n\n• Izu Japanese Food (2 min)\nJaponés · el mejor valorado del barrio\n\n• Panela Mágica (5 min)\nComida casera · top 10 de Goiânia en 2026\n\n• Bartolomeu Restaurante e Adega (5 min)\nRua 22 · contemporáneo, top 10 de 2026\n\n• Pizzaria Pitigliano (6 min)\nPizza italiana\n\n• Celsin & Cia (5 min)\nBoteco y picadas\n\n• Churrascaria do Walmor (5 min)\nChurrasco tradicional\n\n• Bar do Peixe (6 min)\nPescados y mariscos\n\n• Porto Cave (6 min)\nCocina portuguesa\n\n• El Argentino (10 min)\nParrilla argentina\n\n• Íz · 1929 Trattoria · Botelli · Fãmu (taxi)\nSetor Marista · alta gastronomía (Íz es el nº 1 de la ciudad en 2026)",
+      icon: "Utensils",
+      tags: ["comer", "restaurante", "bar", "churrasquería", "almuerzo", "cena", "restaurantes a pie", "izu", "panela mágica", "bartolomeu", "pitigliano", "celsin", "walmor", "bar do peixe", "porto cave", "el argentino", "íz"]
     },
     {
       id: "guia-local-servicos",
@@ -492,12 +492,12 @@ export const translatedArticles: { [lang: string]: any[] } = {
     {
       id: "guia-local-parques-cultura",
       tab: "guia-local",
-      category: "Ocio y Cultura",
-      title: "Ocio, Parques y Cultura",
-      excerpt: "Hermosas plazas, ferias famosas y museos para explorar a pasos del apartamento.",
-      content: "Disfrute de la rica vida cultural y natural de Setor Oeste:\n\n• Feira do Sol: Feria tradicional de Goiânia que se realiza los domingos en la arbolada Praça do Sol, con artesanías, moda y comidas típicas a pasos de su apartamento.\n• Bosque dos Buritis: Hermoso y extenso parque urbano arbolado, perfecto para caminatas y contacto con la naturaleza.\n• Zoológico de Goiânia: Un paseo agradable y clásico en la ciudad para toda la familia.\n• Museo Pedro Ludovico: Museo histórico que preserva la memoria de la fundación de Goiânia, situado en la histórica Praça Dr. Pedro Ludovico Teixeira.\n• Nota Institucional: El TJGO - Tribunal de Justicia del Estado de Goiás también se encuentra en las inmediaciones de esta misma región central.",
-      icon: "Wifi",
-      tags: ["parque", "ocio", "cultura", "feria", "bosque", "zoológico", "museo"]
+      category: "Puntos Turísticos",
+      title: "Puntos turísticos",
+      excerpt: "Praça do Sol enfrente, Praça Tamandaré a 3 min, Bosque dos Buritis, Centro Art Déco y principales atracciones de la capital.",
+      content: "Puntos turísticos:\n\n• Praça do Sol (enfrente)\nPlaza arbolada con juegos infantiles; sede de la Feira do Sol los domingos.\n\n• Praça Tamandaré (3 min a pie)\nBares, heladerías y la Feira da Lua los sábados.\n\n• Bosque dos Buritis y Museo de Arte de Goiânia (~1,5 km)\nAv. Assis Chateaubriand · abierto 24h · MAG en Rua 1, Setor Oeste.\n\n• Lago das Rosas (~2 km)\nAlameda das Rosas · caminata, con el Zoológico al lado.\n\n• Praça Cívica y Centro Art Déco (~2 km)\nMuseo Zoroastro Artiaga (gratis) y la arquitectura de los años 1930–40.\n\n• Beco da Codorna (~2,5 km)\nAv. Anhanguera, 5331 · galería de grafiti al aire libre.\n\n• Parque Vaca Brava (~2,5 km)\nAv. T-10, Setor Bueno · lago, pista y quioscos.\n\n• Centro Cultural Oscar Niemeyer (auto)\nGO-020 · conjunto de museo, biblioteca y teatro.",
+      icon: "Landmark",
+      tags: ["puntos turísticos", "turismo", "parques", "cultura", "praça do sol", "praça tamandaré", "bosque dos buritis", "mag", "lago das rosas", "praça cívica", "beco da codorna", "vaca brava", "niemeyer"]
     },
     {
       id: "regras-checkin-visitas",
