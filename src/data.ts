@@ -153,16 +153,6 @@ export const guideArticles: GuideArticle[] = [
     tags: ['a semana na região', 'semana', 'feiras e programação, de segunda a domingo', 'feiras', 'feira da lua', 'feira do sol', 'feira hippie', 'feira do cerrado', 'up marista', 'feira das nuvens', 'mercado da 74', 'parque amazônia', 'negrão de lima']
   },
   {
-    id: 'guia-local-todos-os-dias',
-    tab: 'guia-local',
-    category: 'Todos os Dias',
-    title: 'Todos os dias',
-    excerpt: 'Abre a semana inteira',
-    content: 'Todos os dias: Abre a semana inteira.\n\n• Mercado Central\nCentro · Rua 3, 322 · seg–sex 7h–18h, sáb 7h–14h, dom 7h–12h\n\n• Mercado Popular da Rua 74\nCentro · Rua 74, 329 · seg–sáb 7h–23h · botecos à noite\n\n• Vila Cultural Cora Coralina\nCentro · Rua 23 com Rua 3 · todos os dias 9h–17h\n\n• Parques Vaca Brava e Flamboyant\n24h · Caminhada, corrida e quiosques',
-    icon: 'Clock',
-    tags: ['todos os dias', 'abre a semana inteira', 'mercados', 'feiras', 'pontos turísticos', 'mercado central', 'mercado popular da rua 74', 'rua 74', 'vila cultural cora coralina', 'parque vaca brava', 'parque flamboyant', 'centro', '24h']
-  },
-  {
     id: 'guia-local-gastronomia',
     tab: 'guia-local',
     category: 'Gastronomia',

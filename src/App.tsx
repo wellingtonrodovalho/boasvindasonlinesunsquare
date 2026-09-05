@@ -4,13 +4,13 @@ import {
   Search, Info, AlertTriangle, ArrowRight, CheckCircle2, MessageSquare, ChevronDown, ChevronUp, 
   Mail, Clock, User, HelpCircle, ExternalLink, RefreshCw, Send, Check, X, Building, Copy, 
   PhoneCall, Calendar, CheckSquare, ClipboardList, ShieldAlert, Home, Cloud, CloudSun, CloudRain,
-  LogOut, Sparkles, Key, Lock, Utensils, ShoppingBag, Store, Tent, Landmark,
+  LogOut, Sparkles, Key, Lock, Utensils, ShoppingBag, Landmark,
   ChevronLeft, ChevronRight, Waves, Heart, Tv, Wind
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   guideArticles, faqItems, contactList, GuideArticle, FAQItem, ContactInfo, localGuideItems, LocalGuideItem,
-  weeklyScheduleDays, dailyVenues, everydaySpots, touristSpots
+  weeklyScheduleDays, touristSpots
 } from './data';
 import {
   translationStrings,
@@ -43,7 +43,6 @@ export default function App() {
     if (filter === 'Todos' || filter === 'All') return true;
     const ptToOther: { [key: string]: string[] } = {
       'A Semana': ['A Semana', 'Weekly Schedule', 'La Semana', 'Semana'],
-      'Todos os Dias': ['Todos os Dias', 'Every Day', 'Todos los Días', 'A Semana', 'Weekly Schedule', 'La Semana', 'Lazer e Cultura', 'Leisure & Culture', 'Ocio y Cultura', 'Pontos Turísticos', 'Mercados', 'Feiras'],
       'Gastronomia': ['Gastronomia', 'Gastronomy', 'Gastronomía'],
       'Shoppings': ['Shoppings', 'Shopping', 'Shopping Centers', 'Compras'],
       'Lavanderias': ['Lavanderias', 'Laundry', 'Laundromats', 'Lavandería'],
@@ -161,9 +160,6 @@ export default function App() {
   // Local Guide Category Filter
   const [guideFilter, setGuideFilter] = useState<string>('Todos');
 
-  // Daily Venues Subcategory Filter (Mercados, Feiras, Pontos Turísticos)
-  const [dailySubCategory, setDailySubCategory] = useState<'Todos' | 'Mercados' | 'Feiras' | 'Pontos Turísticos'>('Todos');
-
   // Nosso Flat Sub-section filter & quick navigation
   const [flatSubSection, setFlatSubSection] = useState<string>('todos');
 
@@ -246,12 +242,6 @@ export default function App() {
   const [rulesCanScrollLeft, setRulesCanScrollLeft] = useState(false);
   const [rulesCanScrollRight, setRulesCanScrollRight] = useState(false);
 
-  // Daily Venues Subcategories (Mercados, Feiras, Pontos Turísticos)
-  const dailySubNavRef = useRef<HTMLDivElement | null>(null);
-  const dailySubRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
-  const [dailyCanScrollLeft, setDailyCanScrollLeft] = useState(false);
-  const [dailyCanScrollRight, setDailyCanScrollRight] = useState(false);
-
   // Nosso Flat Sub-navigation Refs & States
   const flatSubNavRef = useRef<HTMLDivElement | null>(null);
   const flatSubRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
@@ -285,7 +275,6 @@ export default function App() {
     checkScrollState(navContainerRef.current, setNavCanScrollLeft, setNavCanScrollRight);
     checkScrollState(guideNavRef.current, setGuideCanScrollLeft, setGuideCanScrollRight);
     checkScrollState(rulesNavRef.current, setRulesCanScrollLeft, setRulesCanScrollRight);
-    checkScrollState(dailySubNavRef.current, setDailyCanScrollLeft, setDailyCanScrollRight);
     checkScrollState(flatSubNavRef.current, setFlatCanScrollLeft, setFlatCanScrollRight);
     checkScrollState(supportSubNavRef.current, setSupportCanScrollLeft, setSupportCanScrollRight);
   };
@@ -295,7 +284,7 @@ export default function App() {
     const handleResize = () => refreshAllScrollStates();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [activeTab, guideFilter, rulesFilter, dailySubCategory, flatSubSection, supportSubSection]);
+  }, [activeTab, guideFilter, rulesFilter, flatSubSection, supportSubSection]);
 
   // Auto-scroll para centralizar a aba ativa no topo
   useEffect(() => {
@@ -344,22 +333,6 @@ export default function App() {
     }, 60);
     return () => clearTimeout(timer);
   }, [rulesFilter, activeTab]);
-
-  // Auto-scroll para centralizar sub-categoria ativa de Todos os Dias
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const btn = dailySubRefs.current[dailySubCategory];
-      if (btn && dailySubNavRef.current) {
-        btn.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'center'
-        });
-      }
-      checkScrollState(dailySubNavRef.current, setDailyCanScrollLeft, setDailyCanScrollRight);
-    }, 60);
-    return () => clearTimeout(timer);
-  }, [dailySubCategory, activeTab]);
 
   // Auto-scroll para centralizar sub-aba de Nosso Flat
   useEffect(() => {
@@ -851,7 +824,6 @@ export default function App() {
                   { id: 'Todos', label: lang === 'pt' ? 'Todos' : lang === 'en' ? 'All' : 'Todos', icon: MapPin },
                   { id: 'Pontos Turísticos', label: lang === 'pt' ? 'Pontos Turísticos' : lang === 'en' ? 'Tourist Sights' : 'Puntos Turísticos', icon: Landmark },
                   { id: 'A Semana', label: lang === 'pt' ? 'A Semana (Feiras)' : lang === 'en' ? 'Weekly Fairs' : 'La Semana (Ferias)', icon: Calendar },
-                  { id: 'Todos os Dias', label: lang === 'pt' ? 'Todos os Dias (Abre a semana)' : lang === 'en' ? 'Every Day (Open all week)' : 'Todos los Días (Abre la semana)', icon: Clock },
                   { id: 'Gastronomia', label: lang === 'pt' ? 'Gastronomia' : lang === 'en' ? 'Gastronomy' : 'Gastronomía', icon: Utensils },
                   { id: 'Shoppings', label: lang === 'pt' ? 'Shoppings' : lang === 'en' ? 'Malls' : 'Centros Comerciales', icon: ShoppingBag },
                   { id: 'Lazer e Cultura', label: lang === 'pt' ? 'Lazer & Parques' : lang === 'en' ? 'Leisure & Parks' : 'Ocio y Parques', icon: Sun },
@@ -2447,273 +2419,6 @@ export default function App() {
                                       )}
                                     </div>
                                   ))}
-                                </div>
-                              </div>
-                            ) : art.id === 'guia-local-todos-os-dias' ? (
-                              <div className="space-y-5 mt-2">
-                                {/* Destaque Especial: Todos os dias · Abre a semana inteira */}
-                                <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-blue-50/90 via-slate-50 to-indigo-50/80 border border-blue-100 shadow-2xs space-y-4">
-                                  <div className="flex items-center justify-between gap-3 flex-wrap">
-                                    <div>
-                                      <div className="flex items-center gap-2">
-                                        <span className="p-1.5 bg-blue-600 text-white rounded-xl shadow-2xs">
-                                          <Clock className="w-4 h-4" />
-                                        </span>
-                                        <span className="text-xs font-black uppercase text-blue-700 tracking-wider">
-                                          {lang === 'pt' ? 'Todos os dias' : lang === 'en' ? 'Every Day' : 'Todos los días'}
-                                        </span>
-                                      </div>
-                                      <h4 className="text-sm sm:text-base font-display font-extrabold text-slate-800 mt-1">
-                                        {lang === 'pt' ? 'Abre a semana inteira' : lang === 'en' ? 'Open all week long' : 'Abre toda la semana'}
-                                      </h4>
-                                    </div>
-                                    <span className="text-[11px] font-bold text-blue-700 bg-white/95 border border-blue-200/80 px-3 py-1 rounded-full shadow-2xs">
-                                      {everydaySpots.length} {lang === 'pt' ? 'destinos fixos' : lang === 'en' ? 'daily spots' : 'destinos fijos'}
-                                    </span>
-                                  </div>
-
-                                  {/* Grid dos 4 locais solicitados */}
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                                    {everydaySpots.map((spot) => (
-                                      <div 
-                                        key={spot.id}
-                                        className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-xs hover:border-blue-200 transition-all flex flex-col justify-between gap-3"
-                                      >
-                                        <div className="space-y-1.5">
-                                          <div className="flex items-center justify-between gap-2 flex-wrap">
-                                            <h5 className="font-display font-bold text-slate-800 text-xs sm:text-sm">
-                                              {spot.name}
-                                            </h5>
-                                            <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wide ${
-                                              spot.regionBadge === '24h'
-                                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                                                : 'bg-blue-100 text-blue-800 border border-blue-200'
-                                            }`}>
-                                              {spot.regionBadge}
-                                            </span>
-                                          </div>
-                                          
-                                          <p className="text-xs text-slate-700 font-semibold leading-relaxed">
-                                            {spot.addressSchedule}
-                                          </p>
-
-                                          {spot.highlight && (
-                                            <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
-                                              {spot.highlight}
-                                            </p>
-                                          )}
-                                        </div>
-
-                                        <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-2">
-                                          <a
-                                            href={spot.mapsUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            referrerPolicy="no-referrer"
-                                            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 py-1.5 px-3 rounded-xl border border-blue-200 active:scale-95 transition-all shadow-2xs"
-                                          >
-                                            <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                                            <span>{spot.mapsLabel}</span>
-                                          </a>
-
-                                          {spot.secondaryMapsUrl && (
-                                            <a
-                                              href={spot.secondaryMapsUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              referrerPolicy="no-referrer"
-                                              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-1.5 px-3 rounded-xl border border-emerald-200 active:scale-95 transition-all shadow-2xs"
-                                            >
-                                              <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                                              <span>{spot.secondaryMapsLabel}</span>
-                                            </a>
-                                          )}
-
-                                          {spot.wazeUrl && (
-                                            <a
-                                              href={spot.wazeUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              referrerPolicy="no-referrer"
-                                              className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200/80 py-1.5 px-2.5 rounded-xl active:scale-95 transition-all"
-                                              title="Abrir no Waze"
-                                            >
-                                              <ExternalLink className="w-3 h-3 text-slate-500" />
-                                              <span>Waze</span>
-                                            </a>
-                                          )}
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-
-                                {/* Informational Header Banner & Filtros de Exploração Completa */}
-                                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
-                                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                    <div>
-                                      <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                                        <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                                        {lang === 'pt' 
-                                          ? 'Explorar todos os mercados, feiras e atrativos' 
-                                          : lang === 'en' 
-                                            ? 'Explore all markets, street fairs & sights' 
-                                            : 'Explorar todos los mercados, ferias y atracciones'}
-                                      </h4>
-                                      <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
-                                        {lang === 'pt' 
-                                          ? 'Consulte o catálogo completo com horários, distâncias a partir do flat e rotas rápidas pelo mapa.' 
-                                          : lang === 'en'
-                                            ? 'Browse the complete catalog with hours, distance from the flat, and fast map routes.'
-                                            : 'Consulte el catálogo completo con horarios, distancia desde el flat y rutas en el mapa.'}
-                                      </p>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-[10px] font-semibold text-slate-600 shrink-0 bg-white px-3 py-1.5 rounded-xl border border-slate-200/60 shadow-2xs">
-                                      <Clock className="w-3.5 h-3.5 text-blue-600" />
-                                      <span>{dailyVenues.length} {lang === 'pt' ? 'locais mapeados' : lang === 'en' ? 'mapped spots' : 'lugares mapeados'}</span>
-                                    </div>
-                                  </div>
-
-                                  {/* Subcategory Filter Tabs com Rolagem Horizontal no Mobile */}
-                                  <div className="relative mt-3 pt-3 border-t border-slate-200/60">
-                                    {dailyCanScrollLeft && (
-                                      <div className="absolute left-0 top-3 bottom-0 w-6 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
-                                    )}
-                                    {dailyCanScrollRight && (
-                                      <div className="absolute right-0 top-3 bottom-0 w-6 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
-                                    )}
-                                    <div 
-                                      ref={dailySubNavRef}
-                                      onScroll={() => checkScrollState(dailySubNavRef.current, setDailyCanScrollLeft, setDailyCanScrollRight)}
-                                      className="flex items-center gap-2 overflow-x-auto scrollbar-none scroll-smooth touch-pan-x py-1"
-                                    >
-                                      {[
-                                        { id: 'Todos', label: lang === 'pt' ? 'Todos' : lang === 'en' ? 'All' : 'Todos', count: dailyVenues.length, icon: MapPin },
-                                        { id: 'Mercados', label: lang === 'pt' ? 'Mercados' : lang === 'en' ? 'Markets' : 'Mercados', count: dailyVenues.filter(v => v.category === 'Mercados').length, icon: Store },
-                                        { id: 'Feiras', label: lang === 'pt' ? 'Feiras' : lang === 'en' ? 'Fairs' : 'Ferias', count: dailyVenues.filter(v => v.category === 'Feiras').length, icon: Tent },
-                                        { id: 'Pontos Turísticos', label: lang === 'pt' ? 'Pontos Turísticos' : lang === 'en' ? 'Sights' : 'Turismo', count: dailyVenues.filter(v => v.category === 'Pontos Turísticos').length, icon: Landmark }
-                                      ].map((sub) => {
-                                        const IconComp = sub.icon;
-                                        const isCurrent = dailySubCategory === sub.id;
-                                        return (
-                                          <button
-                                            key={sub.id}
-                                            ref={(el) => { dailySubRefs.current[sub.id] = el; }}
-                                            type="button"
-                                            onClick={() => setDailySubCategory(sub.id as any)}
-                                            className={`shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs whitespace-nowrap cursor-pointer min-h-[40px] active:scale-95 ${
-                                              isCurrent
-                                                ? 'bg-slate-900 text-white shadow-xs'
-                                                : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/80'
-                                            }`}
-                                          >
-                                            <IconComp className={`w-3.5 h-3.5 ${isCurrent ? 'text-white' : 'text-slate-500'}`} />
-                                            <span>{sub.label}</span>
-                                            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                                              isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
-                                            }`}>
-                                              {sub.count}
-                                            </span>
-                                          </button>
-                                        );
-                                      })}
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* Venue Grid */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                  {dailyVenues
-                                    .filter(venue => dailySubCategory === 'Todos' || venue.category === dailySubCategory)
-                                    .map((venue) => {
-                                      const isMarket = venue.category === 'Mercados';
-                                      const isFair = venue.category === 'Feiras';
-                                      const isSight = venue.category === 'Pontos Turísticos';
-
-                                      return (
-                                        <div 
-                                          key={venue.id} 
-                                          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between"
-                                        >
-                                          <div className="space-y-2.5">
-                                            {/* Badges & Header */}
-                                            <div className="flex items-start justify-between gap-2 flex-wrap">
-                                              <div className="flex items-center gap-1.5 flex-wrap">
-                                                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border flex items-center gap-1 ${
-                                                  isMarket 
-                                                    ? 'bg-amber-50 text-amber-800 border-amber-200' 
-                                                    : isFair 
-                                                      ? 'bg-purple-50 text-purple-800 border-purple-200' 
-                                                      : 'bg-blue-50 text-blue-800 border-blue-200'
-                                                }`}>
-                                                  {isMarket && <Store className="w-2.5 h-2.5" />}
-                                                  {isFair && <Tent className="w-2.5 h-2.5" />}
-                                                  {isSight && <Landmark className="w-2.5 h-2.5" />}
-                                                  {venue.category}
-                                                </span>
-
-                                                {venue.badge && (
-                                                  <span className="text-[9px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-2 py-0.5 rounded-md">
-                                                    {venue.badge}
-                                                  </span>
-                                                )}
-                                              </div>
-
-                                              {venue.distance && (
-                                                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1">
-                                                  <MapPin className="w-2.5 h-2.5 text-emerald-600" />
-                                                  {venue.distance}
-                                                </span>
-                                              )}
-                                            </div>
-
-                                            {/* Venue Name */}
-                                            <h4 className="text-xs font-bold text-slate-800 leading-snug">
-                                              {venue.name}
-                                            </h4>
-
-                                            {/* Description */}
-                                            <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                                              {venue.description}
-                                            </p>
-
-                                            {/* Info rows: Hours & Address */}
-                                            <div className="space-y-1.5 text-[10px] text-slate-500 pt-1">
-                                              <p className="flex items-start gap-1.5 font-semibold text-slate-700">
-                                                <Clock className="w-3 h-3 text-slate-400 mt-0.5 shrink-0" />
-                                                <span>{venue.hours}</span>
-                                              </p>
-                                              <p className="flex items-start gap-1.5 text-slate-500">
-                                                <MapPin className="w-3 h-3 text-slate-400 mt-0.5 shrink-0" />
-                                                <span>{venue.address}</span>
-                                              </p>
-                                            </div>
-                                          </div>
-
-                                          {/* Action Buttons: Google Maps & Waze */}
-                                          <div className="mt-4 pt-3 border-t border-slate-100 flex gap-2">
-                                            <a
-                                              href={venue.mapsUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              referrerPolicy="no-referrer"
-                                              className="flex-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-2 px-2.5 rounded-xl border border-emerald-200/70 flex items-center justify-center gap-1.5 transition-all shadow-2xs"
-                                            >
-                                              <MapPin className="w-3 h-3 text-emerald-600" /> Google Maps
-                                            </a>
-                                            <a
-                                              href={venue.wazeUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              referrerPolicy="no-referrer"
-                                              className="flex-1 text-[10px] font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 py-2 px-2.5 rounded-xl border border-sky-200/70 flex items-center justify-center gap-1.5 transition-all shadow-2xs"
-                                            >
-                                              <Car className="w-3 h-3 text-sky-500" /> Waze
-                                            </a>
-                                          </div>
-                                        </div>
-                                      );
-                                    })}
                                 </div>
                               </div>
                             ) : art.id === 'guia-local-parques-cultura' ? (

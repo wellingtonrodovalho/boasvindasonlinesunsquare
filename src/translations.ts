@@ -298,16 +298,6 @@ export const translatedArticles: { [lang: string]: any[] } = {
       tags: ["weekly", "fair", "fairs", "street market", "feira da lua", "feira do sol", "feira hippie", "cerrado", "up marista", "crafts", "street food"]
     },
     {
-      id: "guia-local-todos-os-dias",
-      tab: "guia-local",
-      category: "Every Day",
-      title: "Every Day",
-      excerpt: "Open all week long",
-      content: "Every Day: Open all week long.\n\n• Mercado Central\nDowntown (Centro) · Rua 3, 322 · Mon–Fri 7am–6pm, Sat 7am–2pm, Sun 7am–12pm\n\n• Mercado Popular da Rua 74\nDowntown (Centro) · Rua 74, 329 · Mon–Sat 7am–11pm · night bars\n\n• Vila Cultural Cora Coralina\nDowntown (Centro) · Rua 23 with Rua 3 · every day 9am–5pm\n\n• Parques Vaca Brava & Flamboyant\n24h · Walking, jogging & kiosks",
-      icon: "Clock",
-      tags: ["every day", "open all week", "markets", "fairs", "sights", "tourist", "mercado central", "mercado da 74", "vila cultural", "vaca brava", "flamboyant"]
-    },
-    {
       id: "guia-local-gastronomia",
       tab: "guia-local",
       category: "Gastronomy",
@@ -458,16 +448,6 @@ export const translatedArticles: { [lang: string]: any[] } = {
       content: "La semana en la región: Ferias y programación, de lunes a domingo.\n\nLun: Día tranquilo: parques y mercados. Bosque dos Buritis, Lago das Rosas o almuerzo en el Mercado de la Rua 74 (abierto hasta las 23h).\nMar: Feria UP Marista gastronómica (Rua 144, Setor Marista · 17h–22h).\nMié: Feria do Parque Amazônia (Praça José Rodrigues de Morais Filho · 16h–23h).\nJue: Feria do Cerrado artesanías y música en vivo (Rua 72, Parque da Criança · 16h–22h).\nVie: Abre la Feria Hippie (funciona directo hasta el domingo 15h) y Feria gastronómica del Negrão de Lima · 17h–23h.\nSáb: Feria da Lua a 3 min a pie (Praça Tamandaré · ~15h–22h) y Mañana: Feria de Orgánicos en el Mercado de la 74 · 6h–10h.\nDom: Feria do Sol en su puerta (Praça do Sol · ~15h–22h) y Feria das Nuvens (16h–22h).",
       icon: "Calendar",
       tags: ["semana", "feria", "ferias", "artesanía", "comida callejera", "feira da lua", "feira do sol", "feira hippie", "cerrado", "up marista"]
-    },
-    {
-      id: "guia-local-todos-os-dias",
-      tab: "guia-local",
-      category: "Todos los Días",
-      title: "Todos los días",
-      excerpt: "Abre toda la semana",
-      content: "Todos los días: Abre toda la semana.\n\n• Mercado Central\nCentro · Rua 3, 322 · lun–vie 7h–18h, sáb 7h–14h, dom 7h–12h\n\n• Mercado Popular da Rua 74\nCentro · Rua 74, 329 · lun–sáb 7h–23h · bares por la noche\n\n• Vila Cultural Cora Coralina\nCentro · Rua 23 con Rua 3 · todos los días 9h–17h\n\n• Parques Vaca Brava y Flamboyant\n24h · Caminata, trote y quioscos",
-      icon: "Clock",
-      tags: ["todos los días", "abre toda la semana", "mercados", "ferias", "turismo", "mercado central", "mercado da 74", "vila cultural", "vaca brava", "flamboyant"]
     },
     {
       id: "guia-local-gastronomia",
