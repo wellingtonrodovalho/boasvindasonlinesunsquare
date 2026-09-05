@@ -27,7 +27,12 @@ export default function App() {
   // Active Data lists based on language
   const activeArticles = lang === 'pt' ? guideArticles : (translatedArticles[lang] || guideArticles);
   const activeFaqs = lang === 'pt' ? faqItems : (translatedFaqs[lang] || faqItems);
-  const activeLocalGuideItems = lang === 'pt' ? localGuideItems : (translatedLocalGuideItems[lang] || localGuideItems);
+  const activeLocalGuideItems = lang === 'pt' 
+    ? localGuideItems 
+    : localGuideItems.map((item) => {
+        const trans = translatedLocalGuideItems[lang]?.find((t: any) => t.id === item.id);
+        return trans ? { ...item, ...trans } : item;
+      });
   const activeContacts = lang === 'pt' ? contactList : (translatedContacts[lang] || contactList);
   
   // Active Translation Strings
@@ -2926,6 +2931,113 @@ export default function App() {
                                               className="w-full text-[10px] font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 py-1.5 px-2 rounded-lg border border-rose-200 flex items-center justify-center gap-1.5 active:scale-95 transition-all mt-1"
                                             >
                                               <ExternalLink className="w-3 h-3 text-rose-500" /> {lang === 'pt' ? 'Pedir Online' : lang === 'en' ? 'Order Online' : 'Pedir en Línea'}
+                                            </a>
+                                          )}
+
+                                          {item.whatsappUrl && (
+                                            <a
+                                              href={item.whatsappUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="w-full text-[10px] font-bold text-teal-800 bg-teal-50 hover:bg-teal-100 py-1.5 px-2 rounded-lg border border-teal-300 flex items-center justify-center gap-1.5 active:scale-95 transition-all mt-1 shadow-2xs"
+                                            >
+                                              <MessageSquare className="w-3.5 h-3.5 text-teal-600" /> WhatsApp {item.phone || ''}
+                                            </a>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))}
+                                </div>
+                              </div>
+                            ) : art.id === 'guia-local-lavanderias' ? (
+                              <div className="space-y-4 mt-2">
+                                <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-cyan-50/80 via-slate-50 to-sky-50/70 border border-cyan-100/90 shadow-2xs space-y-2">
+                                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                                    <div className="flex items-center gap-2">
+                                      <span className="p-1.5 bg-cyan-600 text-white rounded-xl shadow-2xs">
+                                        <Sparkles className="w-4 h-4" />
+                                      </span>
+                                      <span className="text-xs font-black uppercase text-cyan-800 tracking-wider">
+                                        {lang === 'pt' ? 'Lavanderias no Setor Oeste' : lang === 'en' ? 'Laundromats in Setor Oeste' : 'Lavanderías en Setor Oeste'}
+                                      </span>
+                                    </div>
+                                    <span className="text-[11px] font-bold text-cyan-800 bg-white/95 border border-cyan-200/80 px-3 py-1 rounded-full shadow-2xs">
+                                      {lang === 'pt' ? 'Self-service & Delivery' : lang === 'en' ? 'Self-service & Delivery' : 'Self-service y Entrega'}
+                                    </span>
+                                  </div>
+                                  <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
+                                    {lang === 'pt'
+                                      ? 'Opções de lavanderia no Setor Oeste: autoatendimento rápido com máquinas de alta capacidade, serviço tradicional completo com passar a ferro ou delivery com busca e entrega direta no endereço.'
+                                      : lang === 'en'
+                                        ? 'Laundry options in Setor Oeste: self-service with high-capacity machines, full traditional wash-and-iron service, or pickup and delivery directly at your address.'
+                                        : 'Opciones de lavandería en Setor Oeste: autoservicio con máquinas de alta capacidad, servicio completo con planchado o recogida y entrega a domicilio.'}
+                                  </p>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                  {activeLocalGuideItems
+                                    .filter((item) => item.articleId === art.id)
+                                    .map((item) => (
+                                      <div 
+                                        key={item.id} 
+                                        className="p-4 rounded-2xl border bg-slate-50 hover:bg-slate-100/50 border-slate-200/80 hover:border-cyan-300 transition-all flex flex-col justify-between shadow-2xs hover:shadow-xs"
+                                      >
+                                        <div>
+                                          <div className="flex items-start justify-between gap-2 mb-1.5 flex-wrap">
+                                            <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                              {item.name}
+                                            </h4>
+                                            <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
+                                              {item.distance && (
+                                                <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wide bg-cyan-100 text-cyan-800 border border-cyan-300 shadow-2xs">
+                                                  {item.distance}
+                                                </span>
+                                              )}
+                                              {item.badge && (
+                                                <span className="text-[9px] font-semibold text-slate-600 bg-white/90 border border-slate-200 px-2 py-0.5 rounded-full shadow-2xs">
+                                                  {item.badge}
+                                                </span>
+                                              )}
+                                            </div>
+                                          </div>
+                                          {item.description && (
+                                            <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                                              {item.description}
+                                            </p>
+                                          )}
+                                        </div>
+                                        
+                                        <div className="mt-4 pt-3 border-t border-slate-200/60 flex flex-wrap gap-2">
+                                          <a
+                                            href={item.mapsUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            referrerPolicy="no-referrer"
+                                            className="flex-1 min-w-[80px] text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-1.5 px-2 rounded-lg border border-emerald-200 flex items-center justify-center gap-1 active:scale-95 transition-all"
+                                          >
+                                            <MapPin className="w-3 h-3 text-emerald-600" /> Google Maps
+                                          </a>
+
+                                          <a
+                                            href={item.wazeUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            referrerPolicy="no-referrer"
+                                            className="flex-1 min-w-[80px] text-[10px] font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 py-1.5 px-2 rounded-lg border border-sky-200 flex items-center justify-center gap-1 active:scale-95 transition-all"
+                                          >
+                                            <Car className="w-3 h-3 text-sky-500" /> Waze
+                                          </a>
+
+                                          {item.whatsappUrl && (
+                                            <a
+                                              href={item.whatsappUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="w-full text-[10px] font-bold text-teal-800 bg-teal-50 hover:bg-teal-100 py-1.5 px-2 rounded-lg border border-teal-300 flex items-center justify-center gap-1.5 active:scale-95 transition-all mt-1 shadow-2xs"
+                                            >
+                                              <MessageSquare className="w-3.5 h-3.5 text-teal-600" /> WhatsApp {item.phone || '(62) 99923-0087'}
                                             </a>
                                           )}
                                         </div>

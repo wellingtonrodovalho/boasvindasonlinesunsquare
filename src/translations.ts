@@ -318,6 +318,16 @@ export const translatedArticles: { [lang: string]: any[] } = {
       tags: ["eat", "restaurant", "bar", "steakhouse", "lunch", "dinner", "restaurants on foot", "izu", "panela mágica", "bartolomeu", "pitigliano", "celsin", "walmor", "bar do peixe", "porto cave", "el argentino", "íz"]
     },
     {
+      id: "guia-local-lavanderias",
+      tab: "guia-local",
+      category: "Laundry",
+      title: "Laundromats",
+      excerpt: "Laundromat Self-Service (~1 km), Eriká Lavanderia and Minha Lavanderia (Setor Oeste unit with pickup & delivery).",
+      content: "Laundromats:\n\n• Laundromat Self-Service (~1 km)\nAv. Assis Chateaubriand, 439, Setor Oeste · self-service wash and dry, high-capacity machines.\n\n• Eriká Lavanderia (Setor Oeste)\nRua R-12, 60 · wash, dry and iron · WhatsApp (62) 99923-0087.\n\n• Minha Lavanderia — unidade Setor Oeste (Setor Oeste)\nPickup and delivery at your address.",
+      icon: "Sparkles",
+      tags: ["laundry", "clothes", "laundromat", "self-service", "eriká", "minha lavanderia", "wash", "dry", "iron", "delivery"]
+    },
+    {
       id: "guia-local-servicos",
       tab: "guia-local",
       category: "Services",
@@ -468,6 +478,16 @@ export const translatedArticles: { [lang: string]: any[] } = {
       content: "Restaurantes a pie:\n\n• Izu Japanese Food (2 min)\nJaponés · el mejor valorado del barrio\n\n• Panela Mágica (5 min)\nComida casera · top 10 de Goiânia en 2026\n\n• Bartolomeu Restaurante e Adega (5 min)\nRua 22 · contemporáneo, top 10 de 2026\n\n• Pizzaria Pitigliano (6 min)\nPizza italiana\n\n• Celsin & Cia (5 min)\nBoteco y picadas\n\n• Churrascaria do Walmor (5 min)\nChurrasco tradicional\n\n• Bar do Peixe (6 min)\nPescados y mariscos\n\n• Porto Cave (6 min)\nCocina portuguesa\n\n• El Argentino (10 min)\nParrilla argentina\n\n• Íz · 1929 Trattoria · Botelli · Fãmu (taxi)\nSetor Marista · alta gastronomía (Íz es el nº 1 de la ciudad en 2026)",
       icon: "Utensils",
       tags: ["comer", "restaurante", "bar", "churrasquería", "almuerzo", "cena", "restaurantes a pie", "izu", "panela mágica", "bartolomeu", "pitigliano", "celsin", "walmor", "bar do peixe", "porto cave", "el argentino", "íz"]
+    },
+    {
+      id: "guia-local-lavanderias",
+      tab: "guia-local",
+      category: "Lavandería",
+      title: "Lavanderías",
+      excerpt: "Laundromat Self-Service (~1 km), Eriká Lavanderia y Minha Lavanderia (unidad Setor Oeste con recogida y entrega).",
+      content: "Lavanderías:\n\n• Laundromat Self-Service (~1 km)\nAv. Assis Chateaubriand, 439, Setor Oeste · lave y seque usted mismo, máquinas de alta capacidad.\n\n• Eriká Lavanderia (Setor Oeste)\nRua R-12, 60 · lava, seca y plancha · WhatsApp (62) 99923-0087.\n\n• Minha Lavanderia — unidade Setor Oeste (Setor Oeste)\nBúsqueda y entrega a domicilio.",
+      icon: "Sparkles",
+      tags: ["lavandería", "ropa", "laundromat", "self-service", "eriká", "minha lavanderia", "lavar", "secar", "planchar", "delivery"]
     },
     {
       id: "guia-local-servicos",
@@ -665,7 +685,9 @@ export const translatedLocalGuideItems: { [lang: string]: any[] } = {
     { id: 'hospital-coracao', name: 'Hospital do Coração de Goiás', description: 'Heart Hospital and emergencies' },
     { id: 'caixa', name: 'Caixa Econômica Federal', description: 'Bank branch and ATMs' },
     { id: 'bradesco', name: 'Bradesco', description: 'Bank branch and ATMs' },
-    { id: 'lavanella', name: 'Lavanella Lavanderia', description: 'Laundromat and laundry services' },
+    { id: 'laundromat', name: 'Laundromat Self-Service', description: 'Av. Assis Chateaubriand, 439, Setor Oeste · self-service wash and dry, high-capacity machines.' },
+    { id: 'erika-lavanderia', name: 'Eriká Lavanderia', description: 'Rua R-12, 60 · wash, dry and iron · WhatsApp (62) 99923-0087.' },
+    { id: 'minha-lavanderia', name: 'Minha Lavanderia — unidade Setor Oeste', description: 'Pickup and delivery at your address.' },
     { id: 'recarga-tupi', name: 'Tupi Charging Station', description: 'Electric vehicle charging station' },
     { id: 'recarga-tamandare', name: 'Tamandaré Square Charging Station', description: 'Electric vehicle charging station' },
     { id: 'bluefit', name: 'BlueFit Gym Praça do Sol', description: 'Modern fitness center and gym' },
@@ -694,7 +716,9 @@ export const translatedLocalGuideItems: { [lang: string]: any[] } = {
     { id: 'hospital-coracao', name: 'Hospital do Coração de Goiás', description: 'Hospital cardiológico y emergencias' },
     { id: 'caixa', name: 'Caixa Econômica Federal', description: 'Sucursal bancaria y cajeros automáticos' },
     { id: 'bradesco', name: 'Bradesco', description: 'Sucursal bancaria y cajeros automáticos' },
-    { id: 'lavanella', name: 'Lavanella Lavanderia', description: 'Servicios de lavandería' },
+    { id: 'laundromat', name: 'Laundromat Self-Service', description: 'Av. Assis Chateaubriand, 439, Setor Oeste · lave y seque usted mismo, máquinas de alta capacidad.' },
+    { id: 'erika-lavanderia', name: 'Eriká Lavanderia', description: 'Rua R-12, 60 · lava, seca y plancha · WhatsApp (62) 99923-0087.' },
+    { id: 'minha-lavanderia', name: 'Minha Lavanderia — unidade Setor Oeste', description: 'Búsqueda y entrega a domicilio.' },
     { id: 'recarga-tupi', name: 'Estación de carga Tupi', description: 'Estación de carga de vehículos eléctricos' },
     { id: 'recarga-tamandare', name: 'Estación de carga Plaza Tamandaré', description: 'Estación de carga de vehículos eléctricos' },
     { id: 'bluefit', name: 'Gimnasio BlueFit Praça do Sol', description: 'Gimnasio moderno' },

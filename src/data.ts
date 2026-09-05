@@ -196,11 +196,11 @@ export const guideArticles: GuideArticle[] = [
     id: 'guia-local-lavanderias',
     tab: 'guia-local',
     category: 'Lavanderias',
-    title: 'Roupa & Lavanderias',
-    excerpt: 'Opções self-service, lavanderias com serviço completo e entrega direta no flat.',
-    content: 'Precisa cuidar das suas roupas durante a estadia? O Setor Oeste oferece opções práticas que atendem a todas as necessidades:',
+    title: 'Lavanderias',
+    excerpt: 'Laundromat Self-Service (~1 km), Eriká Lavanderia e Minha Lavanderia (unidade Setor Oeste com busca e entrega).',
+    content: 'Lavanderias:\n\n• Laundromat Self-Service (~1 km)\nAv. Assis Chateaubriand, 439, Setor Oeste · você mesmo lava e seca, máquinas de alta capacidade.\n\n• Eriká Lavanderia (Setor Oeste)\nRua R-12, 60 · lava, seca e passa · WhatsApp (62) 99923-0087.\n\n• Minha Lavanderia — unidade Setor Oeste (Setor Oeste)\nBusca e entrega no endereço.',
     icon: 'Sparkles',
-    tags: ['lavanderia', 'roupa', 'laundromat', 'self-service', 'eriká', 'minha lavanderia', 'lavanella', 'lavar', 'secar', 'passar']
+    tags: ['lavanderia', 'lavanderias', 'roupa', 'laundromat', 'self-service', 'eriká', 'minha lavanderia', 'lavar', 'secar', 'passar', 'delivery']
   },
   {
     id: 'guia-local-servicos',
@@ -1132,8 +1132,8 @@ export const localGuideItems: LocalGuideItem[] = [
     name: 'Laundromat Self-Service',
     badge: 'Você mesmo lava e seca',
     distance: '~1 km',
-    address: 'Av. Assis Chateaubriand, 439 — Setor Oeste',
-    description: 'Você mesmo lava e seca suas roupas em máquinas industriais modernas e rápidas. Excelente custo-benefício.',
+    address: 'Av. Assis Chateaubriand, 439, Setor Oeste',
+    description: 'Av. Assis Chateaubriand, 439, Setor Oeste · você mesmo lava e seca, máquinas de alta capacidade.',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Laundromat+Av+Assis+Chateaubriand+439+Setor+Oeste+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Laundromat%20Assis%20Chateaubriand%20Goi%C3%A2nia'
   },
@@ -1143,32 +1143,22 @@ export const localGuideItems: LocalGuideItem[] = [
     name: 'Eriká Lavanderia',
     badge: 'Lava, seca e passa',
     distance: 'Setor Oeste',
-    address: 'Rua R-12, 60 — Setor Oeste',
+    address: 'Rua R-12, 60, Setor Oeste',
     phone: '(62) 99923-0087',
     whatsappUrl: 'https://wa.me/5562999230087',
-    description: 'Serviço completo: lava, seca e passa com atendimento atencioso. Contato direto pelo WhatsApp.',
+    description: 'Rua R-12, 60 · lava, seca e passa · WhatsApp (62) 99923-0087.',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Erika+Lavanderia+Rua+R12+60+Setor+Oeste+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Erika%20Lavanderia%20Setor%20Oeste%20Goi%C3%A2nia'
   },
   {
     id: 'minha-lavanderia',
     articleId: 'guia-local-lavanderias',
-    name: 'Minha Lavanderia — Setor Oeste',
+    name: 'Minha Lavanderia — unidade Setor Oeste',
     badge: 'Busca e entrega',
     distance: 'Setor Oeste',
-    description: 'Lavanderia profissional completa com serviço de busca e entrega (delivery) no flat.',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Minha+Lavanderia+Setor+Oeste+Goiania',
+    description: 'Busca e entrega no endereço.',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Minha+Lavanderia+unidade+Setor+Oeste+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Minha%20Lavanderia%20Setor%20Oeste%20Goi%C3%A2nia'
-  },
-  {
-    id: 'lavanella',
-    articleId: 'guia-local-lavanderias',
-    name: 'Lavanella Lavanderia',
-    badge: 'Tradicional',
-    distance: 'Setor Oeste',
-    description: 'Lavanderia tradicional e tinturaria para roupas sociais e do dia a dia.',
-    mapsUrl: 'https://maps.app.goo.gl/HLXuB5VbY3ubsi1q7',
-    wazeUrl: 'https://waze.com/ul?q=Lavanella%20Lavanderia'
   },
 
   // --- CONVENIÊNCIA, SAÚDE E SERVIÇOS ---
