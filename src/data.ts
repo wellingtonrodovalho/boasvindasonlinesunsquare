@@ -74,6 +74,20 @@ export interface DailyVenueItem {
   wazeUrl: string;
 }
 
+export interface EverydaySpot {
+  id: string;
+  name: string;
+  regionBadge: string;
+  addressSchedule: string;
+  highlight?: string;
+  description?: string;
+  mapsUrl: string;
+  mapsLabel: string;
+  secondaryMapsUrl?: string;
+  secondaryMapsLabel?: string;
+  wazeUrl?: string;
+}
+
 export const guideArticles: GuideArticle[] = [
   {
     id: 'bem-vindo',
@@ -131,11 +145,11 @@ export const guideArticles: GuideArticle[] = [
     id: 'guia-local-todos-os-dias',
     tab: 'guia-local',
     category: 'Todos os Dias',
-    title: 'Todos os Dias: Mercados, Feiras e Pontos Turísticos',
-    excerpt: 'Mercados históricos (Central e 74), feiras culturais de rua e os principais pontos turísticos de Goiânia abertos a semana inteira.',
-    content: 'Guia completo de atrações abertas a semana inteira e feiras regulares de Goiânia: mercados tradicionais da capital, a rica cena cultural de rua e os pontos turísticos mais visitados da cidade.',
+    title: 'Todos os dias',
+    excerpt: 'Abre a semana inteira',
+    content: 'Todos os dias: Abre a semana inteira.\n\n• Mercado Central\nCentro · Rua 3, 322 · seg–sex 7h–18h, sáb 7h–14h, dom 7h–12h\n\n• Mercado Popular da Rua 74\nCentro · Rua 74, 329 · seg–sáb 7h–23h · botecos à noite\n\n• Vila Cultural Cora Coralina\nCentro · Rua 23 com Rua 3 · todos os dias 9h–17h\n\n• Parques Vaca Brava e Flamboyant\n24h · Caminhada, corrida e quiosques',
     icon: 'Clock',
-    tags: ['todos os dias', 'mercados', 'feiras', 'pontos turísticos', 'turismo', 'mercado central', 'mercado da 74', 'rua 74', 'feira do sol', 'feira da lua', 'feira hippie', 'praça do sol', 'praça tamandaré', 'bosque dos buritis', 'lago das rosas', 'beco da codorna', 'parque vaca brava', 'flamboyant', 'vila cultural', 'oscar niemeyer']
+    tags: ['todos os dias', 'abre a semana inteira', 'mercados', 'feiras', 'pontos turísticos', 'mercado central', 'mercado popular da rua 74', 'rua 74', 'vila cultural cora coralina', 'parque vaca brava', 'parque flamboyant', 'centro', '24h']
   },
   {
     id: 'guia-local-gastronomia',
@@ -345,16 +359,65 @@ export const weeklyScheduleDays: WeeklyScheduleDay[] = [
   }
 ];
 
+export const everydaySpots: EverydaySpot[] = [
+  {
+    id: 'mercado-central',
+    name: 'Mercado Central',
+    regionBadge: 'Centro',
+    addressSchedule: 'Rua 3, 322 · seg–sex 7h–18h, sáb 7h–14h, dom 7h–12h',
+    highlight: 'Empadão goiano tradicional, doces cristalizados e queijos',
+    description: 'Inaugurado na década de 50, tradicional comércio popular com gastronomia e artesanato autêntico goiano.',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Mercado+Central+Rua+3+322+Goiania',
+    mapsLabel: 'Mercado Central (Rua 3, 322)',
+    wazeUrl: 'https://waze.com/ul?q=Mercado%20Central%20Goi%C3%A2nia'
+  },
+  {
+    id: 'mercado-74',
+    name: 'Mercado Popular da Rua 74',
+    regionBadge: 'Centro',
+    addressSchedule: 'Rua 74, 329 · seg–sáb 7h–23h · botecos à noite',
+    highlight: 'Almoço caseiro e botecos à noite com música ao vivo e chopp gelado',
+    description: 'Ponto de encontro vibrante no Centro. Almoço com comida típica de dia e botecos animados à noite.',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Mercado+Popular+da+Rua+74+Goiania',
+    mapsLabel: 'Mercado da Rua 74 (Rua 74, 329)',
+    wazeUrl: 'https://waze.com/ul?q=Mercado%20Popular%20da%20Rua%2074%20Goi%C3%A2nia'
+  },
+  {
+    id: 'vila-cultural',
+    name: 'Vila Cultural Cora Coralina',
+    regionBadge: 'Centro',
+    addressSchedule: 'Rua 23 com Rua 3 · todos os dias 9h–17h',
+    highlight: 'Complexo de arte, exposições visuais e feiras criativas',
+    description: 'Espaço cultural subterrâneo atrás do Teatro Goiânia com galerias de arte, exposições e eventos ao ar livre.',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Vila+Cultural+Cora+Coralina+Goiania',
+    mapsLabel: 'Vila Cultural (Rua 23 com Rua 3)',
+    wazeUrl: 'https://waze.com/ul?q=Vila%20Cultural%20Cora%20Coralina%20Goi%C3%A2nia'
+  },
+  {
+    id: 'parques-vaca-brava-flamboyant',
+    name: 'Parques Vaca Brava e Flamboyant',
+    regionBadge: '24h',
+    addressSchedule: 'Caminhada, corrida e quiosques',
+    highlight: 'Abertos 24h todos os dias · Pistas arborizadas e lagos',
+    description: 'Dois dos parques urbanos mais nobres e procurados de Goiânia para exercícios, passeios e relaxamento ao ar livre.',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Parque+Vaca+Brava+Goiania',
+    mapsLabel: 'Parque Vaca Brava (Av. T-10)',
+    secondaryMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Parque+Flamboyant+Goiania',
+    secondaryMapsLabel: 'Parque Flamboyant (Jardim Goiás)',
+    wazeUrl: 'https://waze.com/ul?q=Parque%20Vaca%20Brava%20Goi%C3%A2nia'
+  }
+];
+
 export const dailyVenues: DailyVenueItem[] = [
   // --- MERCADOS ---
   {
     id: 'mercado-central',
-    name: 'Mercado Central de Goiânia',
+    name: 'Mercado Central',
     category: 'Mercados',
-    badge: 'Centro Histórico',
+    badge: 'Centro',
     distance: '~2,5 km',
-    address: 'Rua 3, 322 — Centro',
-    hours: 'Seg–Sex 7h–18h | Sáb 7h–14h | Dom 7h–12h',
+    address: 'Rua 3, 322 · Centro',
+    hours: 'seg–sex 7h–18h, sáb 7h–14h, dom 7h–12h',
     description: 'Inaugurado na década de 50, famoso pelo empadão goiano original, doces caseiros cristalizados, pimentas, queijos da serra e artesanato.',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Mercado+Central+Rua+3+322+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Mercado%20Central%20Goi%C3%A2nia'
@@ -363,10 +426,10 @@ export const dailyVenues: DailyVenueItem[] = [
     id: 'mercado-74',
     name: 'Mercado Popular da Rua 74',
     category: 'Mercados',
-    badge: 'Centro Cultural & Boêmio',
+    badge: 'Centro',
     distance: '~2 km',
-    address: 'Rua 74, 329 — Centro',
-    hours: 'Seg–Sáb 7h–23h · botecos à noite',
+    address: 'Rua 74, 329 · Centro',
+    hours: 'seg–sáb 7h–23h · botecos à noite',
     description: 'Ambiente acolhedor e ponto de encontro tradicional. De dia serve comida goiana e à noite ganha vida com música ao vivo, chopp gelado e petiscos.',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Mercado+Popular+da+Rua+74+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Mercado%20Popular%20da%20Rua%2074%20Goi%C3%A2nia'
@@ -375,10 +438,10 @@ export const dailyVenues: DailyVenueItem[] = [
     id: 'vila-cultural',
     name: 'Vila Cultural Cora Coralina',
     category: 'Mercados',
-    badge: 'Complexo Cultural',
+    badge: 'Centro',
     distance: '~2 km',
-    address: 'Rua 23 com Rua 3 — Centro (Atrás do Teatro Goiânia)',
-    hours: 'Todos os dias das 9h às 17h',
+    address: 'Rua 23 com Rua 3 · Centro (Atrás do Teatro Goiânia)',
+    hours: 'todos os dias 9h–17h',
     description: 'Complexo cultural subterrâneo com galerias de arte, exposições visuais, feiras criativas e bela arquitetura no Centro da capital.',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Vila+Cultural+Cora+Coralina+Goiania',
     wazeUrl: 'https://waze.com/ul?q=Vila%20Cultural%20Cora%20Coralina%20Goi%C3%A2nia'

@@ -301,11 +301,11 @@ export const translatedArticles: { [lang: string]: any[] } = {
       id: "guia-local-todos-os-dias",
       tab: "guia-local",
       category: "Every Day",
-      title: "Every Day: Markets, Fairs & Tourist Sights",
-      excerpt: "Historic markets (Central & 74), cultural street fairs, and top sights open all week.",
-      content: "Comprehensive guide to markets, cultural centers, parks, and sights open all week in Goiânia.",
+      title: "Every Day",
+      excerpt: "Open all week long",
+      content: "Every Day: Open all week long.\n\n• Mercado Central\nDowntown (Centro) · Rua 3, 322 · Mon–Fri 7am–6pm, Sat 7am–2pm, Sun 7am–12pm\n\n• Mercado Popular da Rua 74\nDowntown (Centro) · Rua 74, 329 · Mon–Sat 7am–11pm · night bars\n\n• Vila Cultural Cora Coralina\nDowntown (Centro) · Rua 23 with Rua 3 · every day 9am–5pm\n\n• Parques Vaca Brava & Flamboyant\n24h · Walking, jogging & kiosks",
       icon: "Clock",
-      tags: ["every day", "markets", "fairs", "sights", "tourist", "mercado central", "mercado da 74", "feira do sol", "feira da lua", "feira hippie", "praça do sol", "vaca brava", "flamboyant"]
+      tags: ["every day", "open all week", "markets", "fairs", "sights", "tourist", "mercado central", "mercado da 74", "vila cultural", "vaca brava", "flamboyant"]
     },
     {
       id: "guia-local-gastronomia",
@@ -453,11 +453,11 @@ export const translatedArticles: { [lang: string]: any[] } = {
       id: "guia-local-todos-os-dias",
       tab: "guia-local",
       category: "Todos los Días",
-      title: "Todos los Días: Mercados, Ferias y Puntos Turísticos",
-      excerpt: "Mercados históricos (Central y 74), ferias culturales y los principales puntos turísticos abiertos toda la semana.",
-      content: "Guía completa de mercados, centros culturales, parques y puntos turísticos abiertos toda la semana en Goiânia.",
+      title: "Todos los días",
+      excerpt: "Abre toda la semana",
+      content: "Todos los días: Abre toda la semana.\n\n• Mercado Central\nCentro · Rua 3, 322 · lun–vie 7h–18h, sáb 7h–14h, dom 7h–12h\n\n• Mercado Popular da Rua 74\nCentro · Rua 74, 329 · lun–sáb 7h–23h · bares por la noche\n\n• Vila Cultural Cora Coralina\nCentro · Rua 23 con Rua 3 · todos los días 9h–17h\n\n• Parques Vaca Brava y Flamboyant\n24h · Caminata, trote y quioscos",
       icon: "Clock",
-      tags: ["todos los días", "mercados", "ferias", "turismo", "mercado central", "mercado da 74", "feira do sol", "feira da lua", "feira hippie", "praça do sol", "vaca brava", "flamboyant"]
+      tags: ["todos los días", "abre toda la semana", "mercados", "ferias", "turismo", "mercado central", "mercado da 74", "vila cultural", "vaca brava", "flamboyant"]
     },
     {
       id: "guia-local-gastronomia",

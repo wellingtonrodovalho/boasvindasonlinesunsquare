@@ -10,7 +10,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   guideArticles, faqItems, contactList, GuideArticle, FAQItem, ContactInfo, localGuideItems, LocalGuideItem,
-  weeklyScheduleDays, dailyVenues
+  weeklyScheduleDays, dailyVenues, everydaySpots
 } from './data';
 import {
   translationStrings,
@@ -844,7 +844,7 @@ export default function App() {
                 {[
                   { id: 'Todos', label: lang === 'pt' ? 'Todos' : lang === 'en' ? 'All' : 'Todos', icon: MapPin },
                   { id: 'A Semana', label: lang === 'pt' ? 'A Semana (Feiras)' : lang === 'en' ? 'Weekly Fairs' : 'La Semana (Ferias)', icon: Calendar },
-                  { id: 'Todos os Dias', label: lang === 'pt' ? 'Todos os Dias: Mercados, Feiras, Turismo' : lang === 'en' ? 'Every Day: Markets, Fairs, Sights' : 'Todos los Días: Mercados, Ferias, Turismo', icon: Clock },
+                  { id: 'Todos os Dias', label: lang === 'pt' ? 'Todos os Dias (Abre a semana)' : lang === 'en' ? 'Every Day (Open all week)' : 'Todos los Días (Abre la semana)', icon: Clock },
                   { id: 'Gastronomia', label: lang === 'pt' ? 'Gastronomia' : lang === 'en' ? 'Gastronomy' : 'Gastronomía', icon: Utensils },
                   { id: 'Shoppings', label: lang === 'pt' ? 'Shoppings' : lang === 'en' ? 'Malls' : 'Centros Comerciales', icon: ShoppingBag },
                   { id: 'Lazer e Cultura', label: lang === 'pt' ? 'Lazer & Parques' : lang === 'en' ? 'Leisure & Parks' : 'Ocio y Parques', icon: Sun },
@@ -2443,28 +2443,125 @@ export default function App() {
                                 </div>
                               </div>
                             ) : art.id === 'guia-local-todos-os-dias' ? (
-                              <div className="space-y-4 mt-2">
-                                {/* Informational Header Banner */}
-                                <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-50/70 via-indigo-50/40 to-blue-50/70 border border-slate-200/80">
+                              <div className="space-y-5 mt-2">
+                                {/* Destaque Especial: Todos os dias · Abre a semana inteira */}
+                                <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-blue-50/90 via-slate-50 to-indigo-50/80 border border-blue-100 shadow-2xs space-y-4">
+                                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                                    <div>
+                                      <div className="flex items-center gap-2">
+                                        <span className="p-1.5 bg-blue-600 text-white rounded-xl shadow-2xs">
+                                          <Clock className="w-4 h-4" />
+                                        </span>
+                                        <span className="text-xs font-black uppercase text-blue-700 tracking-wider">
+                                          {lang === 'pt' ? 'Todos os dias' : lang === 'en' ? 'Every Day' : 'Todos los días'}
+                                        </span>
+                                      </div>
+                                      <h4 className="text-sm sm:text-base font-display font-extrabold text-slate-800 mt-1">
+                                        {lang === 'pt' ? 'Abre a semana inteira' : lang === 'en' ? 'Open all week long' : 'Abre toda la semana'}
+                                      </h4>
+                                    </div>
+                                    <span className="text-[11px] font-bold text-blue-700 bg-white/95 border border-blue-200/80 px-3 py-1 rounded-full shadow-2xs">
+                                      {everydaySpots.length} {lang === 'pt' ? 'destinos fixos' : lang === 'en' ? 'daily spots' : 'destinos fijos'}
+                                    </span>
+                                  </div>
+
+                                  {/* Grid dos 4 locais solicitados */}
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                                    {everydaySpots.map((spot) => (
+                                      <div 
+                                        key={spot.id}
+                                        className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-xs hover:border-blue-200 transition-all flex flex-col justify-between gap-3"
+                                      >
+                                        <div className="space-y-1.5">
+                                          <div className="flex items-center justify-between gap-2 flex-wrap">
+                                            <h5 className="font-display font-bold text-slate-800 text-xs sm:text-sm">
+                                              {spot.name}
+                                            </h5>
+                                            <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wide ${
+                                              spot.regionBadge === '24h'
+                                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                                                : 'bg-blue-100 text-blue-800 border border-blue-200'
+                                            }`}>
+                                              {spot.regionBadge}
+                                            </span>
+                                          </div>
+                                          
+                                          <p className="text-xs text-slate-700 font-semibold leading-relaxed">
+                                            {spot.addressSchedule}
+                                          </p>
+
+                                          {spot.highlight && (
+                                            <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                                              {spot.highlight}
+                                            </p>
+                                          )}
+                                        </div>
+
+                                        <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-2">
+                                          <a
+                                            href={spot.mapsUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            referrerPolicy="no-referrer"
+                                            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 py-1.5 px-3 rounded-xl border border-blue-200 active:scale-95 transition-all shadow-2xs"
+                                          >
+                                            <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                                            <span>{spot.mapsLabel}</span>
+                                          </a>
+
+                                          {spot.secondaryMapsUrl && (
+                                            <a
+                                              href={spot.secondaryMapsUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-1.5 px-3 rounded-xl border border-emerald-200 active:scale-95 transition-all shadow-2xs"
+                                            >
+                                              <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                              <span>{spot.secondaryMapsLabel}</span>
+                                            </a>
+                                          )}
+
+                                          {spot.wazeUrl && (
+                                            <a
+                                              href={spot.wazeUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200/80 py-1.5 px-2.5 rounded-xl active:scale-95 transition-all"
+                                              title="Abrir no Waze"
+                                            >
+                                              <ExternalLink className="w-3 h-3 text-slate-500" />
+                                              <span>Waze</span>
+                                            </a>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                {/* Informational Header Banner & Filtros de Exploração Completa */}
+                                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
                                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                     <div>
                                       <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                                        <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                                        <Sparkles className="w-3.5 h-3.5 text-blue-600" />
                                         {lang === 'pt' 
-                                          ? 'Todos os Dias: Mercados, Feiras e Pontos Turísticos' 
+                                          ? 'Explorar todos os mercados, feiras e atrativos' 
                                           : lang === 'en' 
-                                            ? 'Every Day: Markets, Fairs & Sights' 
-                                            : 'Todos los Días: Mercados, Ferias y Puntos Turísticos'}
+                                            ? 'Explore all markets, street fairs & sights' 
+                                            : 'Explorar todos los mercados, ferias y atracciones'}
                                       </h4>
                                       <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
                                         {lang === 'pt' 
-                                          ? 'Reunimos os mercados gastronômicos tradicionais, as feiras ao ar livre mais famosas e os principais atrativos culturais e turísticos abertos para você aproveitar em Goiânia.' 
+                                          ? 'Consulte o catálogo completo com horários, distâncias a partir do flat e rotas rápidas pelo mapa.' 
                                           : lang === 'en'
-                                            ? 'We gathered traditional food markets, famous outdoor street fairs, and top cultural and tourist attractions open for you in Goiânia.'
-                                            : 'Reunimos los mercados gastronómicos tradicionales, las ferias al aire libre más famosas y las principales atracciones culturales y turísticas de Goiânia.'}
+                                            ? 'Browse the complete catalog with hours, distance from the flat, and fast map routes.'
+                                            : 'Consulte el catálogo completo con horarios, distancia desde el flat y rutas en el mapa.'}
                                       </p>
                                     </div>
-                                    <div className="flex items-center gap-2 text-[10px] font-semibold text-slate-600 shrink-0 bg-white/80 px-3 py-1.5 rounded-xl border border-slate-200/60 shadow-2xs">
+                                    <div className="flex items-center gap-2 text-[10px] font-semibold text-slate-600 shrink-0 bg-white px-3 py-1.5 rounded-xl border border-slate-200/60 shadow-2xs">
                                       <Clock className="w-3.5 h-3.5 text-blue-600" />
                                       <span>{dailyVenues.length} {lang === 'pt' ? 'locais mapeados' : lang === 'en' ? 'mapped spots' : 'lugares mapeados'}</span>
                                     </div>
