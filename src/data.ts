@@ -116,9 +116,9 @@ export const guideArticles: GuideArticle[] = [
     category: 'Conectividade',
     title: 'Wi-Fi de Alta Velocidade',
     excerpt: 'Acesse a rede de internet de fibra óptica ultra rápida do apartamento.',
-    content: 'O flat conta com internet banda larga de alta velocidade (fibra óptica), ideal para home office, chamadas de vídeo e streaming.\n\n• Rede: Ap 1208A\n• Senha: Sun1208\n\n💡 Dica importante: Rede com espaço e letras maiúsculas; senha sem espaço, com S maiúsculo.',
+    content: 'O flat conta com internet banda larga de alta velocidade (fibra óptica), ideal para home office, chamadas de vídeo e streaming.\n\n• Rede: Ap 1208A\n• Senha: Sun1208a\n\n💡 Dica importante: Rede com espaço e letras maiúsculas; senha sem espaço, com S maiúsculo e final "a" minúsculo ("Sun1208a").',
     icon: 'Wifi',
-    tags: ['wi-fi', 'wifi', 'internet', 'senha', 'rede', 'fibra', 'ap 1208a', 'sun1208', '1208a']
+    tags: ['wi-fi', 'wifi', 'internet', 'senha', 'rede', 'fibra', 'ap 1208a', 'sun1208a', 'sun1208', '1208a']
   },
   {
     id: 'tv-stick',

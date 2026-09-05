@@ -1415,9 +1415,9 @@ export default function App() {
                                   <div className="space-y-1">
                                     <span className="text-[10px] uppercase font-bold text-slate-400 block">{lang === 'pt' ? 'Senha' : lang === 'en' ? 'Password' : 'Contraseña'}</span>
                                     <div className="flex items-center gap-2">
-                                      <span className="font-mono text-sm font-bold text-slate-800 bg-white px-2.5 py-1 rounded-lg border border-slate-200">Sun1208</span>
+                                      <span className="font-mono text-sm font-bold text-slate-800 bg-white px-2.5 py-1 rounded-lg border border-slate-200">Sun1208a</span>
                                       <button 
-                                        onClick={() => copyToClipboard('Sun1208', 'Senha Wi-Fi')} 
+                                        onClick={() => copyToClipboard('Sun1208a', 'Senha Wi-Fi')} 
                                         className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-blue-600 transition-colors cursor-pointer"
                                         title={lang === 'pt' ? 'Copiar Senha' : 'Copy Password'}
                                       >
@@ -1430,19 +1430,19 @@ export default function App() {
                                     <Info className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
                                     <span>
                                       {lang === 'pt' 
-                                        ? 'Dica: Nome da rede com espaço e letras maiúsculas ("Ap 1208A"); senha sem espaço, com "S" maiúsculo ("Sun1208").' 
+                                        ? 'Dica: Nome da rede com espaço e letras maiúsculas ("Ap 1208A"); senha sem espaço, com "S" maiúsculo e final "a" minúsculo ("Sun1208a").' 
                                         : lang === 'en'
-                                          ? 'Tip: Network name with space and uppercase letters ("Ap 1208A"); password without space, starting with capital "S" ("Sun1208").'
-                                          : 'Consejo: Nombre de red con espacio y mayúsculas ("Ap 1208A"); contraseña sin espacio, con "S" mayúscula ("Sun1208").'}
+                                          ? 'Tip: Network name with space and uppercase letters ("Ap 1208A"); password without space, starting with capital "S" and ending in lowercase "a" ("Sun1208a").'
+                                          : 'Consejo: Nombre de red con espacio y mayúsculas ("Ap 1208A"); contraseña sin espacio, con "S" mayúscula y "a" minúscula al final ("Sun1208a").'}
                                     </span>
                                   </div>
 
                                   <div className="pt-1">
                                     <a 
-                                      href="wifi:S:Ap%201208A;T:WPA;P:Sun1208;;" 
+                                      href="wifi:S:Ap%201208A;T:WPA;P:Sun1208a;;" 
                                       className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm shadow-blue-100 hover:shadow-md cursor-pointer active:scale-95 animate-pulse hover:animate-none"
                                       onClick={() => {
-                                        copyToClipboard('Sun1208', 'Senha Wi-Fi');
+                                        copyToClipboard('Sun1208a', 'Senha Wi-Fi');
                                       }}
                                     >
                                       <Wifi className="w-4 h-4" />
@@ -1456,7 +1456,7 @@ export default function App() {
 
                                 <div className="flex flex-col items-center gap-2 bg-white p-3.5 rounded-2xl border border-slate-100 shadow-2xs shrink-0">
                                   <img 
-                                    src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=WIFI:S:Ap%201208A;T:WPA;P:Sun1208;;" 
+                                    src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=WIFI:S:Ap%201208A;T:WPA;P:Sun1208a;;" 
                                     alt="Wi-Fi QR Code" 
                                     className="w-28 h-28"
                                     referrerPolicy="no-referrer"

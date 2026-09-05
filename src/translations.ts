@@ -263,9 +263,9 @@ export const translatedArticles: { [lang: string]: any[] } = {
       category: "Connectivity",
       title: "High-Speed Wi-Fi",
       excerpt: "Access the ultra-fast fiber optic internet network of the apartment.",
-      content: "The flat features high-speed broadband internet (fiber optic), ideal for home office, video calls, and streaming.\n\n• Network: Ap 1208A\n• Password: Sun1208\n\n💡 Tip: Network name with space and uppercase letters; password without space, starting with capital S.",
+      content: "The flat features high-speed broadband internet (fiber optic), ideal for home office, video calls, and streaming.\n\n• Network: Ap 1208A\n• Password: Sun1208a\n\n💡 Tip: Network name with space and uppercase letters; password without space, starting with capital S and ending with lowercase a (\"Sun1208a\").",
       icon: "Wifi",
-      tags: ["wi-fi", "wifi", "internet", "password", "network", "fiber", "1208a", "ap 1208a", "sun1208"]
+      tags: ["wi-fi", "wifi", "internet", "password", "network", "fiber", "1208a", "ap 1208a", "sun1208a", "sun1208"]
     },
     {
       id: "tv-stick",
@@ -415,9 +415,9 @@ export const translatedArticles: { [lang: string]: any[] } = {
       category: "Conectividad",
       title: "Wi-Fi de Alta Velocidad",
       excerpt: "Acceda a la red de internet de fibra óptica ultrarrápida del apartamento.",
-      content: "El apartamento cuenta con internet de banda ancha de alta velocidad (fibra óptica), ideal para trabajo remoto, videollamadas y streaming.\n\n• Red: Ap 1208A\n• Contraseña: Sun1208\n\n💡 Consejo: Nombre de red con espacio y mayúsculas; contraseña sin espacio, con S mayúscula.",
+      content: "El apartamento cuenta con internet de banda ancha de alta velocidad (fibra óptica), ideal para trabajo remoto, videollamadas y streaming.\n\n• Red: Ap 1208A\n• Contraseña: Sun1208a\n\n💡 Consejo: Nombre de red con espacio y mayúsculas; contraseña sin espacio, con S mayúscula y a minúscula al final (\"Sun1208a\").",
       icon: "Wifi",
-      tags: ["wi-fi", "wifi", "internet", "contraseña", "red", "fibra", "1208a", "ap 1208a", "sun1208"]
+      tags: ["wi-fi", "wifi", "internet", "contraseña", "red", "fibra", "1208a", "ap 1208a", "sun1208a", "sun1208"]
     },
     {
       id: "tv-stick",
