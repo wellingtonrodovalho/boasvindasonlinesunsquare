@@ -3,11 +3,14 @@ import {
   Sun, MapPin, Briefcase, Truck, Wifi, Shield, Zap, VolumeX, Trash2, Smile, Car, Phone, 
   Search, Info, AlertTriangle, ArrowRight, CheckCircle2, MessageSquare, ChevronDown, ChevronUp, 
   Mail, Clock, User, HelpCircle, ExternalLink, RefreshCw, Send, Check, X, Building, Copy, 
-  PhoneCall, Calendar, CheckSquare, ClipboardList, ShieldAlert, Home, Cloud, CloudSun, CloudRain
+  PhoneCall, Calendar, CheckSquare, ClipboardList, ShieldAlert, Home, Cloud, CloudSun, CloudRain,
+  LogOut, Sparkles, Key, Lock, Utensils, ShoppingBag, Store, Tent, Landmark,
+  ChevronLeft, ChevronRight, Waves, Heart, Tv, Wind
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  guideArticles, faqItems, contactList, GuideArticle, FAQItem, ContactInfo, localGuideItems, LocalGuideItem 
+  guideArticles, faqItems, contactList, GuideArticle, FAQItem, ContactInfo, localGuideItems, LocalGuideItem,
+  weeklyScheduleDays, dailyVenues
 } from './data';
 import {
   translationStrings,
@@ -34,7 +37,11 @@ export default function App() {
   const isCategoryMatched = (artCategory: string, filter: string) => {
     if (filter === 'Todos' || filter === 'All') return true;
     const ptToOther: { [key: string]: string[] } = {
-      'Gastronomia': ['Gastronomia', 'Gastronomy', 'Gastronomy', 'Gastronomía'],
+      'A Semana': ['A Semana', 'Weekly Schedule', 'La Semana', 'Semana'],
+      'Todos os Dias': ['Todos os Dias', 'Every Day', 'Todos los Días', 'A Semana', 'Weekly Schedule', 'La Semana', 'Lazer e Cultura', 'Leisure & Culture', 'Ocio y Cultura', 'Pontos Turísticos', 'Mercados', 'Feiras'],
+      'Gastronomia': ['Gastronomia', 'Gastronomy', 'Gastronomía'],
+      'Shoppings': ['Shoppings', 'Shopping', 'Shopping Centers', 'Compras'],
+      'Lavanderias': ['Lavanderias', 'Laundry', 'Laundromats', 'Lavandería'],
       'Serviços': ['Serviços', 'Services', 'Servicios'],
       'Saúde e Estética': ['Saúde e Estética', 'Estética & Veículos', 'Health & Beauty', 'Salud y Belleza', 'Aesthetics', 'Vehicles, Charging & Aesthetics', 'Vehículos, Recarga y Estética'],
       'Lazer e Cultura': ['Lazer e Cultura', 'Lazer & Cultura', 'Leisure & Culture', 'Ocio y Cultura']
@@ -109,6 +116,16 @@ export default function App() {
     }
   });
 
+  // Checkout Checklist State (Exit Checklist)
+  const [checkoutChecklist, setCheckoutChecklist] = useState<{ [key: string]: boolean }>(() => {
+    try {
+      const saved = localStorage.getItem('sunsquare_checkout_checklist');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
   // Submitted Tickets State (Support tab)
   const [tickets, setTickets] = useState<any[]>(() => {
     try {
@@ -137,6 +154,9 @@ export default function App() {
 
   // Local Guide Category Filter
   const [guideFilter, setGuideFilter] = useState<string>('Todos');
+
+  // Daily Venues Subcategory Filter (Mercados, Feiras, Pontos Turísticos)
+  const [dailySubCategory, setDailySubCategory] = useState<'Todos' | 'Mercados' | 'Feiras' | 'Pontos Turísticos'>('Todos');
 
   // Logo Error State for Fallback
   const [logoError, setLogoError] = useState(false);
@@ -195,10 +215,143 @@ export default function App() {
     return () => clearInterval(interval);
   }, [lang]);
 
+  // --- NAVEGAÇÃO MOBILE & DESK: REFS E CONTROLE DE SCROLL ---
+  // Main Navigation Tabs
+  const navContainerRef = useRef<HTMLDivElement | null>(null);
+  const tabButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const [navCanScrollLeft, setNavCanScrollLeft] = useState(false);
+  const [navCanScrollRight, setNavCanScrollRight] = useState(false);
+
+  // Guide Categories
+  const guideNavRef = useRef<HTMLDivElement | null>(null);
+  const guideCategoryRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const [guideCanScrollLeft, setGuideCanScrollLeft] = useState(false);
+  const [guideCanScrollRight, setGuideCanScrollRight] = useState(false);
+
+  // Rules Categories
+  const rulesNavRef = useRef<HTMLDivElement | null>(null);
+  const rulesCategoryRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const [rulesCanScrollLeft, setRulesCanScrollLeft] = useState(false);
+  const [rulesCanScrollRight, setRulesCanScrollRight] = useState(false);
+
+  // Daily Venues Subcategories (Mercados, Feiras, Pontos Turísticos)
+  const dailySubNavRef = useRef<HTMLDivElement | null>(null);
+  const dailySubRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const [dailyCanScrollLeft, setDailyCanScrollLeft] = useState(false);
+  const [dailyCanScrollRight, setDailyCanScrollRight] = useState(false);
+
+  // Helper para verificar rolagem de contêineres horizontais
+  const checkScrollState = (el: HTMLElement | null, setLeft: (v: boolean) => void, setRight: (v: boolean) => void) => {
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setLeft(scrollLeft > 6);
+    setRight(scrollLeft < scrollWidth - clientWidth - 6);
+  };
+
+  const scrollContainer = (el: HTMLElement | null, direction: 'left' | 'right', distance = 180) => {
+    if (!el) return;
+    el.scrollBy({
+      left: direction === 'left' ? -distance : distance,
+      behavior: 'smooth'
+    });
+  };
+
+  // Atualizar indicadores de rolagem após renderização ou resize
+  const refreshAllScrollStates = () => {
+    checkScrollState(navContainerRef.current, setNavCanScrollLeft, setNavCanScrollRight);
+    checkScrollState(guideNavRef.current, setGuideCanScrollLeft, setGuideCanScrollRight);
+    checkScrollState(rulesNavRef.current, setRulesCanScrollLeft, setRulesCanScrollRight);
+    checkScrollState(dailySubNavRef.current, setDailyCanScrollLeft, setDailyCanScrollRight);
+  };
+
+  useEffect(() => {
+    refreshAllScrollStates();
+    const handleResize = () => refreshAllScrollStates();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [activeTab, guideFilter, rulesFilter, dailySubCategory]);
+
+  // Auto-scroll para centralizar a aba ativa no topo
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const btn = tabButtonRefs.current[activeTab];
+      if (btn && navContainerRef.current) {
+        btn.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+      checkScrollState(navContainerRef.current, setNavCanScrollLeft, setNavCanScrollRight);
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [activeTab]);
+
+  // Auto-scroll para centralizar sub-categoria ativa do Guia Local
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const btn = guideCategoryRefs.current[guideFilter];
+      if (btn && guideNavRef.current) {
+        btn.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+      checkScrollState(guideNavRef.current, setGuideCanScrollLeft, setGuideCanScrollRight);
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [guideFilter, activeTab]);
+
+  // Auto-scroll para centralizar sub-categoria ativa de Regras
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const btn = rulesCategoryRefs.current[rulesFilter];
+      if (btn && rulesNavRef.current) {
+        btn.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+      checkScrollState(rulesNavRef.current, setRulesCanScrollLeft, setRulesCanScrollRight);
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [rulesFilter, activeTab]);
+
+  // Auto-scroll para centralizar sub-categoria ativa de Todos os Dias
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const btn = dailySubRefs.current[dailySubCategory];
+      if (btn && dailySubNavRef.current) {
+        btn.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+      checkScrollState(dailySubNavRef.current, setDailyCanScrollLeft, setDailyCanScrollRight);
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [dailySubCategory, activeTab]);
+
+  const scrollToArticle = (articleId: string) => {
+    setHighlightedArticleId(articleId);
+    const element = document.getElementById(articleId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   // Save checklist progress to localStorage
   useEffect(() => {
     localStorage.setItem('sunsquare_checklist', JSON.stringify(checklist));
   }, [checklist]);
+
+  // Save checkout checklist progress to localStorage
+  useEffect(() => {
+    localStorage.setItem('sunsquare_checkout_checklist', JSON.stringify(checkoutChecklist));
+  }, [checkoutChecklist]);
 
   // Save tickets to localStorage
   useEffect(() => {
@@ -254,6 +407,7 @@ export default function App() {
       case 'Smile': return <Smile className={className} />;
       case 'Car': return <Car className={className} />;
       case 'Phone': return <Phone className={className} />;
+      case 'LogOut': return <LogOut className={className} />;
       default: return <HelpCircle className={className} />;
     }
   };
@@ -261,6 +415,14 @@ export default function App() {
   // Toggle checklist task
   const toggleChecklist = (taskKey: string) => {
     setChecklist(prev => ({
+      ...prev,
+      [taskKey]: !prev[taskKey]
+    }));
+  };
+
+  // Toggle checkout checklist task
+  const toggleCheckoutChecklist = (taskKey: string) => {
+    setCheckoutChecklist(prev => ({
       ...prev,
       [taskKey]: !prev[taskKey]
     }));
@@ -383,7 +545,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 flex flex-col font-sans selection:bg-brand-100 selection:text-brand-700 pb-24 md:pb-28">
+    <div className="min-h-screen bg-slate-50/50 flex flex-col font-sans selection:bg-brand-100 selection:text-brand-700 pb-20 sm:pb-0">
       
       {/* HEADER FIXO E ATIVO COM BARRA DE PESQUISA E ABAS */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
@@ -488,72 +650,151 @@ export default function App() {
             )}
           </div>
 
-          {/* Abas de Navegação Fixas e Visíveis */}
-          <nav className="flex border-b border-slate-100 justify-between sm:justify-start sm:gap-4 overflow-x-auto scrollbar-none" id="tabs-navigation">
-            {[
-              { id: 'inicio', label: lang === 'pt' ? 'Início' : lang === 'en' ? 'Home' : 'Inicio', icon: Sun },
-              { id: 'nosso-flat', label: lang === 'pt' ? 'Nosso Flat' : lang === 'en' ? 'Our Flat' : 'Nuestro Flat', icon: Home },
-              { id: 'condominio', label: lang === 'pt' ? 'O Condomínio' : lang === 'en' ? 'The Condominium' : 'El Condominio', icon: Building },
-              { id: 'guia-local', label: lang === 'pt' ? 'Guia Local' : lang === 'en' ? 'Local Guide' : 'Guía Local', icon: MapPin },
-              { id: 'regras', label: lang === 'pt' ? 'Regras' : lang === 'en' ? 'Rules' : 'Reglas', icon: ClipboardList },
-              { id: 'suporte', label: lang === 'pt' ? 'Suporte' : lang === 'en' ? 'Support' : 'Soporte', icon: Phone }
-            ].map((tab) => {
-              const IconComponent = tab.icon;
-              const isActive = activeTab === tab.id && !hasSearchResults;
-              return (
+          {/* Abas de Navegação Fixas e Visíveis com Suporte Superior a Celular */}
+          <div className="relative -mx-4 px-4 sm:mx-0 sm:px-0">
+            {/* Indicador / Botão Scroll Esquerda no Celular */}
+            {navCanScrollLeft && (
+              <>
+                <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
                 <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActiveTab(tab.id as any);
-                    setSearchQuery(''); // Clear search on explicit tab change to return to normal view
-                  }}
-                  className={`relative flex items-center justify-center gap-1.5 py-3 px-3.5 md:px-5 text-xs md:text-sm font-semibold transition-all duration-300 outline-none select-none flex-1 sm:flex-initial text-center border-b-2 whitespace-nowrap ${
-                    isActive 
-                      ? 'text-blue-600 border-blue-600' 
-                      : 'text-slate-500 border-transparent hover:text-slate-700 hover:border-slate-200'
-                  }`}
-                  id={`tab-button-${tab.id}`}
+                  type="button"
+                  onClick={() => scrollContainer(navContainerRef.current, 'left', 160)}
+                  aria-label="Rolar abas para a esquerda"
+                  className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-7 h-7 bg-white/95 backdrop-blur-xs text-slate-700 hover:text-blue-600 rounded-full shadow-md border border-slate-200/80 flex items-center justify-center transition-all cursor-pointer active:scale-90"
                 >
-                  <IconComponent className={`w-3.5 h-3.5 ${isActive ? 'text-blue-600' : 'text-slate-400'}`} />
-                  {tab.label}
-                  {isActive && (
-                    <motion.div 
-                      layoutId="activeTabIndicator" 
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500 to-indigo-600" 
-                    />
-                  )}
+                  <ChevronLeft className="w-4 h-4" />
                 </button>
-              );
-            })}
-          </nav>
+              </>
+            )}
 
-          {/* Categorias do Guia Local fixas no topo (quando a aba ativa for guia-local) */}
-          {activeTab === 'guia-local' && !hasSearchResults && (
-            <div className="flex gap-1.5 overflow-x-auto scrollbar-none py-2.5 border-t border-slate-100/60 justify-start" id="guide-categories-sticky">
+            {/* Indicador / Botão Scroll Direita no Celular */}
+            {navCanScrollRight && (
+              <>
+                <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
+                <button
+                  type="button"
+                  onClick={() => scrollContainer(navContainerRef.current, 'right', 160)}
+                  aria-label="Rolar abas para a direita"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-7 h-7 bg-white/95 backdrop-blur-xs text-slate-700 hover:text-blue-600 rounded-full shadow-md border border-slate-200/80 flex items-center justify-center transition-all cursor-pointer active:scale-90"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </>
+            )}
+
+            <nav 
+              ref={navContainerRef}
+              onScroll={() => checkScrollState(navContainerRef.current, setNavCanScrollLeft, setNavCanScrollRight)}
+              className="flex border-b border-slate-100 overflow-x-auto scrollbar-none scroll-smooth touch-pan-x gap-1 sm:gap-2 px-1 py-0.5" 
+              id="tabs-navigation"
+            >
               {[
-                { id: 'Todos', label: 'Todos', icon: MapPin },
-                { id: 'Gastronomia', label: 'Gastronomia', icon: Smile },
-                { id: 'Serviços', label: 'Serviços', icon: Briefcase },
-                { id: 'Saúde e Estética', label: 'Estética & Veículos', icon: Zap },
-                { id: 'Lazer e Cultura', label: 'Lazer & Cultura', icon: Sun }
-              ].map((cat) => {
-                const IconComponent = cat.icon;
-                const isSelected = guideFilter === cat.id;
+                { id: 'inicio', label: lang === 'pt' ? 'Início' : lang === 'en' ? 'Home' : 'Inicio', icon: Sun },
+                { id: 'nosso-flat', label: lang === 'pt' ? 'Nosso Flat' : lang === 'en' ? 'Our Flat' : 'Nuestro Flat', icon: Home },
+                { id: 'condominio', label: lang === 'pt' ? 'O Condomínio' : lang === 'en' ? 'The Condominium' : 'El Condominio', icon: Building },
+                { id: 'guia-local', label: lang === 'pt' ? 'Guia Local' : lang === 'en' ? 'Local Guide' : 'Guía Local', icon: MapPin },
+                { id: 'regras', label: lang === 'pt' ? 'Regras' : lang === 'en' ? 'Rules' : 'Reglas', icon: ClipboardList },
+                { id: 'suporte', label: lang === 'pt' ? 'Suporte' : lang === 'en' ? 'Support' : 'Soporte', icon: Phone }
+              ].map((tab) => {
+                const IconComponent = tab.icon;
+                const isActive = activeTab === tab.id && !hasSearchResults;
                 return (
                   <button
-                    key={cat.id}
-                    onClick={() => setGuideFilter(cat.id)}
-                    className={`py-1.5 px-3 rounded-full text-[11px] font-bold whitespace-nowrap outline-none transition-all duration-200 flex items-center gap-1 cursor-pointer transition-colors ${
-                      isSelected 
-                        ? 'bg-blue-600 text-white shadow-xs' 
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80'
+                    key={tab.id}
+                    ref={(el) => { tabButtonRefs.current[tab.id] = el; }}
+                    onClick={() => {
+                      setActiveTab(tab.id as any);
+                      setSearchQuery(''); // Clear search on explicit tab change to return to normal view
+                    }}
+                    className={`relative shrink-0 flex items-center justify-center gap-1.5 py-3 px-3.5 sm:px-5 text-xs sm:text-sm font-semibold transition-all duration-200 outline-none select-none text-center border-b-2 whitespace-nowrap cursor-pointer min-h-[44px] ${
+                      isActive 
+                        ? 'text-blue-600 border-blue-600 font-bold bg-blue-50/40 sm:bg-transparent rounded-t-xl sm:rounded-none' 
+                        : 'text-slate-500 border-transparent hover:text-slate-700 hover:border-slate-200'
                     }`}
+                    id={`tab-button-${tab.id}`}
                   >
-                    <IconComponent className={`w-3 h-3 ${isSelected ? 'text-white' : 'text-slate-400'}`} />
-                    {cat.label}
+                    <IconComponent className={`w-4 h-4 shrink-0 transition-transform ${isActive ? 'text-blue-600 scale-110' : 'text-slate-400'}`} />
+                    <span>{tab.label}</span>
+                    {isActive && (
+                      <motion.div 
+                        layoutId="activeTabIndicator" 
+                        className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full" 
+                      />
+                    )}
                   </button>
                 );
               })}
+            </nav>
+          </div>
+
+          {/* Categorias do Guia Local fixas no topo (quando a aba ativa for guia-local) */}
+          {activeTab === 'guia-local' && !hasSearchResults && (
+            <div className="relative -mx-4 px-4 sm:mx-0 sm:px-0 py-2 border-t border-slate-100/70" id="guide-categories-sticky">
+              {/* Botão/Gradiente Esquerda */}
+              {guideCanScrollLeft && (
+                <>
+                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+                  <button
+                    type="button"
+                    onClick={() => scrollContainer(guideNavRef.current, 'left', 160)}
+                    aria-label="Rolar categorias para a esquerda"
+                    className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 bg-white/95 backdrop-blur-xs text-slate-700 hover:text-blue-600 rounded-full shadow-md border border-slate-200/80 flex items-center justify-center transition-all cursor-pointer active:scale-90"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </button>
+                </>
+              )}
+
+              {/* Botão/Gradiente Direita */}
+              {guideCanScrollRight && (
+                <>
+                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
+                  <button
+                    type="button"
+                    onClick={() => scrollContainer(guideNavRef.current, 'right', 160)}
+                    aria-label="Rolar categorias para a direita"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 bg-white/95 backdrop-blur-xs text-slate-700 hover:text-blue-600 rounded-full shadow-md border border-slate-200/80 flex items-center justify-center transition-all cursor-pointer active:scale-90"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </>
+              )}
+
+              <div 
+                ref={guideNavRef}
+                onScroll={() => checkScrollState(guideNavRef.current, setGuideCanScrollLeft, setGuideCanScrollRight)}
+                className="flex gap-1.5 overflow-x-auto scrollbar-none scroll-smooth touch-pan-x px-1 py-0.5 justify-start"
+              >
+                {[
+                  { id: 'Todos', label: lang === 'pt' ? 'Todos' : lang === 'en' ? 'All' : 'Todos', icon: MapPin },
+                  { id: 'A Semana', label: lang === 'pt' ? 'A Semana (Feiras)' : lang === 'en' ? 'Weekly Fairs' : 'La Semana (Ferias)', icon: Calendar },
+                  { id: 'Todos os Dias', label: lang === 'pt' ? 'Todos os Dias: Mercados, Feiras, Turismo' : lang === 'en' ? 'Every Day: Markets, Fairs, Sights' : 'Todos los Días: Mercados, Ferias, Turismo', icon: Clock },
+                  { id: 'Gastronomia', label: lang === 'pt' ? 'Gastronomia' : lang === 'en' ? 'Gastronomy' : 'Gastronomía', icon: Utensils },
+                  { id: 'Shoppings', label: lang === 'pt' ? 'Shoppings' : lang === 'en' ? 'Malls' : 'Centros Comerciales', icon: ShoppingBag },
+                  { id: 'Lazer e Cultura', label: lang === 'pt' ? 'Lazer & Parques' : lang === 'en' ? 'Leisure & Parks' : 'Ocio y Parques', icon: Sun },
+                  { id: 'Lavanderias', label: lang === 'pt' ? 'Lavanderias' : lang === 'en' ? 'Laundry' : 'Lavanderías', icon: Sparkles },
+                  { id: 'Serviços', label: lang === 'pt' ? 'Serviços' : lang === 'en' ? 'Services' : 'Servicios', icon: Briefcase },
+                  { id: 'Saúde e Estética', label: lang === 'pt' ? 'Estética & Veículos' : lang === 'en' ? 'Beauty & Vehicles' : 'Estética y Vehículos', icon: Zap }
+                ].map((cat) => {
+                  const IconComponent = cat.icon;
+                  const isSelected = guideFilter === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      ref={(el) => { guideCategoryRefs.current[cat.id] = el; }}
+                      onClick={() => setGuideFilter(cat.id)}
+                      className={`shrink-0 py-1.5 px-3 rounded-full text-xs font-bold whitespace-nowrap outline-none transition-all duration-200 flex items-center gap-1.5 cursor-pointer min-h-[38px] ${
+                        isSelected 
+                          ? 'bg-blue-600 text-white shadow-xs' 
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80'
+                      }`}
+                    >
+                      <IconComponent className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-slate-400'}`} />
+                      <span>{cat.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
 
@@ -906,6 +1147,15 @@ export default function App() {
                           target: 'cuidados-sustentabilidade',
                           icon: <Trash2 className="w-5 h-5 text-rose-600" />,
                           bg: 'bg-rose-50/50'
+                        },
+                        { 
+                          key: 'checkout', 
+                          title: lang === 'pt' ? 'Instruções de Check-out' : lang === 'en' ? 'Check-out Instructions' : 'Instrucciones de Check-out', 
+                          desc: lang === 'pt' ? 'Check-out até 11h. Recolha toalhas, tire o lixo no S1, desligue tudo, tranque e devolva as chaves na recepção.' : lang === 'en' ? 'Check-out until 11 AM. Collect towels, take out trash to B1, turn off appliances, lock and return keys at reception.' : 'Check-out hasta las 11:00. Recoja toallas, saque la basura en S1, apague todo, cierre y devuelva las llaves.',
+                          tab: 'regras',
+                          target: 'instrucoes-checkout',
+                          icon: <LogOut className="w-5 h-5 text-indigo-600" />,
+                          bg: 'bg-indigo-50/50'
                         }
                       ].map((item) => (
                         <button 
@@ -1032,9 +1282,9 @@ export default function App() {
                                   <div className="space-y-1">
                                     <span className="text-[10px] uppercase font-bold text-slate-400 block">{lang === 'pt' ? 'Nome da Rede (SSID)' : lang === 'en' ? 'Network Name (SSID)' : 'Nombre de Red (SSID)'}</span>
                                     <div className="flex items-center gap-2">
-                                      <span className="font-mono text-sm font-bold text-slate-800 bg-white px-2.5 py-1 rounded-lg border border-slate-200">1308a</span>
+                                      <span className="font-mono text-sm font-bold text-slate-800 bg-white px-2.5 py-1 rounded-lg border border-slate-200">Ap 1208A</span>
                                       <button 
-                                        onClick={() => copyToClipboard('1308a', 'Rede Wi-Fi')} 
+                                        onClick={() => copyToClipboard('Ap 1208A', 'Rede Wi-Fi')} 
                                         className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-blue-600 transition-colors cursor-pointer"
                                         title={lang === 'pt' ? 'Copiar Rede' : 'Copy Network'}
                                       >
@@ -1045,9 +1295,9 @@ export default function App() {
                                   <div className="space-y-1">
                                     <span className="text-[10px] uppercase font-bold text-slate-400 block">{lang === 'pt' ? 'Senha' : lang === 'en' ? 'Password' : 'Contraseña'}</span>
                                     <div className="flex items-center gap-2">
-                                      <span className="font-mono text-sm font-bold text-slate-800 bg-white px-2.5 py-1 rounded-lg border border-slate-200">lualap1308a</span>
+                                      <span className="font-mono text-sm font-bold text-slate-800 bg-white px-2.5 py-1 rounded-lg border border-slate-200">Sun1208</span>
                                       <button 
-                                        onClick={() => copyToClipboard('lualap1308a', 'Senha Wi-Fi')} 
+                                        onClick={() => copyToClipboard('Sun1208', 'Senha Wi-Fi')} 
                                         className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-blue-600 transition-colors cursor-pointer"
                                         title={lang === 'pt' ? 'Copiar Senha' : 'Copy Password'}
                                       >
@@ -1056,12 +1306,23 @@ export default function App() {
                                     </div>
                                   </div>
 
-                                  <div className="pt-2">
+                                  <div className="p-2.5 rounded-xl bg-amber-50/80 border border-amber-200/60 text-[11px] text-amber-800 flex items-start gap-2">
+                                    <Info className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                                    <span>
+                                      {lang === 'pt' 
+                                        ? 'Dica: Nome da rede com espaço e letras maiúsculas ("Ap 1208A"); senha sem espaço, com "S" maiúsculo ("Sun1208").' 
+                                        : lang === 'en'
+                                          ? 'Tip: Network name with space and uppercase letters ("Ap 1208A"); password without space, starting with capital "S" ("Sun1208").'
+                                          : 'Consejo: Nombre de red con espacio y mayúsculas ("Ap 1208A"); contraseña sin espacio, con "S" mayúscula ("Sun1208").'}
+                                    </span>
+                                  </div>
+
+                                  <div className="pt-1">
                                     <a 
-                                      href="wifi:S:1308a;T:WPA;P:lualap1308a;;" 
+                                      href="wifi:S:Ap%201208A;T:WPA;P:Sun1208;;" 
                                       className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm shadow-blue-100 hover:shadow-md cursor-pointer active:scale-95 animate-pulse hover:animate-none"
                                       onClick={() => {
-                                        copyToClipboard('lualap1308a', 'Senha Wi-Fi');
+                                        copyToClipboard('Sun1208', 'Senha Wi-Fi');
                                       }}
                                     >
                                       <Wifi className="w-4 h-4" />
@@ -1075,7 +1336,7 @@ export default function App() {
 
                                 <div className="flex flex-col items-center gap-2 bg-white p-3.5 rounded-2xl border border-slate-100 shadow-2xs shrink-0">
                                   <img 
-                                    src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=WIFI:S:1308a;T:WPA;P:lualap1308a;;" 
+                                    src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=WIFI:S:Ap%201208A;T:WPA;P:Sun1208;;" 
                                     alt="Wi-Fi QR Code" 
                                     className="w-28 h-28"
                                     referrerPolicy="no-referrer"
@@ -1480,7 +1741,7 @@ export default function App() {
                                   </div>
                                 </div>
 
-                                {/* Informações Complementares (Check-out, Capacidade e Visitas) */}
+                                 {/* Informações Complementares (Check-out, Capacidade e Visitas) */}
                                 <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-100 space-y-3">
                                   <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
                                     <Info className="w-3.5 h-3.5 text-blue-600" />
@@ -1503,9 +1764,397 @@ export default function App() {
                                   </div>
                                 </div>
                               </div>
+                            ) : art.id === 'instrucoes-checkout' ? (
+                              <div className="space-y-6 mt-2">
+                                {/* Header Card / Flat Identification */}
+                                <div className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                  <div className="space-y-1">
+                                    <div className="flex items-center gap-2">
+                                      <span className="px-2.5 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                                        {lang === 'pt' ? 'Check-out & Instruções de Saída' : lang === 'en' ? 'Check-out & Exit Instructions' : 'Check-out e Instrucciones de Salida'}
+                                      </span>
+                                      <span className="text-xs font-bold text-slate-700 font-mono bg-white px-2 py-0.5 rounded border border-slate-200">
+                                        Flat 1208A
+                                      </span>
+                                    </div>
+                                    <p className="text-xs text-slate-600">
+                                      {lang === 'pt' 
+                                        ? 'Confira o passo a passo obrigatório para encerrar sua estadia com tranquilidade:' 
+                                        : lang === 'en' 
+                                          ? 'Check the mandatory step-by-step guide to complete your checkout smoothly:' 
+                                          : 'Consulte el paso a paso obligatorio para finalizar su estancia con tranquilidad:'}
+                                    </p>
+                                  </div>
+
+                                  <div className="px-3.5 py-2 bg-white rounded-xl border border-indigo-100 shadow-2xs flex items-center gap-2.5 shrink-0">
+                                    <Clock className="w-4 h-4 text-indigo-600" />
+                                    <div>
+                                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                        {lang === 'pt' ? 'Horário Limite' : lang === 'en' ? 'Deadline' : 'Horario Límite'}
+                                      </p>
+                                      <p className="text-xs font-bold text-slate-800">
+                                        {lang === 'pt' ? 'Até as 11:00 AM' : lang === 'en' ? 'Until 11:00 AM' : 'Hasta las 11:00 AM'}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* 5 Main Checkout Steps */}
+                                <div className="space-y-3">
+                                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 pl-1">
+                                    <CheckSquare className="w-4 h-4 text-indigo-600" />
+                                    {lang === 'pt' ? 'Passo a Passo de Saída' : lang === 'en' ? 'Step-by-Step Exit Guide' : 'Paso a Paso de Salida'}
+                                  </h4>
+
+                                  {[
+                                    {
+                                      key: 'toalhas',
+                                      num: 1,
+                                      title: lang === 'pt' ? '🧺 Recolha as toalhas usadas' : lang === 'en' ? '🧺 Collect used towels' : '🧺 Recoja las toallas usadas',
+                                      desc: lang === 'pt' ? 'Deixe as toalhas estendidas para evitar mal cheiro e mofo.' : lang === 'en' ? 'Leave towels hanging to prevent bad odor and mold.' : 'Deje las toallas colgadas para evitar mal olor y moho.',
+                                      icon: <Sparkles className="w-4 h-4 text-blue-600" />
+                                    },
+                                    {
+                                      key: 'lixo',
+                                      num: 2,
+                                      title: lang === 'pt' ? '🗑️ Tire o lixo' : lang === 'en' ? '🗑️ Take out the trash' : '🗑️ Saque la basura',
+                                      desc: lang === 'pt' ? 'Separe o orgânico do reciclado e descarte nas lixeiras do condomínio, localizadas no Subsolo 1 (S1).' : lang === 'en' ? 'Separate organic from recyclable waste and dispose of it in the condominium trash bins located in Basement 1 (S1).' : 'Separe lo orgánico de lo reciclable y deséchelo en los contenedores del condominio, ubicados en el Sótano 1 (S1).',
+                                      icon: <Trash2 className="w-4 h-4 text-rose-600" />
+                                    },
+                                    {
+                                      key: 'desligue',
+                                      num: 3,
+                                      title: lang === 'pt' ? '🔌 Desligue tudo' : lang === 'en' ? '🔌 Turn off everything' : '🔌 Apague todo',
+                                      desc: lang === 'pt' ? 'Com exceção do frigobar, todos os aparelhos precisam ser deixados desligados sempre que se ausentarem do flat.' : lang === 'en' ? 'With the exception of the minibar, all appliances must be left turned off whenever leaving the flat.' : 'Con excepción del frigobar, todos los electrodomésticos deben dejarse apagados siempre que se ausenten del apartamento.',
+                                      icon: <Zap className="w-4 h-4 text-amber-600" />
+                                    },
+                                    {
+                                      key: 'tranque',
+                                      num: 4,
+                                      title: lang === 'pt' ? '🔒 Tranque tudo' : lang === 'en' ? '🔒 Lock everything' : '🔒 Cierre todo',
+                                      desc: lang === 'pt' ? 'Feche as janelas e a porta.' : lang === 'en' ? 'Close windows and lock the door.' : 'Cierre las ventanas y la puerta.',
+                                      icon: <Lock className="w-4 h-4 text-indigo-600" />
+                                    },
+                                    {
+                                      key: 'chaves',
+                                      num: 5,
+                                      title: lang === 'pt' ? '🔑 Devolva as chaves' : lang === 'en' ? '🔑 Return the keys' : '🔑 Devuelva las llaves',
+                                      desc: lang === 'pt' ? 'Devolva o cartão magnético na recepção.' : lang === 'en' ? 'Return the magnetic access card at reception.' : 'Devuelva la tarjeta magnética en la recepción.',
+                                      icon: <Key className="w-4 h-4 text-emerald-600" />
+                                    }
+                                  ].map((item) => (
+                                    <div 
+                                      key={item.key} 
+                                      onClick={() => toggleCheckoutChecklist(item.key)}
+                                      className={`p-4 rounded-2xl border transition-all duration-200 cursor-pointer flex items-start gap-3.5 ${
+                                        checkoutChecklist[item.key] 
+                                          ? 'bg-emerald-50/60 border-emerald-300' 
+                                          : 'bg-white border-slate-200/80 hover:border-indigo-200 shadow-2xs'
+                                      }`}
+                                    >
+                                      <div className="pt-0.5">
+                                        <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${
+                                          checkoutChecklist[item.key] 
+                                            ? 'bg-emerald-600 border-emerald-600 text-white' 
+                                            : 'border-slate-300 bg-slate-50'
+                                        }`}>
+                                          {checkoutChecklist[item.key] && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                                        </div>
+                                      </div>
+
+                                      <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2 mb-1">
+                                          <span className="w-5 h-5 rounded-full bg-indigo-50 text-indigo-700 text-[10px] font-bold flex items-center justify-center shrink-0">
+                                            {item.num}
+                                          </span>
+                                          <h5 className={`text-xs font-bold ${checkoutChecklist[item.key] ? 'text-emerald-900 line-through opacity-80' : 'text-slate-800'}`}>
+                                            {item.title}
+                                          </h5>
+                                        </div>
+                                        <p className={`text-[11px] leading-relaxed ${checkoutChecklist[item.key] ? 'text-emerald-700' : 'text-slate-500'}`}>
+                                          {item.desc}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                {/* Regras Essenciais & Pedidos Adicionais */}
+                                <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0" />
+                                    <h4 className="font-bold text-amber-900 text-xs uppercase tracking-wider">
+                                      {lang === 'pt' ? 'Pedidos Adicionais & Regras Essenciais' : lang === 'en' ? 'Additional Requests & Essential Rules' : 'Pedidos Adicionales y Reglas Esenciales'}
+                                    </h4>
+                                  </div>
+
+                                  <div className="space-y-2 text-[11px] text-amber-900/90 font-medium leading-relaxed">
+                                    <div className="flex items-start gap-2">
+                                      <span className="font-bold text-amber-700">1.</span>
+                                      <p>{lang === 'pt' ? 'O acesso só é liberado após o preenchimento obrigatório do nosso WebCheckin.' : lang === 'en' ? 'Access is only granted after mandatory WebCheckin completion.' : 'El acceso solo se libera tras el llenado obligatorio de nuestro WebCheckin.'}</p>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="font-bold text-amber-700">2.</span>
+                                      <p>{lang === 'pt' ? 'Visitas são estritamente proibidas, a menos que sejam cadastradas previamente conosco.' : lang === 'en' ? 'Visitors are strictly prohibited unless previously registered with us.' : 'Las visitas están estrictamente prohibidas, a menos que se hayan registrado previamente con nosotros.'}</p>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="font-bold text-amber-700">3.</span>
+                                      <p>{lang === 'pt' ? 'Ao sair do flat, lembre-se de desligar luzes e o ar-condicionado.' : lang === 'en' ? 'When leaving the flat, remember to turn off lights and air conditioning.' : 'Al salir del flat, recuerde apagar las luces y el aire acondicionado.'}</p>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="font-bold text-amber-700">4.</span>
+                                      <p>{lang === 'pt' ? 'O lixo (orgânico e reciclável) deve ser descartado no Subsolo 1 (S1).' : lang === 'en' ? 'Trash (organic and recyclable) must be disposed of in Basement 1 (S1).' : 'La basura (orgánica y reciclable) debe desecharse en el Sótano 1 (S1).'}</p>
+                                    </div>
+                                  </div>
+
+                                  <div className="pt-2 border-t border-amber-200/60 text-center">
+                                    <p className="text-xs font-bold text-amber-800 italic">
+                                      {lang === 'pt' ? 'Obrigado por cuidar do espaço!' : lang === 'en' ? 'Thank you for taking care of our space!' : '¡Gracias por cuidar el espacio!'}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : art.id === 'guia-local-programacao-semanal' ? (
+                              <div className="space-y-4 mt-2">
+                                <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200/70 text-[11px] text-amber-900 flex items-start gap-2">
+                                  <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                                  <span>
+                                    {lang === 'pt' 
+                                      ? '⚠️ Horários de feiras podem sofrer alterações conforme o clima ou datas comemorativas. Recomendamos sempre verificar antes de sair.' 
+                                      : lang === 'en'
+                                        ? '⚠️ Street fair schedules may vary according to weather or holidays. We recommend checking before going.'
+                                        : '⚠️ Los horarios de las ferias pueden variar según el clima o días festivos. Recomendamos verificar antes de salir.'}
+                                  </span>
+                                </div>
+
+                                <div className="grid grid-cols-1 gap-3">
+                                  {weeklyScheduleDays.map((sched) => (
+                                    <div key={sched.dayId} className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+                                      <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-100 flex-wrap">
+                                        <div className="flex items-center gap-2">
+                                          <Calendar className="w-4 h-4 text-blue-600" />
+                                          <span className="text-xs font-extrabold text-slate-800 uppercase tracking-wide">
+                                            {sched.dayName}
+                                          </span>
+                                        </div>
+                                        {sched.badge && (
+                                          <span className="text-[10px] font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
+                                            {sched.badge}
+                                          </span>
+                                        )}
+                                      </div>
+
+                                      <div className="space-y-2">
+                                        <div className="flex items-center justify-between gap-2 flex-wrap">
+                                          <h4 className="text-xs font-bold text-slate-800">{sched.title}</h4>
+                                          {sched.distance && (
+                                            <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                                              {sched.distance}
+                                            </span>
+                                          )}
+                                        </div>
+
+                                        <p className="text-[11px] text-slate-600 leading-relaxed">
+                                          {sched.details}
+                                        </p>
+
+                                        {sched.extra && (
+                                          <p className="text-[11px] text-slate-500 italic bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                            {sched.extra}
+                                          </p>
+                                        )}
+
+                                        {sched.mapsUrl && (
+                                          <div className="pt-2 flex">
+                                            <a
+                                              href={sched.mapsUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-1.5 px-3 rounded-lg border border-emerald-200 flex items-center gap-1.5 transition-all"
+                                            >
+                                              <MapPin className="w-3.5 h-3.5 text-emerald-600" /> Abrir no Google Maps
+                                            </a>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : art.id === 'guia-local-todos-os-dias' ? (
+                              <div className="space-y-4 mt-2">
+                                {/* Informational Header Banner */}
+                                <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-50/70 via-indigo-50/40 to-blue-50/70 border border-slate-200/80">
+                                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                    <div>
+                                      <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                        <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                                        {lang === 'pt' 
+                                          ? 'Todos os Dias: Mercados, Feiras e Pontos Turísticos' 
+                                          : lang === 'en' 
+                                            ? 'Every Day: Markets, Fairs & Sights' 
+                                            : 'Todos los Días: Mercados, Ferias y Puntos Turísticos'}
+                                      </h4>
+                                      <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                                        {lang === 'pt' 
+                                          ? 'Reunimos os mercados gastronômicos tradicionais, as feiras ao ar livre mais famosas e os principais atrativos culturais e turísticos abertos para você aproveitar em Goiânia.' 
+                                          : lang === 'en'
+                                            ? 'We gathered traditional food markets, famous outdoor street fairs, and top cultural and tourist attractions open for you in Goiânia.'
+                                            : 'Reunimos los mercados gastronómicos tradicionales, las ferias al aire libre más famosas y las principales atracciones culturales y turísticas de Goiânia.'}
+                                      </p>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-[10px] font-semibold text-slate-600 shrink-0 bg-white/80 px-3 py-1.5 rounded-xl border border-slate-200/60 shadow-2xs">
+                                      <Clock className="w-3.5 h-3.5 text-blue-600" />
+                                      <span>{dailyVenues.length} {lang === 'pt' ? 'locais mapeados' : lang === 'en' ? 'mapped spots' : 'lugares mapeados'}</span>
+                                    </div>
+                                  </div>
+
+                                  {/* Subcategory Filter Tabs com Rolagem Horizontal no Mobile */}
+                                  <div className="relative mt-3 pt-3 border-t border-slate-200/60">
+                                    {dailyCanScrollLeft && (
+                                      <div className="absolute left-0 top-3 bottom-0 w-6 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+                                    )}
+                                    {dailyCanScrollRight && (
+                                      <div className="absolute right-0 top-3 bottom-0 w-6 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none" />
+                                    )}
+                                    <div 
+                                      ref={dailySubNavRef}
+                                      onScroll={() => checkScrollState(dailySubNavRef.current, setDailyCanScrollLeft, setDailyCanScrollRight)}
+                                      className="flex items-center gap-2 overflow-x-auto scrollbar-none scroll-smooth touch-pan-x py-1"
+                                    >
+                                      {[
+                                        { id: 'Todos', label: lang === 'pt' ? 'Todos' : lang === 'en' ? 'All' : 'Todos', count: dailyVenues.length, icon: MapPin },
+                                        { id: 'Mercados', label: lang === 'pt' ? 'Mercados' : lang === 'en' ? 'Markets' : 'Mercados', count: dailyVenues.filter(v => v.category === 'Mercados').length, icon: Store },
+                                        { id: 'Feiras', label: lang === 'pt' ? 'Feiras' : lang === 'en' ? 'Fairs' : 'Ferias', count: dailyVenues.filter(v => v.category === 'Feiras').length, icon: Tent },
+                                        { id: 'Pontos Turísticos', label: lang === 'pt' ? 'Pontos Turísticos' : lang === 'en' ? 'Sights' : 'Turismo', count: dailyVenues.filter(v => v.category === 'Pontos Turísticos').length, icon: Landmark }
+                                      ].map((sub) => {
+                                        const IconComp = sub.icon;
+                                        const isCurrent = dailySubCategory === sub.id;
+                                        return (
+                                          <button
+                                            key={sub.id}
+                                            ref={(el) => { dailySubRefs.current[sub.id] = el; }}
+                                            type="button"
+                                            onClick={() => setDailySubCategory(sub.id as any)}
+                                            className={`shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs whitespace-nowrap cursor-pointer min-h-[40px] active:scale-95 ${
+                                              isCurrent
+                                                ? 'bg-slate-900 text-white shadow-xs'
+                                                : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/80'
+                                            }`}
+                                          >
+                                            <IconComp className={`w-3.5 h-3.5 ${isCurrent ? 'text-white' : 'text-slate-500'}`} />
+                                            <span>{sub.label}</span>
+                                            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                                              isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                                            }`}>
+                                              {sub.count}
+                                            </span>
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Venue Grid */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  {dailyVenues
+                                    .filter(venue => dailySubCategory === 'Todos' || venue.category === dailySubCategory)
+                                    .map((venue) => {
+                                      const isMarket = venue.category === 'Mercados';
+                                      const isFair = venue.category === 'Feiras';
+                                      const isSight = venue.category === 'Pontos Turísticos';
+
+                                      return (
+                                        <div 
+                                          key={venue.id} 
+                                          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between"
+                                        >
+                                          <div className="space-y-2.5">
+                                            {/* Badges & Header */}
+                                            <div className="flex items-start justify-between gap-2 flex-wrap">
+                                              <div className="flex items-center gap-1.5 flex-wrap">
+                                                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border flex items-center gap-1 ${
+                                                  isMarket 
+                                                    ? 'bg-amber-50 text-amber-800 border-amber-200' 
+                                                    : isFair 
+                                                      ? 'bg-purple-50 text-purple-800 border-purple-200' 
+                                                      : 'bg-blue-50 text-blue-800 border-blue-200'
+                                                }`}>
+                                                  {isMarket && <Store className="w-2.5 h-2.5" />}
+                                                  {isFair && <Tent className="w-2.5 h-2.5" />}
+                                                  {isSight && <Landmark className="w-2.5 h-2.5" />}
+                                                  {venue.category}
+                                                </span>
+
+                                                {venue.badge && (
+                                                  <span className="text-[9px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-2 py-0.5 rounded-md">
+                                                    {venue.badge}
+                                                  </span>
+                                                )}
+                                              </div>
+
+                                              {venue.distance && (
+                                                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1">
+                                                  <MapPin className="w-2.5 h-2.5 text-emerald-600" />
+                                                  {venue.distance}
+                                                </span>
+                                              )}
+                                            </div>
+
+                                            {/* Venue Name */}
+                                            <h4 className="text-xs font-bold text-slate-800 leading-snug">
+                                              {venue.name}
+                                            </h4>
+
+                                            {/* Description */}
+                                            <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
+                                              {venue.description}
+                                            </p>
+
+                                            {/* Info rows: Hours & Address */}
+                                            <div className="space-y-1.5 text-[10px] text-slate-500 pt-1">
+                                              <p className="flex items-start gap-1.5 font-semibold text-slate-700">
+                                                <Clock className="w-3 h-3 text-slate-400 mt-0.5 shrink-0" />
+                                                <span>{venue.hours}</span>
+                                              </p>
+                                              <p className="flex items-start gap-1.5 text-slate-500">
+                                                <MapPin className="w-3 h-3 text-slate-400 mt-0.5 shrink-0" />
+                                                <span>{venue.address}</span>
+                                              </p>
+                                            </div>
+                                          </div>
+
+                                          {/* Action Buttons: Google Maps & Waze */}
+                                          <div className="mt-4 pt-3 border-t border-slate-100 flex gap-2">
+                                            <a
+                                              href={venue.mapsUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="flex-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-2 px-2.5 rounded-xl border border-emerald-200/70 flex items-center justify-center gap-1.5 transition-all shadow-2xs"
+                                            >
+                                              <MapPin className="w-3 h-3 text-emerald-600" /> Google Maps
+                                            </a>
+                                            <a
+                                              href={venue.wazeUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              referrerPolicy="no-referrer"
+                                              className="flex-1 text-[10px] font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 py-2 px-2.5 rounded-xl border border-sky-200/70 flex items-center justify-center gap-1.5 transition-all shadow-2xs"
+                                            >
+                                              <Car className="w-3 h-3 text-sky-500" /> Waze
+                                            </a>
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                </div>
+                              </div>
                             ) : art.id.startsWith('guia-local-') ? (
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                {localGuideItems
+                                {activeLocalGuideItems
                                   .filter((item) => item.articleId === art.id)
                                   .map((item) => (
                                     <div 
@@ -1595,26 +2244,45 @@ export default function App() {
                       <p className="text-xs text-slate-400 mt-0.5">{t.floorMapSubtitle}</p>
                     </div>
 
-                    {/* Floor Buttons */}
-                    <div className="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-xl">
+                    {/* Floor Buttons com Design Otimizado para Toque */}
+                    <div className="grid grid-cols-3 gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/60">
                       {[
-                        { id: 'mezanino', label: lang === 'pt' ? 'Mezanino' : lang === 'en' ? 'Mezzanine' : 'Entrepiso', info: lang === 'pt' ? 'Lazer Completo' : lang === 'en' ? 'Full Leisure' : 'Ocio Completo' },
-                        { id: 'terreo', label: lang === 'pt' ? 'Térreo' : lang === 'en' ? 'Ground Floor' : 'Planta Baja', info: lang === 'pt' ? 'Porte-Cochère' : lang === 'en' ? 'Main Access' : 'Acceso Principal' },
-                        { id: 'subsolo', label: lang === 'pt' ? 'Subsolos' : lang === 'en' ? 'Basement' : 'Sótano', info: lang === 'pt' ? 'Manobrista' : lang === 'en' ? 'Valet & Services' : 'Acomodador' }
-                      ].map((floor) => (
-                        <button
-                          key={floor.id}
-                          onClick={() => setActiveFloor(floor.id as any)}
-                          className={`py-2 px-1 rounded-lg text-[11px] font-bold transition-all text-center flex flex-col items-center justify-center outline-none select-none cursor-pointer ${
-                            activeFloor === floor.id 
-                              ? 'bg-white text-blue-600 shadow-sm' 
-                              : 'text-slate-500 hover:text-slate-800'
-                          }`}
-                        >
-                          <span>{floor.label}</span>
-                          <span className="text-[8px] font-medium opacity-70 hidden sm:inline">{floor.info}</span>
-                        </button>
-                      ))}
+                        { id: 'mezanino', label: lang === 'pt' ? 'Mezanino' : lang === 'en' ? 'Mezzanine' : 'Entrepiso', info: lang === 'pt' ? 'Lazer & Piscina' : lang === 'en' ? 'Leisure & Pool' : 'Ocio y Piscina', icon: Waves },
+                        { id: 'terreo', label: lang === 'pt' ? 'Térreo' : lang === 'en' ? 'Ground Floor' : 'Planta Baja', info: lang === 'pt' ? 'Recepção 24h' : lang === 'en' ? 'Reception 24h' : 'Recepción 24h', icon: Key },
+                        { id: 'subsolo', label: lang === 'pt' ? 'Subsolos' : lang === 'en' ? 'Basement' : 'Sótano', info: lang === 'pt' ? 'Garagem & Lixo' : lang === 'en' ? 'Valet & Trash' : 'Garaje y Basura', icon: Car }
+                      ].map((floor) => {
+                        const IconComp = floor.icon;
+                        const isSelected = activeFloor === floor.id;
+                        return (
+                          <button
+                            key={floor.id}
+                            type="button"
+                            onClick={() => setActiveFloor(floor.id as any)}
+                            className={`relative py-2.5 px-2 rounded-xl text-xs font-bold transition-all text-center flex flex-col items-center justify-center outline-none select-none cursor-pointer min-h-[54px] active:scale-95 ${
+                              isSelected 
+                                ? 'text-blue-600 font-extrabold' 
+                                : 'text-slate-500 hover:text-slate-800'
+                            }`}
+                          >
+                            {isSelected && (
+                              <motion.div
+                                layoutId="activeFloorPill"
+                                className="absolute inset-0 bg-white rounded-xl shadow-xs border border-slate-200/60"
+                                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                              />
+                            )}
+                            <div className="relative z-10 flex flex-col items-center gap-0.5">
+                              <div className="flex items-center gap-1.5">
+                                <IconComp className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-blue-600' : 'text-slate-400'}`} />
+                                <span className="leading-tight text-xs">{floor.label}</span>
+                              </div>
+                              <span className={`text-[9px] font-medium leading-tight ${isSelected ? 'text-blue-500' : 'text-slate-400 opacity-85'}`}>
+                                {floor.info}
+                              </span>
+                            </div>
+                          </button>
+                        );
+                      })}
                     </div>
 
                     {/* Floor Detail Content */}
@@ -1917,24 +2585,68 @@ export default function App() {
               {activeTab === 'regras' && (
                 <div className="flex flex-col gap-6">
                   
-                  {/* Seletor de Categorias de Regras */}
-                  <div className="bg-white rounded-2xl p-3 border border-slate-100 shadow-sm flex gap-1.5 overflow-x-auto scrollbar-none">
-                    {['Todas', 'Normas', 'Convivência', 'Animais', 'Zelo'].map((cat) => {
-                      const isSelected = rulesFilter === cat;
-                      return (
+                  {/* Seletor de Categorias de Regras com Rolagem Suave no Mobile */}
+                  <div className="relative bg-white rounded-2xl p-2.5 border border-slate-100 shadow-sm">
+                    {/* Indicador / Botão Scroll Esquerda */}
+                    {rulesCanScrollLeft && (
+                      <>
+                        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none rounded-l-2xl" />
                         <button
-                          key={cat}
-                          onClick={() => setRulesFilter(cat)}
-                          className={`py-1.5 px-3 rounded-xl text-xs font-semibold whitespace-nowrap outline-none transition-all cursor-pointer ${
-                            isSelected 
-                              ? 'bg-blue-600 text-white shadow-xs' 
-                              : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
-                          }`}
+                          type="button"
+                          onClick={() => scrollContainer(rulesNavRef.current, 'left', 140)}
+                          aria-label="Rolar categorias para esquerda"
+                          className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 bg-white/95 backdrop-blur-xs text-slate-700 hover:text-blue-600 rounded-full shadow-md border border-slate-200/80 flex items-center justify-center transition-all cursor-pointer active:scale-90"
                         >
-                          {getRulesCategoryLabel(cat)}
+                          <ChevronLeft className="w-3.5 h-3.5" />
                         </button>
-                      );
-                    })}
+                      </>
+                    )}
+
+                    {/* Indicador / Botão Scroll Direita */}
+                    {rulesCanScrollRight && (
+                      <>
+                        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none rounded-r-2xl" />
+                        <button
+                          type="button"
+                          onClick={() => scrollContainer(rulesNavRef.current, 'right', 140)}
+                          aria-label="Rolar categorias para direita"
+                          className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 bg-white/95 backdrop-blur-xs text-slate-700 hover:text-blue-600 rounded-full shadow-md border border-slate-200/80 flex items-center justify-center transition-all cursor-pointer active:scale-90"
+                        >
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </>
+                    )}
+
+                    <div 
+                      ref={rulesNavRef}
+                      onScroll={() => checkScrollState(rulesNavRef.current, setRulesCanScrollLeft, setRulesCanScrollRight)}
+                      className="flex gap-2 overflow-x-auto scrollbar-none scroll-smooth touch-pan-x px-1 py-0.5"
+                    >
+                      {[
+                        { id: 'Todas', icon: Sparkles },
+                        { id: 'Normas', icon: ShieldAlert },
+                        { id: 'Convivência', icon: Heart },
+                        { id: 'Animais', icon: Smile },
+                        { id: 'Zelo', icon: CheckSquare }
+                      ].map(({ id: cat, icon: IconComp }) => {
+                        const isSelected = rulesFilter === cat;
+                        return (
+                          <button
+                            key={cat}
+                            ref={(el) => { rulesCategoryRefs.current[cat] = el; }}
+                            onClick={() => setRulesFilter(cat)}
+                            className={`shrink-0 py-2 px-3.5 rounded-xl text-xs font-bold whitespace-nowrap outline-none transition-all flex items-center gap-1.5 cursor-pointer min-h-[40px] active:scale-95 ${
+                              isSelected 
+                                ? 'bg-blue-600 text-white shadow-xs' 
+                                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200/60'
+                            }`}
+                          >
+                            <IconComp className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-slate-400'}`} />
+                            <span>{getRulesCategoryLabel(cat)}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   {/* Informação sobre Notificações de Infrações */}
@@ -2339,8 +3051,8 @@ export default function App() {
 
       </main>
 
-      {/* RODAPÉ FIXO COMPLETO E VISÍVEL EM TODAS AS SEÇÕES */}
-      <footer className="fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 text-slate-100 border-t border-slate-800 py-3 px-4 shadow-2xl backdrop-blur-md">
+      {/* RODAPÉ AO FINAL DA PÁGINA */}
+      <footer className="w-full mt-auto bg-slate-950 text-slate-100 border-t border-slate-800 py-6 px-4 shadow-xl">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
           
           {/* Dados da Sun Square */}
@@ -2421,13 +3133,56 @@ export default function App() {
         target="_blank"
         rel="noopener noreferrer"
         referrerPolicy="no-referrer"
-        className="fixed bottom-20 right-6 z-50 flex items-center justify-center bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 rounded-full shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-200 animate-bounce hover:animate-none"
+        className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center justify-center bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 rounded-full shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-200 animate-bounce hover:animate-none"
         style={{ animationDuration: '3s' }}
         id="floating-whatsapp-btn"
         title="Fale Conosco no WhatsApp"
       >
         <MessageSquare className="w-6 h-6 text-white" />
       </a>
+
+      {/* BARRA DE NAVEGAÇÃO INFERIOR PARA CELULAR (MOBILE BOTTOM NAV) */}
+      <nav 
+        className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-slate-200/90 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] px-1 py-1 pb-[max(env(safe-area-inset-bottom),0.5rem)] flex items-center justify-around"
+        id="mobile-bottom-navigation"
+      >
+        {[
+          { id: 'inicio', label: lang === 'pt' ? 'Início' : lang === 'en' ? 'Home' : 'Inicio', icon: Sun },
+          { id: 'nosso-flat', label: lang === 'pt' ? 'Flat' : lang === 'en' ? 'Flat' : 'Flat', icon: Home },
+          { id: 'condominio', label: lang === 'pt' ? 'Condomínio' : lang === 'en' ? 'Condo' : 'Condominio', icon: Building },
+          { id: 'guia-local', label: lang === 'pt' ? 'Guia' : lang === 'en' ? 'Guide' : 'Guía', icon: MapPin },
+          { id: 'regras', label: lang === 'pt' ? 'Regras' : lang === 'en' ? 'Rules' : 'Reglas', icon: ClipboardList },
+          { id: 'suporte', label: lang === 'pt' ? 'Suporte' : lang === 'en' ? 'Support' : 'Soporte', icon: Phone }
+        ].map((item) => {
+          const IconComp = item.icon;
+          const isActive = activeTab === item.id && !hasSearchResults;
+          return (
+            <button
+              key={item.id}
+              onClick={() => {
+                setActiveTab(item.id as any);
+                setSearchQuery('');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className={`relative flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all duration-200 select-none cursor-pointer flex-1 min-w-0 ${
+                isActive ? 'text-blue-600 font-bold' : 'text-slate-400 hover:text-slate-600'
+              }`}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="mobileBottomActiveBg"
+                  className="absolute inset-0 bg-blue-50/90 rounded-xl"
+                  transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                />
+              )}
+              <div className="relative z-10 flex flex-col items-center">
+                <IconComp className={`w-5 h-5 transition-transform ${isActive ? 'scale-110 text-blue-600' : ''}`} />
+                <span className="text-[10px] tracking-tight truncate mt-0.5">{item.label}</span>
+              </div>
+            </button>
+          );
+        })}
+      </nav>
 
     </div>
   );

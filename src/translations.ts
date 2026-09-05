@@ -263,9 +263,9 @@ export const translatedArticles: { [lang: string]: any[] } = {
       category: "Connectivity",
       title: "High-Speed Wi-Fi",
       excerpt: "Access the ultra-fast fiber optic internet network of the apartment.",
-      content: "The flat features high-speed broadband internet (fiber optic), ideal for home office, video calls, and streaming.\n\n• Network: 1308a\n• Password: lualap1308a",
+      content: "The flat features high-speed broadband internet (fiber optic), ideal for home office, video calls, and streaming.\n\n• Network: Ap 1208A\n• Password: Sun1208\n\n💡 Tip: Network name with space and uppercase letters; password without space, starting with capital S.",
       icon: "Wifi",
-      tags: ["wi-fi", "wifi", "internet", "password", "network", "fiber"]
+      tags: ["wi-fi", "wifi", "internet", "password", "network", "fiber", "1208a", "ap 1208a", "sun1208"]
     },
     {
       id: "tv-stick",
@@ -286,6 +286,26 @@ export const translatedArticles: { [lang: string]: any[] } = {
       content: "Sun Square Suites Hotel has an excellent infrastructure available to you:\n\n• Entrance (Ground Floor) / Porte-cochère: Boarding and deboarding area at the main entrance, offering greater safety and convenience for vehicles.\n• Swimming Pool (Mezzanine): Excellent heated pool for your leisure and relaxation. Open daily. It is strictly forbidden to bring glass cups or bottles to the pool area.\n• Dry and Steam Sauna (Mezzanine): Located in the common leisure area of the Mezzanine. Use is permitted only with prior authorization at the reception.\n• Gym (Mezzanine): Fitness space equipped with modern equipment to keep up with your workouts.\n• Game Room (Mezzanine): Integrated leisure area for entertainment.\n• 24h Security and Reception: Team always ready to guarantee your security and help with visitor identification or parcel receipt. We remind you that only properly registered people are authorized to access the flat.\n• Parking: Rotating with valet included (spots are subject to availability).",
       icon: "Building",
       tags: ["pool", "gym", "sauna", "mezzanine", "game room", "parking", "valet", "concierge", "access"]
+    },
+    {
+      id: "guia-local-programacao-semanal",
+      tab: "guia-local",
+      category: "Weekly Schedule",
+      title: "Weekly Region Schedule (Fairs & Street Markets)",
+      excerpt: "Street fairs, handicrafts, and food markets from Monday to Sunday in Goiânia.",
+      content: "Goiânia is famous for its lively outdoor street fairs. Check out the complete weekly schedule with traditional markets steps from the flat.\n\n⚠️ Fair hours can change frequently — check beforehand.",
+      icon: "Calendar",
+      tags: ["weekly", "fair", "fairs", "street market", "feira da lua", "feira do sol", "feira hippie", "cerrado", "up marista", "crafts", "street food"]
+    },
+    {
+      id: "guia-local-todos-os-dias",
+      tab: "guia-local",
+      category: "Every Day",
+      title: "Every Day: Markets, Fairs & Tourist Sights",
+      excerpt: "Historic markets (Central & 74), cultural street fairs, and top sights open all week.",
+      content: "Comprehensive guide to markets, cultural centers, parks, and sights open all week in Goiânia.",
+      icon: "Clock",
+      tags: ["every day", "markets", "fairs", "sights", "tourist", "mercado central", "mercado da 74", "feira do sol", "feira da lua", "feira hippie", "praça do sol", "vaca brava", "flamboyant"]
     },
     {
       id: "guia-local-gastronomia",
@@ -338,6 +358,16 @@ export const translatedArticles: { [lang: string]: any[] } = {
       tags: ["check-in", "check-out", "1208a", "flat 1208a", "reception", "access card", "magnetic card", "documents", "limit", "capacity", "visits"]
     },
     {
+      id: "instrucoes-checkout",
+      tab: "regras",
+      category: "Check-out",
+      title: "Check-out Instructions",
+      excerpt: "Essential step-by-step guide for returning keys, towels, waste disposal, power off, and key house rules.",
+      content: "Check-out Step-by-Step Instructions:\n\n1. 🧺 Collect used towels: Leave towels hanging to prevent bad odors and mold.\n2. 🗑️ Take out the trash: Separate organic from recyclable waste and dispose of it in the building bins located on Basement 1 (S1).\n3. 🔌 Turn off everything: Except for the minibar, all appliances must be turned off whenever leaving the flat.\n4. 🔒 Lock everything: Close the windows and lock the door.\n5. 🔑 Return the keys: Return the magnetic access card at reception.\n\nAdditional Requests / Essential Rules:\n1. Access is only granted after mandatory WebCheckin completion.\n2. Visitors are strictly prohibited unless previously registered with us.\n3. When leaving the flat, remember to turn off lights and air conditioning.\n4. Trash (organic and recyclable) must be disposed of in Basement 1 (S1).\n\nThank you for taking care of our space!",
+      icon: "LogOut",
+      tags: ["checkout", "check-out", "towels", "trash", "basement 1", "s1", "minibar", "turn off", "lock", "keys", "reception", "webcheckin", "visitors"]
+    },
+    {
       id: "regras-silencio-fumo",
       tab: "regras",
       category: "Coexistence",
@@ -385,9 +415,9 @@ export const translatedArticles: { [lang: string]: any[] } = {
       category: "Conectividad",
       title: "Wi-Fi de Alta Velocidad",
       excerpt: "Acceda a la red de internet de fibra óptica ultrarrápida del apartamento.",
-      content: "El apartamento cuenta con internet de banda ancha de alta velocidad (fibra óptica), ideal para trabajo remoto, videollamadas y streaming.\n\n• Red: 1308a\n• Contraseña: lualap1308a",
+      content: "El apartamento cuenta con internet de banda ancha de alta velocidad (fibra óptica), ideal para trabajo remoto, videollamadas y streaming.\n\n• Red: Ap 1208A\n• Contraseña: Sun1208\n\n💡 Consejo: Nombre de red con espacio y mayúsculas; contraseña sin espacio, con S mayúscula.",
       icon: "Wifi",
-      tags: ["wi-fi", "wifi", "internet", "contraseña", "red", "fibra"]
+      tags: ["wi-fi", "wifi", "internet", "contraseña", "red", "fibra", "1208a", "ap 1208a", "sun1208"]
     },
     {
       id: "tv-stick",
@@ -408,6 +438,26 @@ export const translatedArticles: { [lang: string]: any[] } = {
       content: "El Sun Square Suites Hotel cuenta con una excelente infraestructura a su disposición:\n\n• Entrada (Planta Baja) / Porte-cochère: Área de ascenso y descenso en la entrada principal, ofreciendo mayor seguridad y comodidad para vehículos.\n• Piscina (Mezzanine): Excelente piscina climatizada para su ocio y descanso. Abierta todos los días. Está estrictamente prohibido llevar vasos o botellas de vidrio al área de la piscina.\n• Saunas Seca y a Vapor (Mezzanine): Ubicadas en el área común de ocio del Mezzanine. El uso está permitido únicamente con autorización previa en la recepción.\n• Gimnasio (Mezzanine): Espacio fitness equipado con aparatos modernos para mantener sus entrenamientos al día.\n• Sala de Juegos (Mezzanine): Área de ocio integrada para el entretenimiento.\n• Recepción y Portería 24h: Equipo siempre a su disposición para garantizar su seguridad y ayudar en la identificación de visitas o recepción de encomiendas. Le recordamos que solo las personas debidamente registradas están autorizadas a acceder al apartamento.\n• Estacionamiento: Rotativo con valet incluido (las plazas están sujetas a disponibilidad).",
       icon: "Building",
       tags: ["piscina", "gimnasio", "sauna", "mezzanine", "sala de juegos", "estacionamiento", "valet", "portería", "acceso"]
+    },
+    {
+      id: "guia-local-programacao-semanal",
+      tab: "guia-local",
+      category: "La Semana",
+      title: "La Semana en la Región (Ferias y Programación)",
+      excerpt: "Ferias callejeras, artesanías y gastronomía de lunes a domingo en Goiânia.",
+      content: "Goiânia respira cultura al aire libre y sus ferias son verdaderas atracciones turísticas. Consulte el cronograma completo con ferias tradicionales a pasos del flat.\n\n⚠️ Los horarios de las ferias pueden variar — vale la pena confirmar antes de salir.",
+      icon: "Calendar",
+      tags: ["semana", "feria", "ferias", "artesanía", "comida callejera", "feira da lua", "feira do sol", "feira hippie", "cerrado", "up marista"]
+    },
+    {
+      id: "guia-local-todos-os-dias",
+      tab: "guia-local",
+      category: "Todos los Días",
+      title: "Todos los Días: Mercados, Ferias y Puntos Turísticos",
+      excerpt: "Mercados históricos (Central y 74), ferias culturales y los principales puntos turísticos abiertos toda la semana.",
+      content: "Guía completa de mercados, centros culturales, parques y puntos turísticos abiertos toda la semana en Goiânia.",
+      icon: "Clock",
+      tags: ["todos los días", "mercados", "ferias", "turismo", "mercado central", "mercado da 74", "feira do sol", "feira da lua", "feira hippie", "praça do sol", "vaca brava", "flamboyant"]
     },
     {
       id: "guia-local-gastronomia",
@@ -458,6 +508,16 @@ export const translatedArticles: { [lang: string]: any[] } = {
       content: "Instrucciones paso a paso para realizar su check-in en el Flat 1208A:\n\n1. Recepción 24h y Horario: La recepción funciona las 24 horas. El check-in es a partir de las 14:00.\n2. Identificación en Recepción: Al llegar al edificio, preséntese en la recepción e informe que se hospedará en el flat 1208A.\n3. Presentación de Documentos: Presente a la recepción los documentos personales previamente enviados al anfitrión.\n4. Retiro de Tarjeta Magnética: Una vez confirmada la información, le entregarán la tarjeta magnética de acceso al flat 1208A.\n\n• Check-out: Hasta las 11:00.\n• Estadías de larga duración: Permitidas para períodos de 28 días o más.\n• Límite de Huéspedes: La capacidad máxima es de 4 personas.\n• Control de Acceso y Visitas: El Flat puede recibir visitas, pero deben ser previamente registradas por el propietario o administrador.",
       icon: "Shield",
       tags: ["check-in", "check-out", "1208a", "flat 1208a", "recepción", "tarjeta magnética", "documentos", "límite", "capacidad", "visitas"]
+    },
+    {
+      id: "instrucoes-checkout",
+      tab: "regras",
+      category: "Check-out",
+      title: "Instrucciones de Check-out",
+      excerpt: "Guía paso a paso esencial para devolución de llaves, toallas, basura, apagar aparatos y normas.",
+      content: "Instrucciones Paso a Paso de Check-out:\n\n1. 🧺 Recoja las toallas usadas: Deje las toallas colgadas para evitar mal olor y moho.\n2. 🗑️ Saque la basura: Separe lo orgánico de lo reciclable y deséchelo en los contenedores del condominio, ubicados en el Sótano 1 (S1).\n3. 🔌 Apague todo: Con excepción del frigobar, todos los electrodomésticos deben dejarse apagados siempre que se ausenten del apartamento.\n4. 🔒 Cierre todo: Cierre las ventanas y la puerta.\n5. 🔑 Devuelva las llaves: Devuelva la tarjeta magnética en la recepción.\n\nPedidos adicionales / Normas esenciales:\n1. El acceso solo se libera tras el llenado obligatorio de nuestro WebCheckin.\n2. Las visitas están estrictamente prohibidas, a menos que se hayan registrado previamente con nosotros.\n3. Al salir del flat, recuerde apagar las luces y el aire acondicionado.\n4. La basura (orgánica y reciclable) debe desecharse en el Sótano 1 (S1).\n\n¡Gracias por cuidar el espacio!",
+      icon: "LogOut",
+      tags: ["checkout", "check-out", "toallas", "basura", "sótano 1", "s1", "frigobar", "apagar", "cerrar", "llaves", "recepción", "webcheckin", "visitas"]
     },
     {
       id: "regras-silencio-fumo",
